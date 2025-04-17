@@ -24,7 +24,7 @@ public class KeyGenerate {
         String deviceId = response.jsonPath().getString("deviceId");
         // Check if the signature is not null or empty
        
-        assertNotNull(signature, "Signature is missing from the response");
+        assertNotNull(signature, "signature is missing");
         assertNotNull(signOnKey, "signon key is missing from the response");
         assertNotNull(deviceId, "device id is missing from the response");
         assertFalse(signature.isEmpty(), "Signature is empty in the response");

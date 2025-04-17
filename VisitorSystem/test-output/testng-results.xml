@@ -2,16 +2,16 @@
 <testng-results ignored="0" total="11" passed="8" failed="3" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2025-04-16T14:37:48 NPT" name="Default suite" finished-at="2025-04-16T14:37:52 NPT" duration-ms="4017">
+  <suite started-at="2025-04-17T10:52:38 NPT" name="Default suite" finished-at="2025-04-17T10:53:29 NPT" duration-ms="51096">
     <groups>
     </groups>
-    <test started-at="2025-04-16T14:37:48 NPT" name="Default test" finished-at="2025-04-16T14:37:52 NPT" duration-ms="4017">
+    <test started-at="2025-04-17T10:52:38 NPT" name="Default test" finished-at="2025-04-17T10:53:29 NPT" duration-ms="51096">
       <class name="KeyGeneration.KeyGenerate">
-        <test-method signature="GetKey()[pri:0, instance:KeyGeneration.KeyGenerate@1c7696c6]" started-at="2025-04-16T14:37:48 NPT" name="GetKey" finished-at="2025-04-16T14:37:50 NPT" duration-ms="2287" status="PASS">
+        <test-method signature="GetKey()[pri:0, instance:KeyGeneration.KeyGenerate@1c7696c6]" started-at="2025-04-17T10:52:38 NPT" name="GetKey" finished-at="2025-04-17T10:52:49 NPT" duration-ms="10929" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- GetKey -->
-        <test-method signature="InvalidDeviceId()[pri:0, instance:KeyGeneration.KeyGenerate@1c7696c6]" started-at="2025-04-16T14:37:50 NPT" name="InvalidDeviceId" finished-at="2025-04-16T14:37:50 NPT" duration-ms="194" status="FAIL">
+        <test-method signature="InvalidDeviceId()[pri:0, instance:KeyGeneration.KeyGenerate@1c7696c6]" started-at="2025-04-17T10:52:49 NPT" name="InvalidDeviceId" finished-at="2025-04-17T10:52:54 NPT" duration-ms="5627" status="FAIL">
           <exception class="java.lang.AssertionError">
             <message>
               <![CDATA[1 expectation failed.
@@ -77,23 +77,23 @@ at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:91)
           <reporter-output>
           </reporter-output>
         </test-method> <!-- InvalidDeviceId -->
-        <test-method signature="InvalidGeo()[pri:0, instance:KeyGeneration.KeyGenerate@1c7696c6]" started-at="2025-04-16T14:37:50 NPT" name="InvalidGeo" finished-at="2025-04-16T14:37:50 NPT" duration-ms="67" status="PASS">
+        <test-method signature="InvalidGeo()[pri:0, instance:KeyGeneration.KeyGenerate@1c7696c6]" started-at="2025-04-17T10:52:54 NPT" name="InvalidGeo" finished-at="2025-04-17T10:52:57 NPT" duration-ms="2436" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- InvalidGeo -->
-        <test-method signature="InvalidUserAgent()[pri:0, instance:KeyGeneration.KeyGenerate@1c7696c6]" started-at="2025-04-16T14:37:50 NPT" name="InvalidUserAgent" finished-at="2025-04-16T14:37:50 NPT" duration-ms="120" status="PASS">
+        <test-method signature="InvalidUserAgent()[pri:0, instance:KeyGeneration.KeyGenerate@1c7696c6]" started-at="2025-04-17T10:52:57 NPT" name="InvalidUserAgent" finished-at="2025-04-17T10:52:59 NPT" duration-ms="2612" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- InvalidUserAgent -->
-        <test-method signature="MissingDevice()[pri:0, instance:KeyGeneration.KeyGenerate@1c7696c6]" started-at="2025-04-16T14:37:50 NPT" name="MissingDevice" finished-at="2025-04-16T14:37:50 NPT" duration-ms="206" status="PASS">
+        <test-method signature="MissingDevice()[pri:0, instance:KeyGeneration.KeyGenerate@1c7696c6]" started-at="2025-04-17T10:52:59 NPT" name="MissingDevice" finished-at="2025-04-17T10:53:03 NPT" duration-ms="3726" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- MissingDevice -->
-        <test-method signature="MissingGeo()[pri:0, instance:KeyGeneration.KeyGenerate@1c7696c6]" started-at="2025-04-16T14:37:50 NPT" name="MissingGeo" finished-at="2025-04-16T14:37:51 NPT" duration-ms="75" status="PASS">
+        <test-method signature="MissingGeo()[pri:0, instance:KeyGeneration.KeyGenerate@1c7696c6]" started-at="2025-04-17T10:53:03 NPT" name="MissingGeo" finished-at="2025-04-17T10:53:12 NPT" duration-ms="8841" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- MissingGeo -->
-        <test-method signature="MissingUserAgent()[pri:0, instance:KeyGeneration.KeyGenerate@1c7696c6]" started-at="2025-04-16T14:37:51 NPT" name="MissingUserAgent" finished-at="2025-04-16T14:37:51 NPT" duration-ms="60" status="FAIL">
+        <test-method signature="MissingUserAgent()[pri:0, instance:KeyGeneration.KeyGenerate@1c7696c6]" started-at="2025-04-17T10:53:12 NPT" name="MissingUserAgent" finished-at="2025-04-17T10:53:15 NPT" duration-ms="3056" status="FAIL">
           <exception class="java.lang.AssertionError">
             <message>
               <![CDATA[1 expectation failed.
@@ -157,19 +157,19 @@ at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:91)
           <reporter-output>
           </reporter-output>
         </test-method> <!-- MissingUserAgent -->
-        <test-method signature="NoDeviceId()[pri:0, instance:KeyGeneration.KeyGenerate@1c7696c6]" started-at="2025-04-16T14:37:51 NPT" name="NoDeviceId" finished-at="2025-04-16T14:37:51 NPT" duration-ms="762" status="PASS">
+        <test-method signature="NoDeviceId()[pri:0, instance:KeyGeneration.KeyGenerate@1c7696c6]" started-at="2025-04-17T10:53:15 NPT" name="NoDeviceId" finished-at="2025-04-17T10:53:19 NPT" duration-ms="4578" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- NoDeviceId -->
-        <test-method signature="NoGeoLocation()[pri:0, instance:KeyGeneration.KeyGenerate@1c7696c6]" started-at="2025-04-16T14:37:51 NPT" name="NoGeoLocation" finished-at="2025-04-16T14:37:51 NPT" duration-ms="65" status="PASS">
+        <test-method signature="NoGeoLocation()[pri:0, instance:KeyGeneration.KeyGenerate@1c7696c6]" started-at="2025-04-17T10:53:19 NPT" name="NoGeoLocation" finished-at="2025-04-17T10:53:25 NPT" duration-ms="5821" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- NoGeoLocation -->
-        <test-method signature="NoUserAgent()[pri:0, instance:KeyGeneration.KeyGenerate@1c7696c6]" started-at="2025-04-16T14:37:51 NPT" name="NoUserAgent" finished-at="2025-04-16T14:37:51 NPT" duration-ms="69" status="PASS">
+        <test-method signature="NoUserAgent()[pri:0, instance:KeyGeneration.KeyGenerate@1c7696c6]" started-at="2025-04-17T10:53:25 NPT" name="NoUserAgent" finished-at="2025-04-17T10:53:28 NPT" duration-ms="2554" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- NoUserAgent -->
-        <test-method signature="SystemError()[pri:0, instance:KeyGeneration.KeyGenerate@1c7696c6]" started-at="2025-04-16T14:37:51 NPT" name="SystemError" finished-at="2025-04-16T14:37:52 NPT" duration-ms="45" status="FAIL">
+        <test-method signature="SystemError()[pri:0, instance:KeyGeneration.KeyGenerate@1c7696c6]" started-at="2025-04-17T10:53:28 NPT" name="SystemError" finished-at="2025-04-17T10:53:29 NPT" duration-ms="852" status="FAIL">
           <exception class="java.lang.AssertionError">
             <message>
               <![CDATA[1 expectation failed.

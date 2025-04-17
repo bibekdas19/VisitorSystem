@@ -1,13 +1,12 @@
 package Authentication;
-
 import org.testng.annotations.Test;
 import io.restassured.response.Response;
 import static io.restassured.RestAssured.*;
 import static org.testng.Assert.*;
 
-public class logOut {
+public class deleteBiometric {
 	@Test
-	public void LogoutwithValidCredentials() {
+	public void deleteBiometricWithValidCredentials() {
 		baseURI = "https://visitor0.moco.com.np/visitor";
         Response response = given()
             .header("X-GEO-Location", "12,12")
@@ -15,21 +14,21 @@ public class logOut {
             .header("X-Device-Id", "3efe6bbeb55f4411")
             .header("User-Agent", "NepalTravelApp/1.0.0 android")
         .when()
-            .delete("/authenticate")
+            .delete("/biometric")
         .then()
             .statusCode(200)
             .extract().response();
         
         String code = response.jsonPath().getString("code");
         String description = response.jsonPath().getString("description");
+        String signature = response.jsonPath().getString("signature");
         
         assertNotNull(code, "code is missing from the response");
         assertFalse(code.isEmpty(), "code is empty in the response");
         assertNotNull(description, "description is missing from the response");
         assertFalse(description.isEmpty(), "description is empty in the response");
-        //check if the code value is as per the decided
-        assertEquals(code,"GNR_PARAM_MISSING");
-        assertEquals(description,"Bad Request.");
+        assertNotNull(signature, "description is missing from the response");
+        assertFalse(signature.isEmpty(), "description is empty in the response");
 	}
 
 }

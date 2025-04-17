@@ -26,7 +26,7 @@ public class authenticate {
             .header("User-Agent", "NepalTravelApp/1.0.0 android")
             .body(requestBody)
         .when()
-            .get("/authenticate")
+            .post("/authenticate")
         .then()
             .statusCode(200);
         //check if the device id is same in request and response
