@@ -206,7 +206,7 @@ public class KeyGenerate {
          assertFalse(description.isEmpty(), "description is empty in the response");
          //check if the code value is as per the decided
          assertEquals(code,"GNR_INVALID_DATA");
-         assertEquals(description,"Invalid data");
+         assertEquals(description,"Invalid device Id found.");
 	}
 	
 	@Test
