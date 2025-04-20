@@ -33,7 +33,7 @@ public class signupOtp {
     @Test
     public void signUpwithValidCredentials() throws Exception {
         String email = "vivek@moco.com.np";
-        String requestTimestamp = "2025-04-20 10:22:00";
+        String requestTimestamp = signatureCreate.generateTimestamp();
         String data = email + requestTimestamp;
 
         String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);

@@ -2,20 +2,20 @@
 <testng-results ignored="0" total="14" passed="6" failed="8" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2025-04-20T15:14:05 NPT" name="Default suite" finished-at="2025-04-20T15:14:28 NPT" duration-ms="22697">
+  <suite started-at="2025-04-20T17:05:45 NPT" name="Default suite" finished-at="2025-04-20T17:05:53 NPT" duration-ms="7589">
     <groups>
     </groups>
-    <test started-at="2025-04-20T15:14:05 NPT" name="Default test" finished-at="2025-04-20T15:14:28 NPT" duration-ms="22697">
+    <test started-at="2025-04-20T17:05:45 NPT" name="Default test" finished-at="2025-04-20T17:05:53 NPT" duration-ms="7589">
       <class name="OTP.signupOtp">
-        <test-method is-config="true" signature="getSecretKey()[pri:0, instance:OTP.signupOtp@75437611]" started-at="2025-04-20T15:14:05 NPT" name="getSecretKey" finished-at="2025-04-20T15:14:10 NPT" duration-ms="5108" status="PASS">
+        <test-method is-config="true" signature="getSecretKey()[pri:0, instance:OTP.signupOtp@75437611]" started-at="2025-04-20T17:05:45 NPT" name="getSecretKey" finished-at="2025-04-20T17:05:49 NPT" duration-ms="3935" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- getSecretKey -->
-        <test-method signature="signUpWithEmptyLocation()[pri:0, instance:OTP.signupOtp@75437611]" started-at="2025-04-20T15:14:10 NPT" name="signUpWithEmptyLocation" finished-at="2025-04-20T15:14:11 NPT" duration-ms="391" status="PASS">
+        <test-method signature="signUpWithEmptyLocation()[pri:0, instance:OTP.signupOtp@75437611]" started-at="2025-04-20T17:05:49 NPT" name="signUpWithEmptyLocation" finished-at="2025-04-20T17:05:50 NPT" duration-ms="429" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- signUpWithEmptyLocation -->
-        <test-method signature="signUpWithInvalidEmailformat()[pri:0, instance:OTP.signupOtp@75437611]" started-at="2025-04-20T15:14:11 NPT" name="signUpWithInvalidEmailformat" finished-at="2025-04-20T15:14:12 NPT" duration-ms="1672" status="FAIL">
+        <test-method signature="signUpWithInvalidEmailformat()[pri:0, instance:OTP.signupOtp@75437611]" started-at="2025-04-20T17:05:50 NPT" name="signUpWithInvalidEmailformat" finished-at="2025-04-20T17:05:50 NPT" duration-ms="222" status="FAIL">
           <exception class="java.lang.AssertionError">
             <message>
               <![CDATA[1 expectation failed.
@@ -81,7 +81,7 @@ at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:91)
           <reporter-output>
           </reporter-output>
         </test-method> <!-- signUpWithInvalidEmailformat -->
-        <test-method signature="signUpwithDuplicateDevice()[pri:0, instance:OTP.signupOtp@75437611]" started-at="2025-04-20T15:14:12 NPT" name="signUpwithDuplicateDevice" finished-at="2025-04-20T15:14:15 NPT" duration-ms="2046" status="FAIL">
+        <test-method signature="signUpwithDuplicateDevice()[pri:0, instance:OTP.signupOtp@75437611]" started-at="2025-04-20T17:05:50 NPT" name="signUpwithDuplicateDevice" finished-at="2025-04-20T17:05:50 NPT" duration-ms="233" status="FAIL">
           <exception class="java.lang.AssertionError">
             <message>
               <![CDATA[1 expectation failed.
@@ -145,7 +145,7 @@ at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:91)
           <reporter-output>
           </reporter-output>
         </test-method> <!-- signUpwithDuplicateDevice -->
-        <test-method signature="signUpwithDuplicateEmail()[pri:0, instance:OTP.signupOtp@75437611]" started-at="2025-04-20T15:14:15 NPT" name="signUpwithDuplicateEmail" finished-at="2025-04-20T15:14:17 NPT" duration-ms="2665" status="FAIL">
+        <test-method signature="signUpwithDuplicateEmail()[pri:0, instance:OTP.signupOtp@75437611]" started-at="2025-04-20T17:05:50 NPT" name="signUpwithDuplicateEmail" finished-at="2025-04-20T17:05:51 NPT" duration-ms="980" status="FAIL">
           <exception class="java.lang.AssertionError">
             <message>
               <![CDATA[1 expectation failed.
@@ -209,15 +209,15 @@ at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:91)
           <reporter-output>
           </reporter-output>
         </test-method> <!-- signUpwithDuplicateEmail -->
-        <test-method signature="signUpwithEmptyEmail()[pri:0, instance:OTP.signupOtp@75437611]" started-at="2025-04-20T15:14:17 NPT" name="signUpwithEmptyEmail" finished-at="2025-04-20T15:14:19 NPT" duration-ms="1642" status="PASS">
+        <test-method signature="signUpwithEmptyEmail()[pri:0, instance:OTP.signupOtp@75437611]" started-at="2025-04-20T17:05:51 NPT" name="signUpwithEmptyEmail" finished-at="2025-04-20T17:05:51 NPT" duration-ms="190" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- signUpwithEmptyEmail -->
-        <test-method signature="signUpwithEmptyTimestamp()[pri:0, instance:OTP.signupOtp@75437611]" started-at="2025-04-20T15:14:19 NPT" name="signUpwithEmptyTimestamp" finished-at="2025-04-20T15:14:20 NPT" duration-ms="1081" status="PASS">
+        <test-method signature="signUpwithEmptyTimestamp()[pri:0, instance:OTP.signupOtp@75437611]" started-at="2025-04-20T17:05:51 NPT" name="signUpwithEmptyTimestamp" finished-at="2025-04-20T17:05:51 NPT" duration-ms="166" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- signUpwithEmptyTimestamp -->
-        <test-method signature="signUpwithInvalidDevice()[pri:0, instance:OTP.signupOtp@75437611]" started-at="2025-04-20T15:14:20 NPT" name="signUpwithInvalidDevice" finished-at="2025-04-20T15:14:20 NPT" duration-ms="484" status="FAIL">
+        <test-method signature="signUpwithInvalidDevice()[pri:0, instance:OTP.signupOtp@75437611]" started-at="2025-04-20T17:05:51 NPT" name="signUpwithInvalidDevice" finished-at="2025-04-20T17:05:52 NPT" duration-ms="157" status="FAIL">
           <exception class="java.lang.AssertionError">
             <message>
               <![CDATA[expected [Bad Request.] but found [Invalid device Id found.]]]>
@@ -263,7 +263,7 @@ at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:91)
           <reporter-output>
           </reporter-output>
         </test-method> <!-- signUpwithInvalidDevice -->
-        <test-method signature="signUpwithInvalidLocation()[pri:0, instance:OTP.signupOtp@75437611]" started-at="2025-04-20T15:14:20 NPT" name="signUpwithInvalidLocation" finished-at="2025-04-20T15:14:22 NPT" duration-ms="1260" status="FAIL">
+        <test-method signature="signUpwithInvalidLocation()[pri:0, instance:OTP.signupOtp@75437611]" started-at="2025-04-20T17:05:52 NPT" name="signUpwithInvalidLocation" finished-at="2025-04-20T17:05:52 NPT" duration-ms="150" status="FAIL">
           <exception class="java.lang.AssertionError">
             <message>
               <![CDATA[expected [Bad Request.] but found [Invalid Geo location found.]]]>
@@ -309,7 +309,7 @@ at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:91)
           <reporter-output>
           </reporter-output>
         </test-method> <!-- signUpwithInvalidLocation -->
-        <test-method signature="signUpwithInvalidTime()[pri:0, instance:OTP.signupOtp@75437611]" started-at="2025-04-20T15:14:22 NPT" name="signUpwithInvalidTime" finished-at="2025-04-20T15:14:23 NPT" duration-ms="1338" status="FAIL">
+        <test-method signature="signUpwithInvalidTime()[pri:0, instance:OTP.signupOtp@75437611]" started-at="2025-04-20T17:05:52 NPT" name="signUpwithInvalidTime" finished-at="2025-04-20T17:05:52 NPT" duration-ms="173" status="FAIL">
           <exception class="java.lang.AssertionError">
             <message>
               <![CDATA[1 expectation failed.
@@ -373,7 +373,7 @@ at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:91)
           <reporter-output>
           </reporter-output>
         </test-method> <!-- signUpwithInvalidTime -->
-        <test-method signature="signUpwithInvalidUserAgent()[pri:0, instance:OTP.signupOtp@75437611]" started-at="2025-04-20T15:14:23 NPT" name="signUpwithInvalidUserAgent" finished-at="2025-04-20T15:14:24 NPT" duration-ms="800" status="FAIL">
+        <test-method signature="signUpwithInvalidUserAgent()[pri:0, instance:OTP.signupOtp@75437611]" started-at="2025-04-20T17:05:52 NPT" name="signUpwithInvalidUserAgent" finished-at="2025-04-20T17:05:52 NPT" duration-ms="93" status="FAIL">
           <exception class="java.lang.AssertionError">
             <message>
               <![CDATA[expected [Bad Request.] but found [Invalid Geo location found.]]]>
@@ -419,11 +419,11 @@ at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:91)
           <reporter-output>
           </reporter-output>
         </test-method> <!-- signUpwithInvalidUserAgent -->
-        <test-method signature="signUpwithNoSignature()[pri:0, instance:OTP.signupOtp@75437611]" started-at="2025-04-20T15:14:24 NPT" name="signUpwithNoSignature" finished-at="2025-04-20T15:14:24 NPT" duration-ms="369" status="PASS">
+        <test-method signature="signUpwithNoSignature()[pri:0, instance:OTP.signupOtp@75437611]" started-at="2025-04-20T17:05:52 NPT" name="signUpwithNoSignature" finished-at="2025-04-20T17:05:52 NPT" duration-ms="138" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- signUpwithNoSignature -->
-        <test-method signature="signUpwithValidCredentials()[pri:0, instance:OTP.signupOtp@75437611]" started-at="2025-04-20T15:14:24 NPT" name="signUpwithValidCredentials" finished-at="2025-04-20T15:14:27 NPT" duration-ms="3196" status="FAIL">
+        <test-method signature="signUpwithValidCredentials()[pri:0, instance:OTP.signupOtp@75437611]" started-at="2025-04-20T17:05:52 NPT" name="signUpwithValidCredentials" finished-at="2025-04-20T17:05:52 NPT" duration-ms="222" status="FAIL">
           <exception class="java.lang.AssertionError">
             <message>
               <![CDATA[1 expectation failed.
@@ -487,11 +487,11 @@ at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:91)
           <reporter-output>
           </reporter-output>
         </test-method> <!-- signUpwithValidCredentials -->
-        <test-method signature="signUpwithoutDevice()[pri:0, instance:OTP.signupOtp@75437611]" started-at="2025-04-20T15:14:27 NPT" name="signUpwithoutDevice" finished-at="2025-04-20T15:14:28 NPT" duration-ms="245" status="PASS">
+        <test-method signature="signUpwithoutDevice()[pri:0, instance:OTP.signupOtp@75437611]" started-at="2025-04-20T17:05:52 NPT" name="signUpwithoutDevice" finished-at="2025-04-20T17:05:53 NPT" duration-ms="204" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- signUpwithoutDevice -->
-        <test-method signature="signUpwithoutUserAgent()[pri:0, instance:OTP.signupOtp@75437611]" started-at="2025-04-20T15:14:28 NPT" name="signUpwithoutUserAgent" finished-at="2025-04-20T15:14:28 NPT" duration-ms="312" status="PASS">
+        <test-method signature="signUpwithoutUserAgent()[pri:0, instance:OTP.signupOtp@75437611]" started-at="2025-04-20T17:05:53 NPT" name="signUpwithoutUserAgent" finished-at="2025-04-20T17:05:53 NPT" duration-ms="211" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- signUpwithoutUserAgent -->

@@ -7,7 +7,7 @@ import static org.testng.Assert.*;
 
 import java.util.*;
 
-public class signupOtpVerify {
+public class verifyresetOtp {
 	String baseURI = "https://visitor0.moco.com.np/visitor";
     String secretKey;
     String code;
@@ -50,7 +50,7 @@ public class signupOtpVerify {
                 .contentType("application/json")
                 .body(jsonBody)
             .when()
-                .post("/signup/otp/verify")
+                .post("/reset/otp/verify")
             .then()
                 .statusCode(200)
                 .log().all()
@@ -84,7 +84,7 @@ public class signupOtpVerify {
                 .contentType("application/json")
                 .body(jsonBody)
             .when()
-                .post("/signup/otp/verify")
+                .post("/reset/otp/verify")
             .then()
                 .statusCode(201)
                 .log().all()
@@ -132,7 +132,7 @@ public class signupOtpVerify {
                 .contentType("application/json")
                 .body(jsonBody)
             .when()
-                .post("/signup/otp/verify")
+                .post("/reset/otp/verify")
             .then()
                 .statusCode(400)
                 .log().all()
@@ -171,7 +171,7 @@ public class signupOtpVerify {
                 .contentType("application/json")
                 .body(jsonBody)
             .when()
-                .post("/signup/otp/verify")
+                .post("/reset/otp/verify")
             .then()
                 .statusCode(400)
                 .log().all()
@@ -210,7 +210,7 @@ public class signupOtpVerify {
                 .contentType("application/json")
                 .body(jsonBody)
             .when()
-                .post("/signup/otp/verify")
+                .post("/reset/otp/verify")
             .then()
                 .statusCode(400)
                 .log().all()
@@ -250,7 +250,7 @@ public class signupOtpVerify {
                 .contentType("application/json")
                 .body(jsonBody)
             .when()
-                .post("/signup/otp/verify")
+                .post("/reset/otp/verify")
             .then()
                 .statusCode(400)
                 .log().all()
@@ -288,7 +288,7 @@ public class signupOtpVerify {
               .contentType("application/json")
               .body(jsonBody)
           .when()
-              .post("/signup/otp/verify")
+              .post("/reset/otp/verify")
           .then()
               .statusCode(400)
               .log().all()
@@ -326,7 +326,7 @@ public class signupOtpVerify {
              .contentType("application/json")
              .body(jsonBody)
          .when()
-             .post("/signup/otp/verify")
+             .post("/reset/otp/verify")
          .then()
              .statusCode(400)
              .log().all()
@@ -365,7 +365,7 @@ public class signupOtpVerify {
              .contentType("application/json")
              .body(jsonBody)
          .when()
-             .post("/signup/otp/verify")
+             .post("/reset/otp/verify")
          .then()
              .statusCode(400)
              .log().all()
@@ -404,7 +404,7 @@ public class signupOtpVerify {
              .contentType("application/json")
              .body(jsonBody)
          .when()
-             .post("/signup/otp/verify")
+             .post("/reset/otp/verify")
          .then()
              .statusCode(400)
              .log().all()
@@ -442,7 +442,7 @@ public class signupOtpVerify {
              .contentType("application/json")
              .body(jsonBody)
          .when()
-             .post("/signup/otp/verify")
+             .post("/reset/otp/verify")
          .then()
              .statusCode(400)
              .log().all()
@@ -480,7 +480,7 @@ public class signupOtpVerify {
              .contentType("application/json")
              .body(jsonBody)
          .when()
-             .post("/signup/otp/verify")
+             .post("/reset/otp/verify")
          .then()
              .statusCode(422)
              .log().all()
@@ -517,7 +517,7 @@ public class signupOtpVerify {
              .contentType("application/json")
              .body(jsonBody)
          .when()
-             .post("/signup/otp/verify")
+             .post("/reset/otp/verify")
          .then()
              .statusCode(422)
              .log().all()
@@ -556,7 +556,7 @@ public void VerifySignUpwithInvalidOtp() throws Exception {
             .contentType("application/json")
             .body(jsonBody)
         .when()
-            .post("/signup/otp/verify")
+            .post("/reset/otp/verify")
         .then()
             .statusCode(422)
             .log().all()
@@ -595,7 +595,7 @@ public void VerifySignUpwithInvalidPin() throws Exception {
             .contentType("application/json")
             .body(jsonBody)
         .when()
-            .post("/signup/otp/verify")
+            .post("/reset/otp/verify")
         .then()
             .statusCode(422)
             .log().all()
@@ -632,7 +632,7 @@ public void VerifySignUpwithInvalidPin() throws Exception {
              .contentType("application/json")
              .body(jsonBody)
          .when()
-             .post("/signup/otp/verify")
+             .post("/reset/otp/verify")
          .then()
              .statusCode(422)
              .log().all()
@@ -670,7 +670,7 @@ public void VerifySignUpwithInvalidPin() throws Exception {
              .contentType("application/json")
              .body(jsonBody)
          .when()
-             .post("/signup/otp/verify")
+             .post("/reset/otp/verify")
          .then()
              .statusCode(401)
              .log().all()
@@ -682,7 +682,5 @@ public void VerifySignUpwithInvalidPin() throws Exception {
      assertFalse(signature.isEmpty(), "Signature is empty");
      assertFalse(code.isEmpty(), "Code is empty");
  }
- 
-
 
 }
