@@ -8,9 +8,29 @@ import java.util.*;
 
 
 public class authenticate {
+     String baseURI = "https://visitor0.moco.com.np/visitor";
+    String secretKey;
+
+    @BeforeClass
+    public void getSecretKey() {
+        Response response = given()
+                .baseUri(baseURI)
+                .header("X-GEO-Location", "12,12")
+                .header("X-Device-Id", "3efe6bbeb55f4411")
+                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+            .when()
+                .get("/key")
+            .then()
+                .statusCode(200)
+                .extract().response();
+
+        secretKey = response.jsonPath().getString("signOnKey");
+        assertNotNull(secretKey, "Secret key is null!");
+    }
+
+
 	@Test
 	public void GetToken() {
-		baseURI = "https://visitor0.moco.com.np/visitor";
 		String requestDeviceId = "3efe6bbeb55f4411";
 		Map<String, Object> credentials = new HashMap<>();
         credentials.put("email", "test@example.com");
@@ -18,7 +38,7 @@ public class authenticate {
 
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("credentials", credentials);
-        requestBody.put("signature", "your-signature-string");
+        requestBody.put("signature", signatureCreate.generateHMACSHA256());
         
         Response response = (Response) given()
             .header("X-GEO-Location", "12,12")

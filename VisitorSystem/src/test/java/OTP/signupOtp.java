@@ -34,7 +34,7 @@ public class signupOtp {
     public void signUpwithValidCredentials() throws Exception {
         String email = "vivek@moco.com.np";
         String requestTimestamp = signatureCreate.generateTimestamp();
-        String data = email + requestTimestamp;
+        String data = signatureCreate.jsonStringify(jsonBody);
 
         String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
 
