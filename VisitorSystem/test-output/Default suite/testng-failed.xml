@@ -3,19 +3,25 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="OTP.signupOtp">
+      <class name="OTP.resetOtp">
         <methods>
-          <include name="signUpwithValidCredentials"/>
-          <include name="signUpwithDuplicateEmail"/>
           <include name="signUpwithInvalidDevice"/>
-          <include name="signUpwithInvalidUserAgent"/>
-          <include name="getSecretKey"/>
+          <include name="signUpwithEmptyTimestamp"/>
           <include name="signUpwithInvalidTime"/>
-          <include name="signUpWithInvalidEmailformat"/>
           <include name="signUpwithInvalidLocation"/>
+          <include name="signUpwithEmptyEmail"/>
+          <include name="signUpwithoutUserAgent"/>
+          <include name="signUpwithDuplicateEmail"/>
           <include name="signUpwithDuplicateDevice"/>
+          <include name="signUpWithInvalidEmailformat"/>
+          <include name="signUpwithInvalidUserAgent"/>
+          <include name="setup"/>
+          <include name="signUpwithValidCredentials"/>
+          <include name="signUpwithoutDevice"/>
+          <include name="signUpwithNoSignature"/>
+          <include name="signUpWithEmptyLocation"/>
         </methods>
-      </class> <!-- OTP.signupOtp -->
+      </class> <!-- OTP.resetOtp -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

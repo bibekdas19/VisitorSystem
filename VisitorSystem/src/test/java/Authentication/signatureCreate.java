@@ -1,4 +1,5 @@
-package OTP;
+package Authentication;
+
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.text.SimpleDateFormat;

@@ -2,21 +2,24 @@ package OTP;
 
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import io.restassured.RestAssured;
 import io.restassured.response.Response;
+
 import static io.restassured.RestAssured.*;
 import static org.testng.Assert.*;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.*;
 
 public class signupOtp {
 
-    String baseURI = "https://visitor0.moco.com.np/visitor";
     String secretKey;
 
     @BeforeClass
-    public void getSecretKey() {
+    public void setup() {
+        RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
+
         Response response = given()
-                .baseUri(baseURI)
                 .header("X-GEO-Location", "12,12")
                 .header("X-Device-Id", "3efe6bbeb55f4411")
                 .header("User-Agent", "NepalTravelApp/1.0.0 android")
@@ -32,19 +35,24 @@ public class signupOtp {
 
     @Test
     public void signUpwithValidCredentials() throws Exception {
+        ObjectMapper objectMapper = new ObjectMapper();
         String email = "vivek@moco.com.np";
         String requestTimestamp = signatureCreate.generateTimestamp();
-        String data = email + requestTimestamp;
 
-        String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
-
+        // Prepare payload without signature
         Map<String, Object> jsonBody = new HashMap<>();
         jsonBody.put("email", email);
         jsonBody.put("requestTimestamp", requestTimestamp);
+
+        // Generate signature
+        String data = objectMapper.writeValueAsString(jsonBody);
+        String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+
+        // Add signature
         jsonBody.put("signature", requestSignature);
 
+        // Send request
         Response response = given()
-                .baseUri(baseURI)
                 .header("X-GEO-Location", "12,12")
                 .header("X-Device-Id", "3efe6bbeb55f4411")
                 .header("User-Agent", "NepalTravelApp/1.0.0 android")
@@ -57,35 +65,42 @@ public class signupOtp {
                 .log().all()
                 .extract().response();
 
-        // Extracting and asserting response values
+        // Assertions
         String code = response.jsonPath().getString("code");
         String description = response.jsonPath().getString("description");
-        String token = response.jsonPath().getString("deviceId");
-        String signature = response.jsonPath().getString("signature");
+        String token = response.jsonPath().getString("token");
+        String responseSignature = response.jsonPath().getString("signature");
 
-        assertNotNull(signature, "Signature is missing");
-        assertNotNull(token, "Device ID is missing from the response");
+        assertNotNull(responseSignature, "Signature is missing");
+        assertNotNull(token, "token is missing from the response");
         assertNotNull(description, "Description is missing from the response");
         assertNotNull(code, "Code is missing");
 
-        assertFalse(signature.isEmpty(), "Signature is empty");
-        assertFalse(token.isEmpty(), "Device ID is empty");
+        assertFalse(responseSignature.isEmpty(), "Signature is empty");
+        assertFalse(token.isEmpty(), "token is empty");
         assertFalse(description.isEmpty(), "Description is empty");
         assertFalse(code.isEmpty(), "Code is empty");
     }
+
+
     
     @Test
     public void signUpwithoutDevice() throws Exception {
-    	String email = "vivek@moco.com.np";
-        String requestTimestamp = "2025-04-20 10:22:00";
-        String data = email + requestTimestamp;
+    	 ObjectMapper objectMapper = new ObjectMapper();
+         String email = "vivek@moco.com.np";
+         String requestTimestamp = signatureCreate.generateTimestamp();
 
-        String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+         // Prepare request without signature
+         Map<String, Object> jsonBody = new HashMap<>();
+         jsonBody.put("email", email);
+         jsonBody.put("requestTimestamp", requestTimestamp);
 
-        Map<String, Object> jsonBody = new HashMap<>();
-        jsonBody.put("email", email);
-        jsonBody.put("requestTimestamp", requestTimestamp);
-        jsonBody.put("signature", requestSignature);
+         // Generate signature
+         String data = objectMapper.writeValueAsString(jsonBody);
+         String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+
+         // Add signature
+         jsonBody.put("signature", requestSignature);
 
         Response response = given()
                 .baseUri(baseURI)
@@ -116,16 +131,21 @@ public class signupOtp {
     
     @Test
     public void signUpwithoutUserAgent() throws Exception {
-    	String email = "vivek@moco.com.np";
-        String requestTimestamp = "2025-04-20 10:22:00";
-        String data = email + requestTimestamp;
+    	 ObjectMapper objectMapper = new ObjectMapper();
+         String email = "vivek@moco.com.np";
+         String requestTimestamp = signatureCreate.generateTimestamp();
 
-        String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+         // Prepare payload without signature
+         Map<String, Object> jsonBody = new HashMap<>();
+         jsonBody.put("email", email);
+         jsonBody.put("requestTimestamp", requestTimestamp);
 
-        Map<String, Object> jsonBody = new HashMap<>();
-        jsonBody.put("email", email);
-        jsonBody.put("requestTimestamp", requestTimestamp);
-        jsonBody.put("signature", requestSignature);
+         // Generate signature
+         String data = objectMapper.writeValueAsString(jsonBody);
+         String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+
+         // Add signature
+         jsonBody.put("signature", requestSignature);
 
         Response response = given()
                 .baseUri(baseURI)
@@ -156,16 +176,21 @@ public class signupOtp {
     
     @Test
     public void signUpWithEmptyLocation() throws Exception {
-    	String email = "vivek@moco.com.np";
-        String requestTimestamp = "2025-04-20 10:22:00";
-        String data = email + requestTimestamp;
+    	 ObjectMapper objectMapper = new ObjectMapper();
+         String email = "vivek@moco.com.np";
+         String requestTimestamp = signatureCreate.generateTimestamp();
 
-        String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+         // Prepare payload without signature
+         Map<String, Object> jsonBody = new HashMap<>();
+         jsonBody.put("email", email);
+         jsonBody.put("requestTimestamp", requestTimestamp);
 
-        Map<String, Object> jsonBody = new HashMap<>();
-        jsonBody.put("email", email);
-        jsonBody.put("requestTimestamp", requestTimestamp);
-        jsonBody.put("signature", requestSignature);
+         // Generate signature
+         String data = objectMapper.writeValueAsString(jsonBody);
+         String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+
+         // Add signature
+         jsonBody.put("signature", requestSignature);
 
         Response response = given()
                 .baseUri(baseURI)
@@ -196,16 +221,21 @@ public class signupOtp {
     }
     @Test
     public void signUpwithInvalidDevice() throws Exception {
-        	String email = "vivek@moco.com.np";
-            String requestTimestamp = "2025-04-20 10:22:00";
-            String data = email + requestTimestamp;
+    	 ObjectMapper objectMapper = new ObjectMapper();
+         String email = "vivek@moco.com.np";
+         String requestTimestamp = signatureCreate.generateTimestamp();
 
-            String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+         // Prepare payload without signature
+         Map<String, Object> jsonBody = new HashMap<>();
+         jsonBody.put("email", email);
+         jsonBody.put("requestTimestamp", requestTimestamp);
 
-            Map<String, Object> jsonBody = new HashMap<>();
-            jsonBody.put("email", email);
-            jsonBody.put("requestTimestamp", requestTimestamp);
-            jsonBody.put("signature", requestSignature);
+         // Generate signature
+         String data = objectMapper.writeValueAsString(jsonBody);
+         String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+
+         // Add signature
+         jsonBody.put("signature", requestSignature);
 
             Response response = given()
                     .baseUri(baseURI)
@@ -230,21 +260,26 @@ public class signupOtp {
             assertFalse(description.isEmpty(), "Description is empty");
             assertFalse(code.isEmpty(), "Code is empty");
             assertEquals(code,"GNR_INVALID_DATA");
-            assertEquals(description,"Bad Request.");
+            assertEquals(description,"Invalid device Id found.");
     }
     
     @Test
     public void signUpwithInvalidLocation() throws Exception {
-    	String email = "vivek@moco.com.np";
-        String requestTimestamp = "2025-04-20 10:22:00";
-        String data = email + requestTimestamp;
+    	 ObjectMapper objectMapper = new ObjectMapper();
+         String email = "vivek@moco.com.np";
+         String requestTimestamp = signatureCreate.generateTimestamp();
 
-        String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+         // Prepare payload without signature
+         Map<String, Object> jsonBody = new HashMap<>();
+         jsonBody.put("email", email);
+         jsonBody.put("requestTimestamp", requestTimestamp);
 
-        Map<String, Object> jsonBody = new HashMap<>();
-        jsonBody.put("email", email);
-        jsonBody.put("requestTimestamp", requestTimestamp);
-        jsonBody.put("signature", requestSignature);
+         // Generate signature
+         String data = objectMapper.writeValueAsString(jsonBody);
+         String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+
+         // Add signature
+         jsonBody.put("signature", requestSignature);
 
         Response response = given()
                 .baseUri(baseURI)
@@ -269,25 +304,30 @@ public class signupOtp {
         assertFalse(description.isEmpty(), "Description is empty");
         assertFalse(code.isEmpty(), "Code is empty");
         assertEquals(code,"GNR_INVALID_DATA");
-        assertEquals(description,"Bad Request.");
+        assertEquals(description,"Invalid Geo location found.");
     	
     }
     @Test
     public void signUpwithInvalidUserAgent() throws Exception {
-        	String email = "vivek@moco.com.np";
-            String requestTimestamp = "2025-04-20 10:22:00";
-            String data = email + requestTimestamp;
+    	 ObjectMapper objectMapper = new ObjectMapper();
+         String email = "vivek@moco.com.np";
+         String requestTimestamp = signatureCreate.generateTimestamp();
 
-            String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+         // Prepare payload without signature
+         Map<String, Object> jsonBody = new HashMap<>();
+         jsonBody.put("email", email);
+         jsonBody.put("requestTimestamp", requestTimestamp);
 
-            Map<String, Object> jsonBody = new HashMap<>();
-            jsonBody.put("email", email);
-            jsonBody.put("requestTimestamp", requestTimestamp);
-            jsonBody.put("signature", requestSignature);
+         // Generate signature
+         String data = objectMapper.writeValueAsString(jsonBody);
+         String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+
+         // Add signature
+         jsonBody.put("signature", requestSignature);
 
             Response response = given()
                     .baseUri(baseURI)
-                    .header("X-GEO-Location", "12,12aa")
+                    .header("X-GEO-Location", "12,12")
                     .header("X-Device-Id", "3efe6bbeb55f411")
                     .header("User-Agent", "NepalTravelApp/1.0.0 androidqqqq")
                     .contentType("application/json")
@@ -308,21 +348,26 @@ public class signupOtp {
             assertFalse(description.isEmpty(), "Description is empty");
             assertFalse(code.isEmpty(), "Code is empty");
             assertEquals(code,"GNR_INVALID_DATA");
-            assertEquals(description,"Bad Request.");
+            assertEquals(description,"Invalid user agent found.");
     }
     
     @Test
     public void signUpwithEmptyEmail() throws Exception {
-    	String email = "vivek@moco.com.np";
-        String requestTimestamp = "2025-04-20 10:22:00";
-        String data = email + requestTimestamp;
+    	 ObjectMapper objectMapper = new ObjectMapper();
+         String email = "";
+         String requestTimestamp = signatureCreate.generateTimestamp();
 
-        String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+         // Prepare payload without signature
+         Map<String, Object> jsonBody = new HashMap<>();
+         jsonBody.put("email", email);
+         jsonBody.put("requestTimestamp", requestTimestamp);
 
-        Map<String, Object> jsonBody = new HashMap<>();
-        jsonBody.put("email", "");
-        jsonBody.put("requestTimestamp", requestTimestamp);
-        jsonBody.put("signature", requestSignature);
+         // Generate signature
+         String data = objectMapper.writeValueAsString(jsonBody);
+         String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+
+         // Add signature
+         jsonBody.put("signature", requestSignature);
 
         Response response = given()
                 .baseUri(baseURI)
@@ -353,16 +398,21 @@ public class signupOtp {
     
     @Test
     public void signUpwithEmptyTimestamp() throws Exception {
-    	String email = "vivek@moco.com.np";
-        String requestTimestamp = "2025-04-20 10:22:00";
-        String data = email + requestTimestamp;
+    	 ObjectMapper objectMapper = new ObjectMapper();
+         String email = "vivek@moco.com.np";
+         //String requestTimestamp = signatureCreate.generateTimestamp();
 
-        String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+         // Prepare payload without signature
+         Map<String, Object> jsonBody = new HashMap<>();
+         jsonBody.put("email", email);
+         jsonBody.put("requestTimestamp", "");
 
-        Map<String, Object> jsonBody = new HashMap<>();
-        jsonBody.put("email", email);
-        jsonBody.put("requestTimestamp", "");
-        jsonBody.put("signature", requestSignature);
+         // Generate signature
+         String data = objectMapper.writeValueAsString(jsonBody);
+         String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+
+         // Add signature
+         jsonBody.put("signature", requestSignature);
 
         Response response = given()
                 .baseUri(baseURI)
@@ -393,16 +443,21 @@ public class signupOtp {
     
     @Test
     public void signUpwithNoSignature() throws Exception {
-    	String email = "vivek@moco.com.np";
-        String requestTimestamp = "2025-04-20 10:22:00";
-        //String data = email + requestTimestamp;
+    	// ObjectMapper objectMapper = new ObjectMapper();
+         String email = "vivek@moco.com.np";
+         String requestTimestamp = signatureCreate.generateTimestamp();
 
-        //String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+         // Prepare payload without signature
+         Map<String, Object> jsonBody = new HashMap<>();
+         jsonBody.put("email", email);
+         jsonBody.put("requestTimestamp", requestTimestamp);
 
-        Map<String, Object> jsonBody = new HashMap<>();
-        jsonBody.put("email", email);
-        jsonBody.put("requestTimestamp", requestTimestamp);
-        jsonBody.put("signature", "");
+         // Generate signature
+         //String data = objectMapper.writeValueAsString(jsonBody);
+         //String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+
+         // Add signature
+         jsonBody.put("signature", "");
 
         Response response = given()
                 .baseUri(baseURI)
@@ -432,16 +487,21 @@ public class signupOtp {
     
     @Test
     public void signUpwithInvalidTime() throws Exception{
-    	String email = "vivek@moco.com.np";
-        String requestTimestamp = "2025-15-20 10:22:00";
-        String data = email + requestTimestamp;
+    	 ObjectMapper objectMapper = new ObjectMapper();
+         String email = "vivek@moco.com.np";
+        // String requestTimestamp = signatureCreate.generateTimestamp();
 
-        String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+         // Prepare payload without signature
+         Map<String, Object> jsonBody = new HashMap<>();
+         jsonBody.put("email", email);
+         jsonBody.put("requestTimestamp", "25:55:99");
 
-        Map<String, Object> jsonBody = new HashMap<>();
-        jsonBody.put("email", email);
-        jsonBody.put("requestTimestamp", requestTimestamp);
-        jsonBody.put("signature", requestSignature);
+         // Generate signature
+         String data = objectMapper.writeValueAsString(jsonBody);
+         String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+
+         // Add signature
+         jsonBody.put("signature", requestSignature);
 
         Response response = given()
                 .baseUri(baseURI)
@@ -471,16 +531,21 @@ public class signupOtp {
     
     @Test
     public void signUpWithInvalidEmailformat() throws Exception{
-    	String email = "vivek@moco@Scom.np";
-        String requestTimestamp = "2025-04-20 10:22:00";
-        String data = email + requestTimestamp;
+    	 ObjectMapper objectMapper = new ObjectMapper();
+         String email = "vivek@moc.l..o.com.np";
+         String requestTimestamp = signatureCreate.generateTimestamp();
 
-        String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+         // Prepare payload without signature
+         Map<String, Object> jsonBody = new HashMap<>();
+         jsonBody.put("email", email);
+         jsonBody.put("requestTimestamp", requestTimestamp);
 
-        Map<String, Object> jsonBody = new HashMap<>();
-        jsonBody.put("email", email);
-        jsonBody.put("requestTimestamp", requestTimestamp);
-        jsonBody.put("signature", requestSignature);
+         // Generate signature
+         String data = objectMapper.writeValueAsString(jsonBody);
+         String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+
+         // Add signature
+         jsonBody.put("signature", requestSignature);
 
         Response response = given()
                 .baseUri(baseURI)
@@ -505,22 +570,26 @@ public class signupOtp {
         assertFalse(description.isEmpty(), "Description is empty");
         assertFalse(code.isEmpty(), "Code is empty");
         assertEquals(code,"GNR_PARAM_MISSING");
-        assertEquals(description,"Bad Request.");
+        assertEquals(description,"Invalid email found.");
     }
     
     @Test
     public void signUpwithDuplicateDevice() throws Exception{
-    	String email = "vivek@moco.com.np"; 
-        String requestTimestamp = "2025-04-20 10:22:00";
-        String data = email + requestTimestamp;
+    	 ObjectMapper objectMapper = new ObjectMapper();
+         String email = "vivek@moco.com.np";
+         String requestTimestamp = signatureCreate.generateTimestamp();
 
-        String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+         // Prepare payload without signature
+         Map<String, Object> jsonBody = new HashMap<>();
+         jsonBody.put("email", email);
+         jsonBody.put("requestTimestamp", requestTimestamp);
 
-        Map<String, Object> jsonBody = new HashMap<>();
-        jsonBody.put("email", email);
-        jsonBody.put("requestTimestamp", requestTimestamp);
-        jsonBody.put("signature", requestSignature);
+         // Generate signature
+         String data = objectMapper.writeValueAsString(jsonBody);
+         String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
 
+         // Add signature
+         jsonBody.put("signature", requestSignature);
         Response response = given()
                 .baseUri(baseURI)
                 .header("X-GEO-Location", "12,12")
@@ -550,16 +619,21 @@ public class signupOtp {
     
     @Test
     public void signUpwithDuplicateEmail() throws Exception {
-    	String email = "vivek@moco.com.np"; //already signed up email
-        String requestTimestamp = "2025-04-20 10:22:00";
-        String data = email + requestTimestamp;
+    	 ObjectMapper objectMapper = new ObjectMapper();
+         String email = "vivek@moco.com.np";
+         String requestTimestamp = signatureCreate.generateTimestamp();
 
-        String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+         // Prepare payload without signature
+         Map<String, Object> jsonBody = new HashMap<>();
+         jsonBody.put("email", email);
+         jsonBody.put("requestTimestamp", requestTimestamp);
 
-        Map<String, Object> jsonBody = new HashMap<>();
-        jsonBody.put("email", email);
-        jsonBody.put("requestTimestamp", requestTimestamp);
-        jsonBody.put("signature", requestSignature);
+         // Generate signature
+         String data = objectMapper.writeValueAsString(jsonBody);
+         String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+
+         // Add signature
+         jsonBody.put("signature", requestSignature);
 
         Response response = given()
                 .baseUri(baseURI)
