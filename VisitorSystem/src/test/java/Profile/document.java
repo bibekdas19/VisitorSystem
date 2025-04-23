@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.io.File;
 
-public class selfie {
+public class document {
 	String AuthToken;
 	@BeforeClass
 	public void getToken() throws Exception{
@@ -68,44 +68,67 @@ public class selfie {
 		AuthToken = Authresponse.getHeader("X-AUTH-TOKEN");
 
 	}
-
+	
 	@Test
-	public void uploadSelfiewithvalidCredentails() {
-		File imageFile = new File("images/Image_20241216_121143_255.jpeg");
+	public void uploaddocumentwithvalidCredentails() {
+		File documentFile = new File("images/Image_20241216_121143_255.jpeg");
 		Response response = given()
 				.baseUri(baseURI)
 				.header("X-GEO-Location", "12,12")
 				.header("X-AUTH-TOKEN",AuthToken)
 				.header("X-Device-Id", "3efe6bbeb55f4411")
 				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-				.multiPart("file", imageFile)
+				.multiPart("file", documentFile)
 				.contentType("multipart/form-data")
 
 				.when()
-				.post("/selfie")
+				.post("/document")
 				.then()
 				.statusCode(200)
 				.extract().response();
 
-		String code = response.jsonPath().getString("code");
-		String description = response.jsonPath().getString("description");
 		String signature = response.jsonPath().getString("signature");
+		String fullName = response.jsonPath().getString("fullName");
+		String country = response.jsonPath().getString("country");
+		String documentNumber = response.jsonPath().getString("documentNumber");
+		String dateOfBirth = response.jsonPath().getString("dateOfBirth");
+		String documentExpiryDate = response.jsonPath().getString("documentExpiryDate");
+		String gender = response.jsonPath().getString("gender");
+		String documentType = response.jsonPath().getString("documentType");
+		
 
-		assertNotNull(description, "Description is missing from the response");
-		assertNotNull(code, "Code is missing");
+		assertNotNull(signature, "signature is missing");
+		assertNotNull(fullName, "fullname is missing");
+		assertNotNull(country, "country is missing");
 		assertNotNull(signature,"signature is missing");
+		assertNotNull(documentNumber, "documentNumber is missing");
+        assertNotNull(documentType, "documentType is missing");
+        assertNotNull(dateOfBirth, "dateOfBirth is missing");
+        assertNotNull(documentExpiryDate, "documentExpiryDate is missing");
+        assertNotNull(gender, "gender is missing");
 
-		assertFalse(description.isEmpty(), "Description is empty");
-		assertFalse(code.isEmpty(), "Code is empty");
-		assertFalse(signature.isEmpty(),"signature is empty");
+        assertFalse(signature.isEmpty(), "Signature is empty in the response");
+        assertFalse(fullName.isEmpty(), "fullname is missing");
+        assertFalse(country.isEmpty(), "country is missing");
+        assertFalse(documentNumber.isEmpty(), "documentNumber is missing");
+        assertFalse(documentType.isEmpty(), "documentType is missing");
+        assertFalse(dateOfBirth.isEmpty(), "dateOfBirth is missing");
+        assertFalse(documentExpiryDate.isEmpty(), "documentExpiryDate is missing");
+        assertFalse(gender.isEmpty(), "gender is missing");
 
-		assertEquals(code,"GNR_OK");
-		assertEquals(description,"Successfully verified Portrait/Selfie.");
+        //check if the device id is same in request and response
+        assertEquals("John Smith",fullName);
+        assertEquals("India",country);
+        
+      //check if the token is in the present in the response
+        assertTrue(response.getHeaders().hasHeaderWithName("X-AUTH-TOKEN"), "Missing X-AUTH-TOKEN header");
+        System.out.println("Request ID: " + response.getHeaders().hasHeaderWithName("X-AUTH-TOKEN"));
+        
 
 	}
-
+	
 	@Test
-	public void uploadSelfiewithInvalidGeo() {
+	public void uploaddocumentwithInvalidGeo() {
 		File imageFile = new File("images/Image_20241216_121143_255.jpeg");
 		Response response = given()
 				.baseUri(baseURI)
@@ -117,7 +140,7 @@ public class selfie {
 				.contentType("multipart/form-data")
 
 				.when()
-				.post("/selfie")
+				.post("/document")
 				.then()
 				.statusCode(422)
 				.extract().response();
@@ -140,7 +163,7 @@ public class selfie {
 	}
 
 	@Test
-	public void uploadSelfiewithInvalidDevice() {
+	public void uploaddocumentwithInvalidDevice() {
 		File imageFile = new File("images/Image_20241216_121143_255.jpeg");
 		Response response = given()
 				.baseUri(baseURI)
@@ -152,7 +175,7 @@ public class selfie {
 				.contentType("multipart/form-data")
 
 				.when()
-				.post("/selfie")
+				.post("/document")
 				.then()
 				.statusCode(422)
 				.extract().response();
@@ -175,7 +198,7 @@ public class selfie {
 	}
 
 	@Test
-	public void uploadSelfiewithInvalidUserAgent() {
+	public void uploaddocumentwithInvalidUserAgent() {
 		File imageFile = new File("images/Image_20241216_121143_255.jpeg");
 		Response response = given()
 				.baseUri(baseURI)
@@ -187,7 +210,7 @@ public class selfie {
 				.contentType("multipart/form-data")
 
 				.when()
-				.post("/selfie")
+				.post("/document")
 				.then()
 				.statusCode(422)
 				.extract().response();
@@ -209,7 +232,7 @@ public class selfie {
 
 	}
 	@Test
-	public void uploadSelfiewithInvalidAuth() {
+	public void uploaddocumentwithInvalidAuth() {
 		File imageFile = new File("images/Image_20241216_121143_255.jpeg");
 		Response response = given()
 				.baseUri(baseURI)
@@ -221,7 +244,7 @@ public class selfie {
 				.contentType("multipart/form-data")
 
 				.when()
-				.post("/selfie")
+				.post("/document")
 				.then()
 				.statusCode(401)
 				.extract().response();
@@ -241,385 +264,247 @@ public class selfie {
 		assertEquals(code,"GNR_AUTHENTICATION_FAIL");
 		assertEquals(description,"Authentication Failed.");
 	}
-
-	@Test
-	public void uploadSelfiewithEmptyDevice() {
-		File imageFile = new File("images/Image_20241216_121143_255.jpeg");
-		Response response = given()
-				.baseUri(baseURI)
-				.header("X-GEO-Location", "12,12")
-				.header("X-AUTH-TOKEN",AuthToken)
-				.header("X-Device-Id", "3efe6bbeb55f4411")
-				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-				.multiPart("file", imageFile)
-				.contentType("multipart/form-data")
-
-				.when()
-				.post("/selfie")
-				.then()
-				.statusCode(400)
-				.extract().response();
-
-		String code = response.jsonPath().getString("code");
-		String description = response.jsonPath().getString("description");
-		String signature = response.jsonPath().getString("signature");
-
-		assertNotNull(description, "Description is missing from the response");
-		assertNotNull(code, "Code is missing");
-		assertNotNull(signature,"signature is missing");
-
-		assertFalse(description.isEmpty(), "Description is empty");
-		assertFalse(code.isEmpty(), "Code is empty");
-		assertFalse(signature.isEmpty(),"signature is empty");
-
-		assertEquals(code,"GNR_PARAM_MISSING");
-		assertEquals(description,"Required values missing.");
-	}
-
-	@Test
-	public void uploadSelfiewithEmptyLocation() {
-		File imageFile = new File("images/Image_20241216_121143_255.jpeg");
-		Response response = given()
-				.baseUri(baseURI)
-				.header("X-GEO-Location", "12,12")
-				.header("X-AUTH-TOKEN",AuthToken)
-				.header("X-Device-Id", "3efe6bbeb55f4411")
-				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-				.multiPart("file", imageFile)
-				.contentType("multipart/form-data")
-
-				.when()
-				.post("/selfie")
-				.then()
-				.statusCode(400)
-				.extract().response();
-
-		String code = response.jsonPath().getString("code");
-		String description = response.jsonPath().getString("description");
-		String signature = response.jsonPath().getString("signature");
-
-		assertNotNull(description, "Description is missing from the response");
-		assertNotNull(code, "Code is missing");
-		assertNotNull(signature,"signature is missing");
-
-		assertFalse(description.isEmpty(), "Description is empty");
-		assertFalse(code.isEmpty(), "Code is empty");
-		assertFalse(signature.isEmpty(),"signature is empty");
-
-		assertEquals(code,"GNR_PARAM_MISSING");
-		assertEquals(description,"Required values missing.");
-
-	}
-	@Test
-	public void uploadSelfiewithEmptyUserAgent() {
-		File imageFile = new File("images/Image_20241216_121143_255.jpeg");
-		Response response = given()
-				.baseUri(baseURI)
-				.header("X-GEO-Location", "12,12")
-				.header("X-AUTH-TOKEN",AuthToken)
-				.header("X-Device-Id", "3efe6bbeb55f4411")
-				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-				.multiPart("file", imageFile)
-				.contentType("multipart/form-data")
-
-				.when()
-				.post("/selfie")
-				.then()
-				.statusCode(400)
-				.extract().response();
-
-		String code = response.jsonPath().getString("code");
-		String description = response.jsonPath().getString("description");
-		String signature = response.jsonPath().getString("signature");
-
-		assertNotNull(description, "Description is missing from the response");
-		assertNotNull(code, "Code is missing");
-		assertNotNull(signature,"signature is missing");
-
-		assertFalse(description.isEmpty(), "Description is empty");
-		assertFalse(code.isEmpty(), "Code is empty");
-		assertFalse(signature.isEmpty(),"signature is empty");
-
-		assertEquals(code,"GNR_PARAM_MISSING");
-		assertEquals(description,"Required values missing.");
-	}
-	@Test
-	public void uploadSelfiewithEmptyAuth() {
-		File imageFile = new File("images/Image_20241216_121143_255.jpeg");
-		Response response = given()
-				.baseUri(baseURI)
-				.header("X-GEO-Location", "12,12")
-				.header("X-AUTH-TOKEN",AuthToken)
-				.header("X-Device-Id", "3efe6bbeb55f4411")
-				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-				.multiPart("file", imageFile)
-				.contentType("multipart/form-data")
-
-				.when()
-				.post("/selfie")
-				.then()
-				.statusCode(400)
-				.extract().response();
-
-		String code = response.jsonPath().getString("code");
-		String description = response.jsonPath().getString("description");
-		String signature = response.jsonPath().getString("signature");
-
-		assertNotNull(description, "Description is missing from the response");
-		assertNotNull(code, "Code is missing");
-		assertNotNull(signature,"signature is missing");
-
-		assertFalse(description.isEmpty(), "Description is empty");
-		assertFalse(code.isEmpty(), "Code is empty");
-		assertFalse(signature.isEmpty(),"signature is empty");
-
-		assertEquals(code,"GNR_PARAM_MISSING");
-		assertEquals(description,"Required values missing.");
-	}
-
-	@Test
-	public void uploadSelfiewithinvalidImage() {
-		File imageFile = new File("images/Image_20241216_121143_255.png");
-		Response response = given()
-				.baseUri(baseURI)
-				.header("X-GEO-Location", "12,12")
-				.header("X-AUTH-TOKEN",AuthToken)
-				.header("X-Device-Id", "3efe6bbeb55f4411")
-				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-				.multiPart("file", imageFile)
-				.contentType("multipart/form-data")
-
-				.when()
-				.post("/selfie")
-				.then()
-				.statusCode(422)
-				.extract().response();
-
-		String code = response.jsonPath().getString("code");
-		String description = response.jsonPath().getString("description");
-		String signature = response.jsonPath().getString("signature");
-
-		assertNotNull(description, "Description is missing from the response");
-		assertNotNull(code, "Code is missing");
-		assertNotNull(signature,"signature is missing");
-
-		assertFalse(description.isEmpty(), "Description is empty");
-		assertFalse(code.isEmpty(), "Code is empty");
-		assertFalse(signature.isEmpty(),"signature is empty");
-
-		assertEquals(code,"GNR_INVALID_DATA");
-		assertEquals(description,"Unable to process request as data is invalid.");
-	}
-
-	@Test
-	public void uploadSelfiewithLargefile() {
-		File imageFile = new File("images/Image_20241216_121143_255.png");
-		Response response = given()
-				.baseUri(baseURI)
-				.header("X-GEO-Location", "12,12")
-				.header("X-AUTH-TOKEN",AuthToken)
-				.header("X-Device-Id", "3efe6bbeb55f4411")
-				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-				.multiPart("file", imageFile)
-				.contentType("multipart/form-data")
-
-				.when()
-				.post("/selfie")
-				.then()
-				.statusCode(422)
-				.extract().response();
-
-		String code = response.jsonPath().getString("code");
-		String description = response.jsonPath().getString("description");
-		String signature = response.jsonPath().getString("signature");
-
-		assertNotNull(description, "Description is missing from the response");
-		assertNotNull(code, "Code is missing");
-		assertNotNull(signature,"signature is missing");
-
-		assertFalse(description.isEmpty(), "Description is empty");
-		assertFalse(code.isEmpty(), "Code is empty");
-		assertFalse(signature.isEmpty(),"signature is empty");
-
-		assertEquals(code,"GNR_INVALID_DATA");
-		assertEquals(description,"Unable to process request as data is invalid.");
-
-	}
-
-	@Test
-	public void uploadSelfiewithFaceObstructPhoto() {
-		File imageFile = new File("images/Image_20241216_121143_255.png");
-		Response response = given()
-				.baseUri(baseURI)
-				.header("X-GEO-Location", "12,12")
-				.header("X-AUTH-TOKEN",AuthToken)
-				.header("X-Device-Id", "3efe6bbeb55f4411")
-				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-				.multiPart("file", imageFile)
-				.contentType("multipart/form-data")
-
-				.when()
-				.post("/selfie")
-				.then()
-				.statusCode(422)
-				.extract().response();
-
-		String code = response.jsonPath().getString("code");
-		String description = response.jsonPath().getString("description");
-		String signature = response.jsonPath().getString("signature");
-
-		assertNotNull(description, "Description is missing from the response");
-		assertNotNull(code, "Code is missing");
-		assertNotNull(signature,"signature is missing");
-
-		assertFalse(description.isEmpty(), "Description is empty");
-		assertFalse(code.isEmpty(), "Code is empty");
-		assertFalse(signature.isEmpty(),"signature is empty");
-
-		assertEquals(code,"VST_PROFILE_IMG_OBSTRUCTED");
-		assertEquals(description,"Full face selfie not recieved. Obstructed view");
-
-	}
-
-	@Test
-	public void uploadSelfiewithSpoofimage() {
-		File imageFile = new File("images/Image_20241216_121143_255.png");
-		Response response = given()
-				.baseUri(baseURI)
-				.header("X-GEO-Location", "12,12")
-				.header("X-AUTH-TOKEN",AuthToken)
-				.header("X-Device-Id", "3efe6bbeb55f4411")
-				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-				.multiPart("file", imageFile)
-				.contentType("multipart/form-data")
-
-				.when()
-				.post("/selfie")
-				.then()
-				.statusCode(422)
-				.extract().response();
-
-		String code = response.jsonPath().getString("code");
-		String description = response.jsonPath().getString("description");
-		String signature = response.jsonPath().getString("signature");
-
-		assertNotNull(description, "Description is missing from the response");
-		assertNotNull(code, "Code is missing");
-		assertNotNull(signature,"signature is missing");
-
-		assertFalse(description.isEmpty(), "Description is empty");
-		assertFalse(code.isEmpty(), "Code is empty");
-		assertFalse(signature.isEmpty(),"signature is empty");
-
-		assertEquals(code,"VST_PROFILE_IMG_SPOOF");
-		assertEquals(description,"Selfie is identified as not real.");
-	}
-
-	@Test
-	public void uploadSelfiewithDarkImage() {
-		File imageFile = new File("images/Image_20241216_121143_255.png");
-		Response response = given()
-				.baseUri(baseURI)
-				.header("X-GEO-Location", "12,12")
-				.header("X-AUTH-TOKEN",AuthToken)
-				.header("X-Device-Id", "3efe6bbeb55f4411")
-				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-				.multiPart("file", imageFile)
-				.contentType("multipart/form-data")
-
-				.when()
-				.post("/selfie")
-				.then()
-				.statusCode(422)
-				.extract().response();
-
-		String code = response.jsonPath().getString("code");
-		String description = response.jsonPath().getString("description");
-		String signature = response.jsonPath().getString("signature");
-
-		assertNotNull(description, "Description is missing from the response");
-		assertNotNull(code, "Code is missing");
-		assertNotNull(signature,"signature is missing");
-
-		assertFalse(description.isEmpty(), "Description is empty");
-		assertFalse(code.isEmpty(), "Code is empty");
-		assertFalse(signature.isEmpty(),"signature is empty");
-
-		assertEquals(code,"VST_PROFILE_IMG_DARK");
-		assertEquals(description,"Unable to extract features. Selfie is not luminous.");
-
-	}
-
-	@Test
-	public void uploadSelfiewithEyesClosed() {
-		File imageFile = new File("images/Image_20241216_121143_255.png");
-		Response response = given()
-				.baseUri(baseURI)
-				.header("X-GEO-Location", "12,12")
-				.header("X-AUTH-TOKEN",AuthToken)
-				.header("X-Device-Id", "3efe6bbeb55f4411")
-				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-				.multiPart("file", imageFile)
-				.contentType("multipart/form-data")
-
-				.when()
-				.post("/selfie")
-				.then()
-				.statusCode(422)
-				.extract().response();
-
-		String code = response.jsonPath().getString("code");
-		String description = response.jsonPath().getString("description");
-		String signature = response.jsonPath().getString("signature");
-
-		assertNotNull(description, "Description is missing from the response");
-		assertNotNull(code, "Code is missing");
-		assertNotNull(signature,"signature is missing");
-
-		assertFalse(description.isEmpty(), "Description is empty");
-		assertFalse(code.isEmpty(), "Code is empty");
-		assertFalse(signature.isEmpty(),"signature is empty");
-
-		assertEquals(code,"VST_PROFILE_IMG_FACE_FEATURES");
-	     assertEquals(description,"Invalid facial features action detected. Eyes closed or mouth open.");
-	}
 	
 	@Test
-	public void uploadSelfiewithOpenedMouth() {
-		File imageFile = new File("images/Image_20241216_121143_255.png");
+	public void uploaddocumentwithoutSelfie() {
+		File imageFile = new File("images/Image_20241216_121143_255.jpeg");
 		Response response = given()
-       .baseUri(baseURI)
-       .header("X-GEO-Location", "12,12")
-       .header("X-AUTH-TOKEN",AuthToken)
-       .header("X-Device-Id", "3efe6bbeb55f4411")
-       .header("User-Agent", "NepalTravelApp/1.0.0 android")
-       .multiPart("file", imageFile)
-       .contentType("multipart/form-data")
-       
-   .when()
-       .post("/selfie")
-   .then()
-       .statusCode(422)
-       .extract().response();
+				.baseUri(baseURI)
+				.header("X-GEO-Location", "12,12")
+				.header("X-AUTH-TOKEN",AuthToken)
+				.header("X-Device-Id", "3efe6bbeb55f4411")
+				.header("User-Agent", "NepalTravelApp/1.0.0 android")
+				.multiPart("file", imageFile)
+				.contentType("multipart/form-data")
+
+				.when()
+				.post("/document")
+				.then()
+				.statusCode(406)
+				.extract().response();
+
+		String code = response.jsonPath().getString("code");
+		String description = response.jsonPath().getString("description");
+		String signature = response.jsonPath().getString("signature");
+
+		assertNotNull(description, "Description is missing from the response");
+		assertNotNull(code, "Code is missing");
+		assertNotNull(signature,"signature is missing");
+
+		assertFalse(description.isEmpty(), "Description is empty");
+		assertFalse(code.isEmpty(), "Code is empty");
+		assertFalse(signature.isEmpty(),"signature is empty");
+
+		assertEquals(code,"GNR_NOT_ALLOWED");
+		assertEquals(description,"Upload selfie first.");
 		
-		 String code = response.jsonPath().getString("code");
-	     String description = response.jsonPath().getString("description");
-	     String signature = response.jsonPath().getString("signature");
-	     
-	     assertNotNull(description, "Description is missing from the response");
-	     assertNotNull(code, "Code is missing");
-	     assertNotNull(signature,"signature is missing");
-	     
-	     assertFalse(description.isEmpty(), "Description is empty");
-	     assertFalse(code.isEmpty(), "Code is empty");
-	     assertFalse(signature.isEmpty(),"signature is empty");
-	     
-	     assertEquals(code,"VST_PROFILE_IMG_FACE_FEATURES");
-	     assertEquals(description,"Invalid facial features action detected. Eyes closed or mouth open.");
 	}
-	
+
 	@Test
-	public void uploadSelfiewhileServerdown() {
+	public void uploaddocumentwithEmptyDevice() {
+		File imageFile = new File("images/Image_20241216_121143_255.jpeg");
+		Response response = given()
+				.baseUri(baseURI)
+				.header("X-GEO-Location", "12,12")
+				.header("X-AUTH-TOKEN",AuthToken)
+				.header("X-Device-Id", "3efe6bbeb55f4411")
+				.header("User-Agent", "NepalTravelApp/1.0.0 android")
+				.multiPart("file", imageFile)
+				.contentType("multipart/form-data")
+
+				.when()
+				.post("/document")
+				.then()
+				.statusCode(400)
+				.extract().response();
+
+		String code = response.jsonPath().getString("code");
+		String description = response.jsonPath().getString("description");
+		String signature = response.jsonPath().getString("signature");
+
+		assertNotNull(description, "Description is missing from the response");
+		assertNotNull(code, "Code is missing");
+		assertNotNull(signature,"signature is missing");
+
+		assertFalse(description.isEmpty(), "Description is empty");
+		assertFalse(code.isEmpty(), "Code is empty");
+		assertFalse(signature.isEmpty(),"signature is empty");
+
+		assertEquals(code,"GNR_PARAM_MISSING");
+		assertEquals(description,"Required values missing.");
+	}
+
+	@Test
+	public void uploaddocumentwithEmptyLocation() {
+		File imageFile = new File("images/Image_20241216_121143_255.jpeg");
+		Response response = given()
+				.baseUri(baseURI)
+				.header("X-GEO-Location", "12,12")
+				.header("X-AUTH-TOKEN",AuthToken)
+				.header("X-Device-Id", "3efe6bbeb55f4411")
+				.header("User-Agent", "NepalTravelApp/1.0.0 android")
+				.multiPart("file", imageFile)
+				.contentType("multipart/form-data")
+
+				.when()
+				.post("/document")
+				.then()
+				.statusCode(400)
+				.extract().response();
+
+		String code = response.jsonPath().getString("code");
+		String description = response.jsonPath().getString("description");
+		String signature = response.jsonPath().getString("signature");
+
+		assertNotNull(description, "Description is missing from the response");
+		assertNotNull(code, "Code is missing");
+		assertNotNull(signature,"signature is missing");
+
+		assertFalse(description.isEmpty(), "Description is empty");
+		assertFalse(code.isEmpty(), "Code is empty");
+		assertFalse(signature.isEmpty(),"signature is empty");
+
+		assertEquals(code,"GNR_PARAM_MISSING");
+		assertEquals(description,"Required values missing.");
+
+	}
+	@Test
+	public void uploaddocumentwithEmptyUserAgent() {
+		File imageFile = new File("images/Image_20241216_121143_255.jpeg");
+		Response response = given()
+				.baseUri(baseURI)
+				.header("X-GEO-Location", "12,12")
+				.header("X-AUTH-TOKEN",AuthToken)
+				.header("X-Device-Id", "3efe6bbeb55f4411")
+				.header("User-Agent", "NepalTravelApp/1.0.0 android")
+				.multiPart("file", imageFile)
+				.contentType("multipart/form-data")
+
+				.when()
+				.post("/document")
+				.then()
+				.statusCode(400)
+				.extract().response();
+
+		String code = response.jsonPath().getString("code");
+		String description = response.jsonPath().getString("description");
+		String signature = response.jsonPath().getString("signature");
+
+		assertNotNull(description, "Description is missing from the response");
+		assertNotNull(code, "Code is missing");
+		assertNotNull(signature,"signature is missing");
+
+		assertFalse(description.isEmpty(), "Description is empty");
+		assertFalse(code.isEmpty(), "Code is empty");
+		assertFalse(signature.isEmpty(),"signature is empty");
+
+		assertEquals(code,"GNR_PARAM_MISSING");
+		assertEquals(description,"Required values missing.");
+	}
+	@Test
+	public void uploaddocumentwithEmptyAuth() {
+		File imageFile = new File("images/Image_20241216_121143_255.jpeg");
+		Response response = given()
+				.baseUri(baseURI)
+				.header("X-GEO-Location", "12,12")
+				.header("X-AUTH-TOKEN",AuthToken)
+				.header("X-Device-Id", "3efe6bbeb55f4411")
+				.header("User-Agent", "NepalTravelApp/1.0.0 android")
+				.multiPart("file", imageFile)
+				.contentType("multipart/form-data")
+
+				.when()
+				.post("/document")
+				.then()
+				.statusCode(400)
+				.extract().response();
+
+		String code = response.jsonPath().getString("code");
+		String description = response.jsonPath().getString("description");
+		String signature = response.jsonPath().getString("signature");
+
+		assertNotNull(description, "Description is missing from the response");
+		assertNotNull(code, "Code is missing");
+		assertNotNull(signature,"signature is missing");
+
+		assertFalse(description.isEmpty(), "Description is empty");
+		assertFalse(code.isEmpty(), "Code is empty");
+		assertFalse(signature.isEmpty(),"signature is empty");
+
+		assertEquals(code,"GNR_PARAM_MISSING");
+		assertEquals(description,"Required values missing.");
+	}
+
+	@Test
+	public void uploaddocumentwithinvalidImage() {
+		File imageFile = new File("images/Image_20241216_121143_255.png");
+		Response response = given()
+				.baseUri(baseURI)
+				.header("X-GEO-Location", "12,12")
+				.header("X-AUTH-TOKEN",AuthToken)
+				.header("X-Device-Id", "3efe6bbeb55f4411")
+				.header("User-Agent", "NepalTravelApp/1.0.0 android")
+				.multiPart("file", imageFile)
+				.contentType("multipart/form-data")
+
+				.when()
+				.post("/document")
+				.then()
+				.statusCode(422)
+				.extract().response();
+
+		String code = response.jsonPath().getString("code");
+		String description = response.jsonPath().getString("description");
+		String signature = response.jsonPath().getString("signature");
+
+		assertNotNull(description, "Description is missing from the response");
+		assertNotNull(code, "Code is missing");
+		assertNotNull(signature,"signature is missing");
+
+		assertFalse(description.isEmpty(), "Description is empty");
+		assertFalse(code.isEmpty(), "Code is empty");
+		assertFalse(signature.isEmpty(),"signature is empty");
+
+		assertEquals(code,"GNR_INVALID_DATA");
+		assertEquals(description,"Unable to process request as data is invalid.");
+	}
+
+	@Test
+	public void uploaddocumentwithLargefile() {
+		File imageFile = new File("images/Image_20241216_121143_255.png");
+		Response response = given()
+				.baseUri(baseURI)
+				.header("X-GEO-Location", "12,12")
+				.header("X-AUTH-TOKEN",AuthToken)
+				.header("X-Device-Id", "3efe6bbeb55f4411")
+				.header("User-Agent", "NepalTravelApp/1.0.0 android")
+				.multiPart("file", imageFile)
+				.contentType("multipart/form-data")
+
+				.when()
+				.post("/document")
+				.then()
+				.statusCode(422)
+				.extract().response();
+
+		String code = response.jsonPath().getString("code");
+		String description = response.jsonPath().getString("description");
+		String signature = response.jsonPath().getString("signature");
+
+		assertNotNull(description, "Description is missing from the response");
+		assertNotNull(code, "Code is missing");
+		assertNotNull(signature,"signature is missing");
+
+		assertFalse(description.isEmpty(), "Description is empty");
+		assertFalse(code.isEmpty(), "Code is empty");
+		assertFalse(signature.isEmpty(),"signature is empty");
+
+		assertEquals(code,"GNR_INVALID_DATA");
+		assertEquals(description,"Unable to process request as data is invalid.");
+
+	}
+	@Test
+	public void uploaddocumentwhileServerdown() {
 		File imageFile = new File("images/Image_20241216_121143_255.png");
 		Response response = given()
        .baseUri(baseURI)
@@ -631,7 +516,7 @@ public class selfie {
        .contentType("multipart/form-data")
        
    .when()
-       .post("/selfie")
+       .post("/document")
    .then()
        .statusCode(500)
        .extract().response();
@@ -653,7 +538,7 @@ public class selfie {
 	}
 	
 	@Test
-	public void uploadSelfieforsameperson() {
+	public void uploaddocumentalreadyverified() {
 		File imageFile = new File("images/Image_20241216_121143_255.png");
 		Response response = given()
        .baseUri(baseURI)
@@ -665,7 +550,7 @@ public class selfie {
        .contentType("multipart/form-data")
        
    .when()
-       .post("/selfie")
+       .post("/document")
    .then()
        .statusCode(403)
        .extract().response();
@@ -683,6 +568,44 @@ public class selfie {
 	     assertFalse(signature.isEmpty(),"signature is empty");
 	     
 	     assertEquals(code,"GNR_FORBIDDEN");
-	     assertEquals(description,"Selfie already verified. Proceed to next operation.");
+	     assertEquals(description,"document already verified. Proceed to next operation.");
+	}
+	
+	@Test
+	public void uploadDocumentofDifferentPerson() {
+		File imageFile = new File("images/Image_20241216_121143_255.png");
+		Response response = given()
+       .baseUri(baseURI)
+       .header("X-GEO-Location", "12,12")
+       .header("X-AUTH-TOKEN",AuthToken)
+       .header("X-Device-Id", "3efe6bbeb55f4411")
+       .header("User-Agent", "NepalTravelApp/1.0.0 android")
+       .multiPart("file", imageFile)
+       .contentType("multipart/form-data")
+       
+   .when()
+       .post("/document")
+   .then()
+       .statusCode(403)
+       .extract().response();
+		
+		 String code = response.jsonPath().getString("code");
+	     String description = response.jsonPath().getString("description");
+	     String signature = response.jsonPath().getString("signature");
+	     
+	     assertNotNull(description, "Description is missing from the response");
+	     assertNotNull(code, "Code is missing");
+	     assertNotNull(signature,"signature is missing");
+	     
+	     assertFalse(description.isEmpty(), "Description is empty");
+	     assertFalse(code.isEmpty(), "Code is empty");
+	     assertFalse(signature.isEmpty(),"signature is empty");
+	     
+	     assertEquals(code,"VST_PROFILE_UNMATCHED");
+	     assertEquals(description,"Unable to match document image with selfie. Retry KYC process again.");
+		
 	}
 }
+
+
+
