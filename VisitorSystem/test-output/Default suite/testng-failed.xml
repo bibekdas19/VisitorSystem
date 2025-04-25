@@ -3,16 +3,27 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="OTP.signupOtp">
+      <class name="OTP.signupOtpVerify">
         <methods>
-          <include name="signUpwithValidCredentials"/>
-          <include name="setup"/>
-          <include name="signUpwithDuplicateEmail"/>
-          <include name="signUpwithInvalidTime"/>
-          <include name="signUpWithInvalidEmailformat"/>
-          <include name="signUpwithDuplicateDevice"/>
+          <include name="VerifySignUpwithInvalidPin"/>
+          <include name="VerifyOtpwithValidCredentials"/>
+          <include name="VerifySignUpOtpwithoutOtp"/>
+          <include name="VerifySignUpwithoutSignature"/>
+          <include name="verifySignUpOtpwithoutDeviceId"/>
+          <include name="verifySignUpOtpwithoutLocation"/>
+          <include name="getSecretKeyAndSignup"/>
+          <include name="VerifySignUpwithouttoken"/>
+          <include name="VerifySignUpwithWrongSignature"/>
+          <include name="VerifySignupwithInvalidTimestamp"/>
+          <include name="verifySignUpwithoutUserAgent"/>
+          <include name="VerifySignUpOtpwithoutTimestamp"/>
+          <include name="VerifySignupOtpwithoutemail"/>
+          <include name="VerifySignUpOtpwithoutpin"/>
+          <include name="VerifySignUpwithInvalidToken"/>
+          <include name="VerifySignUpwithInvalidOtp"/>
+          <include name="VerifySignUpwithInvalidEmail"/>
         </methods>
-      </class> <!-- OTP.signupOtp -->
+      </class> <!-- OTP.signupOtpVerify -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

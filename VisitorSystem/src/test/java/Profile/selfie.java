@@ -71,7 +71,7 @@ public class selfie {
 
 	@Test
 	public void uploadSelfiewithvalidCredentails() {
-		File imageFile = new File("images/Image_20241216_121143_255.jpeg");
+		File imageFile = new File("/resources/Profile/images/Image_20241216_121143_255.jpeg");
 		Response response = given()
 				.baseUri(baseURI)
 				.header("X-GEO-Location", "12,12")
