@@ -60,7 +60,7 @@ public class selfie {
 				.contentType("application/json")
 				.body(jsonBody)
 				.when()
-				.post("authenticate")
+				.post("/authenticate")
 				.then()
 				.statusCode(200)
 				.log().all()
