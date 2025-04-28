@@ -17,6 +17,21 @@ public class signatureCreate {
         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
         return sdf.format(new Date());
     }
+//    public static String generateHMACSHA256(String data, String base64Secret) throws Exception {
+//        // Decode the Base64-encoded secret key
+//        byte[] decodedKey = Base64.getDecoder().decode(base64Secret);
+//
+//        // Initialize HMAC with SHA-256
+//        Mac mac = Mac.getInstance("HmacSHA256");
+//        SecretKeySpec secretKey = new SecretKeySpec(decodedKey, "HmacSHA256");
+//        mac.init(secretKey);
+//
+//        // Generate the HMAC-SHA256 hash
+//        byte[] hashBytes = mac.doFinal(data.getBytes(StandardCharsets.UTF_8));
+//
+//        // Return Base64-encoded signature
+//        return Base64.getEncoder().encodeToString(hashBytes);
+//    }
 
     public static String generateHMACSHA256(String data, String secret) throws Exception {
         Mac mac = Mac.getInstance("HmacSHA256");
@@ -25,7 +40,7 @@ public class signatureCreate {
         byte[] hashBytes = mac.doFinal(data.getBytes(StandardCharsets.UTF_8));
         return Base64.getEncoder().encodeToString(hashBytes);
     }
-    
+//    
     public static String encryptAES256(String plainText, String base64Key) throws Exception {
     	MessageDigest digest = MessageDigest.getInstance("SHA-256");
     	byte[] keyBytes = digest.digest(base64Key.getBytes(StandardCharsets.UTF_8));

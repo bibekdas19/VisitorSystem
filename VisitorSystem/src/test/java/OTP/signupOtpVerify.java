@@ -3,6 +3,9 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import io.restassured.response.Response;
 import static io.restassured.RestAssured.*;
@@ -12,8 +15,8 @@ import java.util.*;
 
 public class signupOtpVerify {
 	String baseURI = "https://visitor0.moco.com.np/visitor";
-    String secretKey = "dib5GEoFN6egWbkwlqCPmWNAqZfTBj+RUWpw74DYLwg=";
-    String token = "YjlVtNmSrNJkLCvDJxP19dW0r11fnaiTImhhLu1iAu4";
+    String secretKey = "oOx4g8VJrs3xOCgjyu8f8n3d+V1FsIMODA4Z0JqHaU4=";
+    String token = "tSRPZhHYY6IcpNMis9VaZvgYPww-W5umSro8VRFFJn4";
 
 //    @BeforeClass
 //    public void getSecretKeyAndSignup() throws Exception {
@@ -71,7 +74,7 @@ public class signupOtpVerify {
 //    	String email = "vivek@moco.com.np";
 //        String requestTimestamp = signatureCreate.generateTimestamp();
 //        String plain_pin = "152986";
-//        String plain_otp = "152585";
+//        String plain_otp = "443062";
 //        //String requestdevice = "3efe6bbeb55f4411";
 //        
 //        Map<String, Object> jsonBody = new HashMap<>();
@@ -133,7 +136,7 @@ public class signupOtpVerify {
 //    	String email = "vivek@moco.com.np";
 //        String requestTimestamp = signatureCreate.generateTimestamp();
 //        String plain_pin = "152986";
-//        String plain_otp = "152585";
+//        String plain_otp = "443062";
 //        String requestdevice = "3efe6bbeb55f4411";
 //        
 //        Map<String, Object> jsonBody = new HashMap<>();
@@ -195,7 +198,7 @@ public class signupOtpVerify {
 //    	String email = "vivek@moco.com.np";
 //        String requestTimestamp = signatureCreate.generateTimestamp();
 //        String plain_pin = "152986";
-//        String plain_otp = "152585";
+//        String plain_otp = "443062";
 //        String requestdevice = "3efe6bbeb55f4411";
 //        
 //        Map<String, Object> jsonBody = new HashMap<>();
@@ -258,7 +261,7 @@ public class signupOtpVerify {
 //    	String email = "";
 //        String requestTimestamp = signatureCreate.generateTimestamp();
 //        String plain_pin = "152986";
-//        String plain_otp = "152585";
+//        String plain_otp = "443062";
 //        String requestdevice = "3efe6bbeb55f4411";
 //        
 //        Map<String, Object> jsonBody = new HashMap<>();
@@ -319,7 +322,7 @@ public class signupOtpVerify {
 //  	String email = "vivek@moco.com.np";
 //      String requestTimestamp = "";
 //      String plain_pin = "152986";
-//      String plain_otp = "152585";
+//      String plain_otp = "443062";
 //      String requestdevice = "3efe6bbeb55f4411";
 //      
 //      Map<String, Object> jsonBody = new HashMap<>();
@@ -503,7 +506,7 @@ public class signupOtpVerify {
 // 	String email = "vivek@moco.com.np";
 //     String requestTimestamp = signatureCreate.generateTimestamp();
 //     String plain_pin = "152986";
-//     String plain_otp = "152585";
+//     String plain_otp = "443062";
 //     String requestdevice = "3efe6bbeb55f4411";
 //     
 //     Map<String, Object> jsonBody = new HashMap<>();
@@ -564,7 +567,7 @@ public class signupOtpVerify {
 // 	 String email = "vivek@moco.com.np";
 //     String requestTimestamp = signatureCreate.generateTimestamp();
 //     String plain_pin = "152986";
-//     String plain_otp = "152585";
+//     String plain_otp = "443062";
 //     String requestdevice = "3efe6bbeb55f4411";
 //     
 //     Map<String, Object> jsonBody = new HashMap<>();
@@ -625,7 +628,7 @@ public class signupOtpVerify {
 // 	String email = "vivekmoco.com.np";
 //     String requestTimestamp = signatureCreate.generateTimestamp();
 //     String plain_pin = "152986";
-//     String plain_otp = "152585";
+//     String plain_otp = "443062";
 //     String requestdevice = "3efe6bbeb55f4411";
 //     
 //     Map<String, Object> jsonBody = new HashMap<>();
@@ -687,7 +690,7 @@ public class signupOtpVerify {
 // 	 String email = "vivek@moco.com.np";
 //     String requestTimestamp = "25:88:53";
 //     String plain_pin = "152986";
-//     String plain_otp = "152585";
+//     String plain_otp = "443062";
 //     String requestdevice = "3efe6bbeb55f4411";
 //     
 //     Map<String, Object> jsonBody = new HashMap<>();
@@ -813,7 +816,7 @@ public class signupOtpVerify {
 //	String email = "vivek@moco.com.np";
 //    String requestTimestamp = signatureCreate.generateTimestamp();
 //    String plain_pin = "89*7";
-//    String plain_otp = "152585";
+//    String plain_otp = "443062";
 //    String requestdevice = "3efe6bbeb55f4411";
 //    
 //    Map<String, Object> jsonBody = new HashMap<>();
@@ -873,7 +876,7 @@ public class signupOtpVerify {
 // 	String email = "vivek@moco.com.np";
 //     String requestTimestamp = signatureCreate.generateTimestamp();
 //     String plain_pin = "152986";
-//     String plain_otp = "152585";
+//     String plain_otp = "443062";
 //     String requestdevice = "3efe6bbeb55f4411";
 //     
 //     Map<String, Object> jsonBody = new HashMap<>();
@@ -934,7 +937,7 @@ public class signupOtpVerify {
 // 	String email = "vivek@moco.com.np";
 //     String requestTimestamp = signatureCreate.generateTimestamp();
 //     String plain_pin = "152986";
-//     String plain_otp = "152585";
+//     String plain_otp = "443062";
 //     String requestdevice = "3efe6bbeb55f4411";
 //     
 //     Map<String, Object> jsonBody = new HashMap<>();
@@ -991,26 +994,25 @@ public class signupOtpVerify {
  @Test
  public void VerifyOtpwithValidCredentials() throws Exception {
 	 ObjectMapper objectMapper = new ObjectMapper();
+	 //ObjectNode jsonBody = JsonNodeFactory.instance.objectNode();
+	// Optional: Don't sort keys alphabetically unless backend expects it
+	 //objectMapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, false);
  	 String email = "vivek@moco.com.np";
      String requestTimestamp = signatureCreate.generateTimestamp();
      String plain_pin = "152986";
-     String plain_otp = "861321";
+     String plain_otp = "022739";
      String requestdevice = "3efe6bbeb55f4411";
      
-     Map<String, Object> jsonBody = new HashMap<>();
+     Map<String, Object> jsonBody = new LinkedHashMap<>();
      jsonBody.put("email", email);
      jsonBody.put("requestTimestamp", requestTimestamp);
-    
-     //encryption with AES256 algorithm
      jsonBody.put("otp", plain_otp);
-     
      String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
-     
      jsonBody.put("pin",pin);
      
      //placing token from signup API
      jsonBody.put("token", token);
-     System.out.println(jsonBody);
+    // System.out.println(jsonBody);
 
   // Generate signature
      String data = objectMapper.writeValueAsString(jsonBody);
@@ -1018,7 +1020,8 @@ public class signupOtpVerify {
      
   // Add signature
      jsonBody.put("signature", requestSignature);
-     System.out.println(jsonBody);
+   String finalJson = objectMapper.writeValueAsString(jsonBody);
+     System.out.println(finalJson);
      
 
      
@@ -1059,6 +1062,9 @@ public class signupOtpVerify {
      //assert device and email is equal with request
      assertEquals(requestdevice,deviceId);
      assertEquals(email,responseEmail);
+     
+    // assertTrue(response.getHeaders().hasHeaderWithName("X-AUTH-TOKEN"), "Missing X-AUTH-TOKEN header");
+     System.out.println("Request ID: " + response.getHeaders().hasHeaderWithName("X-AUTH-TOKEN"));
      
  }
  

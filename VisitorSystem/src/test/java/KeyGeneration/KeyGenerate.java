@@ -284,6 +284,7 @@ public class KeyGenerate {
         
 		// check if the request and response have same value for device id
         assertEquals(requestDeviceId,deviceId);
+        System.out.println(signOnKey);
 	}
 	}
 

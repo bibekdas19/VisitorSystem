@@ -31,6 +31,7 @@ public class signupOtp {
 
         secretKey = response.jsonPath().getString("signOnKey");
         assertNotNull(secretKey, "Secret key is null!");
+        System.out.println(secretKey);
     }
 
    
@@ -573,6 +574,9 @@ public class signupOtp {
         assertFalse(token.isEmpty(), "token is empty");
         assertFalse(description.isEmpty(), "Description is empty");
         assertFalse(code.isEmpty(), "Code is empty");
+        
+        System.out.println(token);
+ 
     }
 
     
