@@ -1,11 +1,11 @@
 package OTP;
-import org.testng.annotations.BeforeClass;
+//import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+//import com.fasterxml.jackson.databind.SerializationFeature;
+//import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+//import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import io.restassured.response.Response;
 import static io.restassured.RestAssured.*;
@@ -15,8 +15,8 @@ import java.util.*;
 
 public class signupOtpVerify {
 	String baseURI = "https://visitor0.moco.com.np/visitor";
-    String secretKey = "oOx4g8VJrs3xOCgjyu8f8n3d+V1FsIMODA4Z0JqHaU4=";
-    String token = "tSRPZhHYY6IcpNMis9VaZvgYPww-W5umSro8VRFFJn4";
+    String secretKey = "ekRFyAftu0rylsmN9Bao8xjzUSR8qkvSmvt2+dzaLDI=";
+    String token = "LsvU79rSruU-klAoIoWEJiVNeTpT9WZmZLmEwZeGUh0";
 
 //    @BeforeClass
 //    public void getSecretKeyAndSignup() throws Exception {
@@ -997,11 +997,11 @@ public class signupOtpVerify {
 	 //ObjectNode jsonBody = JsonNodeFactory.instance.objectNode();
 	// Optional: Don't sort keys alphabetically unless backend expects it
 	 //objectMapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, false);
- 	 String email = "vivek@moco.com.np";
+ 	 String email = "sandeshthapa@moco.com.np";
      String requestTimestamp = signatureCreate.generateTimestamp();
      String plain_pin = "152986";
-     String plain_otp = "022739";
-     String requestdevice = "3efe6bbeb55f4411";
+     String plain_otp = "004645";
+     String requestdevice = "sandesh-thapa-app";
      
      Map<String, Object> jsonBody = new LinkedHashMap<>();
      jsonBody.put("email", email);
@@ -1020,8 +1020,6 @@ public class signupOtpVerify {
      
   // Add signature
      jsonBody.put("signature", requestSignature);
-   String finalJson = objectMapper.writeValueAsString(jsonBody);
-     System.out.println(finalJson);
      
 
      

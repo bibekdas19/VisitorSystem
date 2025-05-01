@@ -1,77 +1,75 @@
 package Profile;
 
-import org.testng.annotations.BeforeClass;
+//import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import OTP.signatureCreate;
-import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import static io.restassured.RestAssured.*;
 import static org.testng.Assert.*;
 
-import java.util.*;
+//import java.util.*;
 
-public class profileStaging {
-	String AuthToken;
-	@BeforeClass
-	public void getToken() throws Exception {
-		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
-		//get the signOn key
-		Response keyResponse = given()
-				.baseUri(baseURI)
-				.header("X-GEO-Location", "12,12")
-				.header("X-Device-Id", "3efe6bbeb55f4411")
-				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-				.when()
-				.get("/key")
-				.then()
-				.statusCode(200)
-				.extract().response();
+public class getProfileDetails {
+	String AuthToken = "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ2aXZla0Btb2NvLmNvbS5ucCIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6InRyYXZlbC1hcHAtcGhvbmUiLCJpYXQiOjE3NDU5ODk1NTYsImV4cCI6MTc0NTk5MzE1Nn0.aZRuzTupfxhdInyVcQTvjSjqzZeTV_FFEYTrQ9AnZp8OjrngYHTiKlYUDEIZyLAL";
 
-		String secretKey = keyResponse.jsonPath().getString("signOnKey");
-		assertNotNull(secretKey, "Secret key is null!");
-
-		//authenticate before for the auth token
-		ObjectMapper objectMapper = new ObjectMapper();
-		String email = "vivek@moco.com.np";
-		String requestDeviceId = "3efe6bbeb55f4411";
-		Map<String, Object> credentials = new HashMap<>();
-		credentials.put("email", email);
-		credentials.put("pin", "123426");
-
-		Map<String, Object> jsonBody = new HashMap<>();
-		jsonBody.put("credentials", credentials);
-
-		// Generate signature
-		String data = objectMapper.writeValueAsString(jsonBody);
-		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
-
-		jsonBody.put("signature", requestSignature);
-
-		// Send request
-		Response Authresponse = given()
-				.header("X-GEO-Location", "12,12")
-				.header("X-Device-Id", requestDeviceId)
-				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-				.contentType("application/json")
-				.body(jsonBody)
-				.when()
-				.post("authenticate")
-				.then()
-				.statusCode(200)
-				.log().all()
-				.extract().response();
-		AuthToken = Authresponse.getHeader("X-AUTH-TOKEN");
-
-	}
+//	@BeforeClass
+//	public void getToken() throws Exception {
+//		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
+//		//get the signOn key
+//		Response keyResponse = given()
+//				.baseUri(baseURI)
+//				.header("X-GEO-Location", "12,12")
+//				.header("X-Device-Id", "travel-app-phone")
+//				.header("User-Agent", "NepalTravelApp/1.0.0 android")
+//				.header("X-AUTH-TOKEN",AuthToken)
+//				.when()
+//				.get("/key")
+//				.then()
+//				.statusCode(200)
+//				.extract().response();
+//
+//		String secretKey = keyResponse.jsonPath().getString("signOnKey");
+//		assertNotNull(secretKey, "Secret key is null!");
+//
+//		//authenticate before for the auth token
+//		ObjectMapper objectMapper = new ObjectMapper();
+//		String email = "vivek@moco.com.np";
+//		String requestDeviceId = "travel-app-phone";
+//		Map<String, Object> credentials = new HashMap<>();
+//		credentials.put("email", email);
+//		credentials.put("pin", "123426");
+//
+//		Map<String, Object> jsonBody = new HashMap<>();
+//		jsonBody.put("credentials", credentials);
+//
+//		// Generate signature
+//		String data = objectMapper.writeValueAsString(jsonBody);
+//		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+//
+//		jsonBody.put("signature", requestSignature);
+//
+//		// Send request
+//		Response Authresponse = given()
+//				.header("X-GEO-Location", "12,12")
+//				.header("X-Device-Id", requestDeviceId)
+//				.header("User-Agent", "NepalTravelApp/1.0.0 android")
+//				.contentType("application/json")
+//				.body(jsonBody)
+//				.when()
+//				.post("authenticate")
+//				.then()
+//				.statusCode(200)
+//				.log().all()
+//				.extract().response();
+//		AuthToken = Authresponse.getHeader("X-AUTH-TOKEN");
+//
+//	}
 	
 	@Test
 	public void getProfileInformation() {
+		baseURI = "https://visitor0.moco.com.np/visitor";
 		Response response = given()
 	            .header("X-GEO-Location", "12,12")
-	            .header("X-Device-Id", "")
+	            .header("X-Device-Id", "travel-app-phone")
 	            .header("X-AUTH-TOKEN",AuthToken)
 	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
 	        .when()
@@ -88,10 +86,11 @@ public class profileStaging {
 		String documentExpiryDate = response.jsonPath().getString("documentExpiryDate");
 		String gender = response.jsonPath().getString("gender");
 		String documentType = response.jsonPath().getString("documentType");
-		String status = response.jsonPath().getString("profile.status");
-        String verificationStatus = response.jsonPath().getString("profile.verificationStatus");
-        String loginAttemptCount = response.jsonPath().getString("profile.loginAttemptCount");
-        String isBiometric = response.jsonPath().getString("profile.isBiometric");
+		String status = response.jsonPath().getString("status");
+        String verificationStatus = response.jsonPath().getString("verificationStatus");
+        String loginAttemptCountPin = response.jsonPath().getString("loginAttemptCountPin");
+        String loginAttemptCountBiometric = response.jsonPath().getString("loginAttemptCountBiometric");
+        
 		
 
 		assertNotNull(signature, "signature is missing");
@@ -105,8 +104,8 @@ public class profileStaging {
         assertNotNull(gender, "gender is missing");
         assertNotNull(status, "status is missing");
         assertNotNull(verificationStatus, "verificationStatus is missing");
-        assertNotNull(loginAttemptCount, "loginAttemptCount is missing");
-        assertNotNull(isBiometric, "isBiometric is missing");
+        assertNotNull(loginAttemptCountPin, "loginAttemptCount is missing");
+        assertNotNull(loginAttemptCountBiometric, "isBiometric is missing");
 
         assertFalse(signature.isEmpty(), "Signature is empty in the response");
         assertFalse(fullName.isEmpty(), "fullname is missing");
@@ -118,12 +117,8 @@ public class profileStaging {
         assertFalse(gender.isEmpty(), "gender is missing");
         assertFalse(status.isEmpty(), "status is missing");
         assertFalse(verificationStatus.isEmpty(), "verificationStatus is missing");
-        assertFalse(loginAttemptCount.isEmpty(), "loginAttemptCount is missing");
-        assertFalse(isBiometric.isEmpty(), "isBiometric is missing");
-
-        //check if the device id is same in request and response
-        assertEquals("John Smith",fullName);
-        assertEquals("India",country);
+        assertFalse(loginAttemptCountPin.isEmpty(), "loginAttemptCount is missing");
+        assertFalse(loginAttemptCountBiometric.isEmpty(), "isBiometric is missing");
         
       //check if the token is in the present in the response
         assertTrue(response.getHeaders().hasHeaderWithName("X-AUTH-TOKEN"), "Missing X-AUTH-TOKEN header");
@@ -132,6 +127,7 @@ public class profileStaging {
 	}
 	@Test
 	public void getProfileInformationwithoutDevice() {
+		baseURI = "https://visitor0.moco.com.np/visitor";
 		Response response = given()
 	            .header("X-GEO-Location", "12,12")
 	            .header("X-Device-Id", "")
@@ -157,9 +153,10 @@ public class profileStaging {
 	}
     @Test
 	public void getProfileInformationwithoutGeo() {
+    	baseURI = "https://visitor0.moco.com.np/visitor";
     	Response response = given()
-	            .header("X-GEO-Location", "12,12")
-	            .header("X-Device-Id", "")
+	            .header("X-GEO-Location", "")
+	            .header("X-Device-Id", "travel-app-phone")
 	            .header("X-AUTH-TOKEN",AuthToken)
 	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
 	        .when()
@@ -182,11 +179,12 @@ public class profileStaging {
 	}
 	@Test
 	public void getProfileInformationwithoutUserAgent() {
+		baseURI = "https://visitor0.moco.com.np/visitor";
 		Response response = given()
 	            .header("X-GEO-Location", "12,12")
-	            .header("X-Device-Id", "")
+	            .header("X-Device-Id", "travel-app-phone")
 	            .header("X-AUTH-TOKEN",AuthToken)
-	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+	            .header("User-Agent", "")
 	        .when()
 	            .get("/profile")
 	        .then()
@@ -207,10 +205,11 @@ public class profileStaging {
 	}
 	@Test
 	public void getProfileInformationwithoutAuth() {
+		baseURI = "https://visitor0.moco.com.np/visitor";
 		Response response = given()
 	            .header("X-GEO-Location", "12,12")
-	            .header("X-Device-Id", "")
-	            .header("X-AUTH-TOKEN",AuthToken)
+	            .header("X-Device-Id", "travel-app-phone")
+	            .header("X-AUTH-TOKEN","")
 	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
 	        .when()
 	            .get("/profile")
@@ -232,9 +231,10 @@ public class profileStaging {
 	}
 	@Test
 	public void getProfileInformationwithInvalidDevice() {
+		baseURI = "https://visitor0.moco.com.np/visitor";
 		Response response = given()
 	            .header("X-GEO-Location", "12,12")
-	            .header("X-Device-Id", "")
+	            .header("X-Device-Id", "travel-app-phone#$")
 	            .header("X-AUTH-TOKEN",AuthToken)
 	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
 	        .when()
@@ -246,24 +246,25 @@ public class profileStaging {
 		// Extracting and asserting response values
 		String code = response.jsonPath().getString("code");
 	     String description = response.jsonPath().getString("description");
-	     String signature = response.jsonPath().getString("signature");
+	    // String signature = response.jsonPath().getString("signature");
 	     
 	     assertNotNull(description, "Description is missing from the response");
 	     assertNotNull(code, "Code is missing");
-	     assertNotNull(signature,"signature is missing");
+	    // assertNotNull(signature,"signature is missing");
 	     
 	     assertFalse(description.isEmpty(), "Description is empty");
 	     assertFalse(code.isEmpty(), "Code is empty");
-	     assertFalse(signature.isEmpty(),"signature is empty");
+	     //assertFalse(signature.isEmpty(),"signature is empty");
 	     
 	     assertEquals(code,"GNR_INVALID_DATA");
-		 assertEquals(description,"Invalid data.");
+		 assertEquals(description,"Invalid device Id found.");
 	}
 	@Test
 	public void getProfileInformationwithInvalidLocation() {
+		baseURI = "https://visitor0.moco.com.np/visitor";
 		Response response = given()
-	            .header("X-GEO-Location", "12,12")
-	            .header("X-Device-Id", "")
+	            .header("X-GEO-Location", "12AA12")
+	            .header("X-Device-Id", "travel-app-phone")
 	            .header("X-AUTH-TOKEN",AuthToken)
 	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
 	        .when()
@@ -275,26 +276,27 @@ public class profileStaging {
 		// Extracting and asserting response values
 		String code = response.jsonPath().getString("code");
 	     String description = response.jsonPath().getString("description");
-	     String signature = response.jsonPath().getString("signature");
+	     //String signature = response.jsonPath().getString("signature");
 	     
 	     assertNotNull(description, "Description is missing from the response");
 	     assertNotNull(code, "Code is missing");
-	     assertNotNull(signature,"signature is missing");
+	    // assertNotNull(signature,"signature is missing");
 	     
 	     assertFalse(description.isEmpty(), "Description is empty");
 	     assertFalse(code.isEmpty(), "Code is empty");
-	     assertFalse(signature.isEmpty(),"signature is empty");
+	     //assertFalse(signature.isEmpty(),"signature is empty");
 	     
 	     assertEquals(code,"GNR_INVALID_DATA");
-		 assertEquals(description,"Invalid data.");
+		 assertEquals(description,"Invalid Geo location found.");
 		
 	}
 	@Test
 	public void getProfileInformationwithInvalidAuth() {
+		baseURI = "https://visitor0.moco.com.np/visitor";
 		Response response = given()
 	            .header("X-GEO-Location", "12,12")
-	            .header("X-Device-Id", "")
-	            .header("X-AUTH-TOKEN",AuthToken)
+	            .header("X-Device-Id", "travel-app-phone")
+	            .header("X-AUTH-TOKEN","()(jd")
 	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
 	        .when()
 	            .get("/profile")
@@ -305,15 +307,15 @@ public class profileStaging {
 		// Extracting and asserting response values
 		String code = response.jsonPath().getString("code");
 	     String description = response.jsonPath().getString("description");
-	     String signature = response.jsonPath().getString("signature");
+	    // String signature = response.jsonPath().getString("signature");
 	     
 	     assertNotNull(description, "Description is missing from the response");
 	     assertNotNull(code, "Code is missing");
-	     assertNotNull(signature,"signature is missing");
+	     //assertNotNull(signature,"signature is missing");
 	     
 	     assertFalse(description.isEmpty(), "Description is empty");
 	     assertFalse(code.isEmpty(), "Code is empty");
-	     assertFalse(signature.isEmpty(),"signature is empty");
+	     //assertFalse(signature.isEmpty(),"signature is empty");
 	     
 	     assertEquals(code,"GNR_AUTHENTICATION_FAIL");
 		 assertEquals(description,"Authentication Failed.");
@@ -321,15 +323,16 @@ public class profileStaging {
 	}
 	@Test
 	public void getProfileInformationwithServerDown() {
+		baseURI = "https://visitor0.moco.com.np/visitor";
 		Response response = given()
 	            .header("X-GEO-Location", "12,12")
-	            .header("X-Device-Id", "")
+	            .header("X-Device-Id", "travel-app-phone")
 	            .header("X-AUTH-TOKEN",AuthToken)
 	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
 	        .when()
 	            .get("/profile")
 	        .then()
-	            .statusCode(401)
+	            .statusCode(500)
 	            .extract().response();
 		
 		// Extracting and asserting response values

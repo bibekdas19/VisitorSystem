@@ -35,5 +35,56 @@ public class biometric {
         assertNotNull(signature, "description is missing from the response");
         assertFalse(signature.isEmpty(), "description is empty in the response");
 	}
-
+	@Test
+	public void setBiometericwithoutDevice() {
+		
+	}
+	@Test
+	public void setBiometricwithoutLocation() {
+		
+	}
+    @Test
+    public void setBiometricwithoutUserAgent() {
+    	
+    }
+    @Test
+    public void setBiometricwithoutAuth() {
+    	
+    }
+    @Test
+    public void setBiometricwithInvalidDevice() {
+    	
+    }
+    @Test
+    public void setBiometricwithInvalidUserAgent() {
+    	
+    }
+    @Test
+    public void setBiometricwithInvalidLocation() {
+    	
+    }
+    @Test
+    public void setBiometricwithInvalidAuth() {
+    	
+    }
+    @Test
+    public void setBiometricwithoutrequest() {
+    	
+    }
+    @Test
+    public void setBiometricwithoutHash() {
+    	
+    }
+    @Test
+    public void setBiometricwithoutSignature() {
+    	
+    }
+    @Test
+    public void setBiometricwithInvalidHash() {
+    	
+    }
+    @Test
+    public void setBiometricwithInvalidSignature() {
+    	
+    }
 }

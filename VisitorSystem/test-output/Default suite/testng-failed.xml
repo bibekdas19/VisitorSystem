@@ -3,14 +3,18 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="OTP.signupOtp">
+      <class name="Authentication.session">
         <methods>
-          <include name="signUpwithValidCredentials"/>
-          <include name="setup"/>
-          <include name="signUpwithDuplicateEmail"/>
-          <include name="signUpwithDuplicateDevice"/>
+          <include name="GetSessionwithInvalidUser"/>
+          <include name="GetSessionwithInvalidSystemID"/>
+          <include name="GetSessionwithInvalidLocation"/>
+          <include name="GetSessionwithInvalidAuth"/>
+          <include name="GetSessionwithinvalidSystemCredentials"/>
+          <include name="GetSessionInformation"/>
+          <include name="GetSessionwithInvalidSignature"/>
+          <include name="GetSessionwithInvalidRequestTimestamp"/>
         </methods>
-      </class> <!-- OTP.signupOtp -->
+      </class> <!-- Authentication.session -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

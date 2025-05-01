@@ -31,5 +31,43 @@ public class logOut {
         assertEquals(code,"GNR_PARAM_MISSING");
         assertEquals(description,"Bad Request.");
 	}
+	
+	@Test
+	public void logoutwithoutDevice() {
+		
+	}
+	@Test
+	public void logoutwithoutAuth() {
+		
+	}
+	@Test
+	public void logoutwithoutLocation() {
+		
+	}
+	@Test
+	public void logoutwithoutUserAgent() {
+		
+	}
+	@Test
+	public void logoutwithInvalidDevice() {
+		
+	}
+	
+	@Test
+	public void logoutwithInvalidLocation() {
+		
+	}
+	@Test
+	public void logoutwithInvalidUserAgent() {
+		
+	}
+	@Test
+	public void logoutwithInvalidAuth() {
+		
+	}
+	@Test
+	public void logoutwithoutLogin() {
+		
+	}
 
 }

@@ -30,5 +30,45 @@ public class deleteBiometric {
         assertNotNull(signature, "description is missing from the response");
         assertFalse(signature.isEmpty(), "description is empty in the response");
 	}
+	
+	@Test
+	public void deleteBiometricwithoutDevice() {
+		
+	}
+	@Test
+	public void deleteBiometricwithoutAuth() {
+		
+	}
+	@Test
+	public void deleteBiometricwithoutLocation() {
+		
+	}
+	@Test
+	public void deleteBiometricwithoutUserAgent() {
+		
+	}
+	@Test
+	public void deleteBiometricwithInvalidDevice() {
+		
+	}
+	
+	@Test
+	public void deleteBiometricwithInvalidLocation() {
+		
+	}
+	@Test
+	public void deleteBiometricwithInvalidUserAgent() {
+		
+	}
+	@Test
+	public void deleteBiometricwithInvalidAuth() {
+		
+	}
+	@Test
+	public void deleteBiometricwithoutsetting() {
+		
+	}
+	
+
 
 }

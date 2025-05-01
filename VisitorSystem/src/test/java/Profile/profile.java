@@ -1,5 +1,5 @@
 package Profile;
-import org.testng.annotations.BeforeClass;
+//import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,68 +11,79 @@ import io.restassured.response.Response;
 import static io.restassured.RestAssured.*;
 import static org.testng.Assert.*;
 
-import java.util.HashMap;
+//import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class profile {
-	String AuthToken = "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ2aXZla0Btb2NvLmNvbS5ucCIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6IjNlZmU2YmJlYjU1ZjQ0MTEiLCJpYXQiOjE3NDU4MzMxNDAsImV4cCI6MTc0NTgzNDA0MH0.fammc6LB9jdsagm0MjajdEv4if50uy42k-XoHLo9tbkJouJ6J-XoGJZr9_5NA5q9";
-	String secretKey = "oOx4g8VJrs3xOCgjyu8f8n3d+V1FsIMODA4Z0JqHaU4=";
+	String AuthToken = "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzYW5kZXNodGhhcGFAbW9jby5jb20ubnAiLCJpc3MiOiJWSVNJVE9SLVNFUlZJQ0UiLCJqdGkiOiJzYW5kZXNoLXRoYXBhLWFwcCIsImlhdCI6MTc0NjAwNjY0NywiZXhwIjoxNzQ2MDEwMjQ3fQ.p_hXnJEQRS1R5gcGWE7DogFnxKT6xZHfkOnFL2cbpADPzJqGPZ9WgcYmejp6jckg";
+	String secretKey = "+8qCXF5kx75wAnNFTRvxzOQye/dO8bxiZSc+EcQNdleSKOEHLHyNNlBs+5hU+uoo";
 //    @BeforeClass
 //    public void getToken() throws Exception {
 //		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
-//		//get the signOn key
-//		Response keyResponse = given()
-//				.baseUri(baseURI)
-//				.header("X-GEO-Location", "12,12")
-//				.header("X-Device-Id", "3efe6bbeb55f4411")
-//				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-//				.when()
-//				.get("/key")
-//				.then()
-//				.statusCode(200)
-//				.extract().response();
-//
-//		secretKey = keyResponse.jsonPath().getString("signOnKey");
-//		assertNotNull(secretKey, "Secret key is null!");
-//
 //		//authenticate before for the auth token
-//		ObjectMapper objectMapper = new ObjectMapper();
-//		String email = "vivek@moco.com.np";
-//		String requestDeviceId = "3efe6bbeb55f4411";
-//		Map<String, Object> credentials = new HashMap<>();
-//		credentials.put("email", email);
-//		credentials.put("pin", "123426");
+//	ObjectMapper objectMapper = new ObjectMapper();
+//	String email = "vivek@moco.com.np";
+//	String requestDeviceId = "3efe6bbeb55f4411";
+//	Map<String, Object> credentials = new HashMap<>();
+//	credentials.put("email", email);
+//	credentials.put("pin", "123426");
 //
-//		Map<String, Object> jsonBody = new HashMap<>();
-//		jsonBody.put("credentials", credentials);
+//	Map<String, Object> jsonBody = new LinkedHashMap<>();
+//	jsonBody.put("credentials", credentials);
 //
-//		// Generate signature
-//		String data = objectMapper.writeValueAsString(jsonBody);
-//		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+//	// Generate signature
+//	String data = objectMapper.writeValueAsString(jsonBody);
+//	String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
 //
-//		jsonBody.put("signature", requestSignature);
+//	jsonBody.put("signature", requestSignature);
 //
-//		// Send request
-//		Response Authresponse = given()
-//				.header("X-GEO-Location", "12,12")
-//				.header("X-Device-Id", requestDeviceId)
-//				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-//				.contentType("application/json")
-//				.body(jsonBody)
-//				.when()
-//				.post("/authenticate")
-//				.then()
-//				.statusCode(200)
-//				.log().all()
-//				.extract().response();
-//		AuthToken = Authresponse.getHeader("X-AUTH-TOKEN");
+//	// Send request
+//	Response Authresponse = given()
+//			.header("X-GEO-Location", "12,12")
+//			.header("X-Device-Id", requestDeviceId)
+//			.header("User-Agent", "NepalTravelApp/1.0.0 android")
+//			.contentType("application/json")
+//			.body(jsonBody)
+//			.when()
+//			.post("/authenticate")
+//			.then()
+//			.statusCode(200)
+//			.log().all()
+//			.extract().response();
+//	AuthToken = Authresponse.getHeader("X-AUTH-TOKEN");
+//
+//		//get sessionkey before for the auth token
+//	
+//	String data = "12,12"+AuthToken+requestDeviceId+"NepalTravelApp/1.0.0 android"+"transaction"+""+"2025-04-30 15:16:00";
+////	: X-GEO-LOCATION+ X-AUTH-TOKEN + X-DEVICE-ID+ User-Agent + X-SYSTEM-ID+ X-CREDENTIAL(Optional) + Request-Timestamp
+//	String Signature = signatureCreate.generateHMACSHA256(data, secretKey);
+//	System.out.println(Signature);
+//
+//    Response response = (Response) given()
+//        .header("X-GEO-Location", "12,12")
+//        .header("X-Device-Id", requestDeviceId)
+//        .header("User-Agent", "NepalTravelApp/1.0.0 android")
+//        .header("X-AUTH-TOKEN",AuthToken)
+//        .header("X-SYSTEM-ID","transaction")
+//        .header("X-SYSTEM-SIGNATURE",Signature) 
+//        .header("Request-Timestamp","2025-04-30 15:16:00")
+//        .when()
+//        .get("/session")
+//    .then()
+//        .statusCode(200)
+//        .extract().response();
+//    String sessionKey = response.jsonPath().getString("sessionKey");
+    
+//		
 //		
 //}
     @Test
     public void getUserDetails() throws Exception {
-		String requestDeviceId = "3efe6bbeb55f4411";
+    	RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
+		String requestDeviceId = "sandesh-thapa-app";
     	ObjectMapper objectMapper = new ObjectMapper();
-		Map<String, Object> jsonBody = new HashMap<>();
+    	Map<String, Object> jsonBody = new LinkedHashMap<>();
 		jsonBody.put("fullName", "SINGH SAGAR");
 		jsonBody.put("country", "IND");
 		jsonBody.put("documentNumber", "R9079271");
@@ -87,6 +98,7 @@ public class profile {
 		
 		jsonBody.put("signature", requestSignature);
 		System.out.println(jsonBody);
+		//jsonBody.put("signature", requestSignature)
 		
 		Response response = given()
 				.header("X-GEO-Location", "12,12")
@@ -151,7 +163,7 @@ public class profile {
 	        
 	        //check if the device id is same in request and response
 	        
-//	        assertEquals(requestDeviceId,deviceId);
+	        assertEquals(requestDeviceId,deviceId);
 //	        assertEquals("John Smith",fullName);
 //	        assertEquals("India",country);
 	        
@@ -159,1262 +171,1262 @@ public class profile {
     	
     }
     
-//    @Test
-//    public void getUserDetailswithoutGeo() throws Exception {
-//    	String requestDeviceId = "3efe6bbeb55f4411";
-//    	ObjectMapper objectMapper = new ObjectMapper();
-//		Map<String, Object> jsonBody = new HashMap<>();
-//		jsonBody.put("fullName", "SINGH SAGAR");
-//		jsonBody.put("country", "IND");
-//		jsonBody.put("documentNumber", "R9079271");
-//		jsonBody.put("documentType", "PASSPORT");
-//		jsonBody.put("dateOfBirth", "1998-02-24");
-//		jsonBody.put("documentExpiryDate", "2028-01-23");
-//		jsonBody.put("gender", "M");
-//
-//		// Generate signature
-//		String data = objectMapper.writeValueAsString(jsonBody);
-//		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
-//		
-//		jsonBody.put("signature", requestSignature);
-//		
-//		Response response = given()
-//				.header("X-GEO-Location", "")
-//				.header("X-Device-Id", requestDeviceId)
-//				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-//				.header("X-AUTH-TOKEN",AuthToken)
-//				.contentType("application/json")
-//				.body(jsonBody)
-//				.when()
-//				.post("/profile")
-//				.then()
-//				.statusCode(400)
-//				.log().all()
-//				.extract().response();
-//		
-//		 String code = response.jsonPath().getString("code");
-//	     String description = response.jsonPath().getString("description");
-//	     String signature = response.jsonPath().getString("signature");
-//	     
-//	     assertNotNull(description, "Description is missing from the response");
-//	     assertNotNull(code, "Code is missing");
-//	     assertNotNull(signature,"signature is missing");
-//	     
-//	     assertFalse(description.isEmpty(), "Description is empty");
-//	     assertFalse(code.isEmpty(), "Code is empty");
-//	     assertFalse(signature.isEmpty(),"signature is empty");
-//	     
-//	     assertEquals(code,"GNR_PARAM_MISSING");
-//		 assertEquals(description,"Required values missing.");
-//    }
-//    
-//    @Test
-//    public void getUserDetailswithoutDevice() throws Exception{
-//    	String requestDeviceId = "";
-//    	ObjectMapper objectMapper = new ObjectMapper();
-//		Map<String, Object> jsonBody = new HashMap<>();
-//		jsonBody.put("fullName", "SINGH SAGAR");
-//		jsonBody.put("country", "IND");
-//		jsonBody.put("documentNumber", "R9079271");
-//		jsonBody.put("documentType", "PASSPORT");
-//		jsonBody.put("dateOfBirth", "1998-02-24");
-//		jsonBody.put("documentExpiryDate", "2028-01-23");
-//		jsonBody.put("gender", "M");
-//
-//		// Generate signature
-//		String data = objectMapper.writeValueAsString(jsonBody);
-//		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
-//		
-//		jsonBody.put("signature", requestSignature);
-//		
-//		Response response = given()
-//				.header("X-GEO-Location", "12,12")
-//				.header("X-Device-Id", requestDeviceId)
-//				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-//				.contentType("application/json")
-//				.body(jsonBody)
-//				.when()
-//				.post("/profile")
-//				.then()
-//				.statusCode(400)
-//				.log().all()
-//				.extract().response();
-//		
-//		 String code = response.jsonPath().getString("code");
-//	     String description = response.jsonPath().getString("description");
-//	     String signature = response.jsonPath().getString("signature");
-//	     
-//	     assertNotNull(description, "Description is missing from the response");
-//	     assertNotNull(code, "Code is missing");
-//	     assertNotNull(signature,"signature is missing");
-//	     
-//	     assertFalse(description.isEmpty(), "Description is empty");
-//	     assertFalse(code.isEmpty(), "Code is empty");
-//	     assertFalse(signature.isEmpty(),"signature is empty");
-//	     
-//	     assertEquals(code,"GNR_PARAM_MISSING");
-//		 assertEquals(description,"Required values missing.");
-//    	
-//    	
-//    }
-//    
-//    @Test
-//    public void getUserDetailswithoutUserAgent() throws Exception {
-//    	String requestDeviceId = "3efe6bbeb55f4411";
-//    	ObjectMapper objectMapper = new ObjectMapper();
-//		Map<String, Object> jsonBody = new HashMap<>();
-//		jsonBody.put("fullName", "SINGH SAGAR");
-//		jsonBody.put("country", "IND");
-//		jsonBody.put("documentNumber", "R9079271");
-//		jsonBody.put("documentType", "PASSPORT");
-//		jsonBody.put("dateOfBirth", "1998-02-24");
-//		jsonBody.put("documentExpiryDate", "2028-01-23");
-//		jsonBody.put("gender", "M");
-//
-//		// Generate signature
-//		String data = objectMapper.writeValueAsString(jsonBody);
-//		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
-//		
-//		jsonBody.put("signature", requestSignature);
-//		
-//		Response response = given()
-//				.header("X-GEO-Location", "12,12")
-//				.header("X-Device-Id", requestDeviceId)
-//				.header("User-Agent", "")
-//				.contentType("application/json")
-//				.body(jsonBody)
-//				.when()
-//				.post("/profile")
-//				.then()
-//				.statusCode(400)
-//				.log().all()
-//				.extract().response();
-//		
-//		 String code = response.jsonPath().getString("code");
-//	     String description = response.jsonPath().getString("description");
-//	     String signature = response.jsonPath().getString("signature");
-//	     
-//	     assertNotNull(description, "Description is missing from the response");
-//	     assertNotNull(code, "Code is missing");
-//	     assertNotNull(signature,"signature is missing");
-//	     
-//	     assertFalse(description.isEmpty(), "Description is empty");
-//	     assertFalse(code.isEmpty(), "Code is empty");
-//	     assertFalse(signature.isEmpty(),"signature is empty");
-//	     
-//	     assertEquals(code,"GNR_PARAM_MISSING");
-//		 assertEquals(description,"Required values missing.");
-//    }
-//    
-//    @Test
-//    public void getUserDetailswithoutAuth() throws Exception {
-//    	String requestDeviceId = "3efe6bbeb55f4411";
-//    	ObjectMapper objectMapper = new ObjectMapper();
-//		Map<String, Object> jsonBody = new HashMap<>();
-//		jsonBody.put("fullName", "SINGH SAGAR");
-//		jsonBody.put("country", "IND");
-//		jsonBody.put("documentNumber", "R9079271");
-//		jsonBody.put("documentType", "PASSPORT");
-//		jsonBody.put("dateOfBirth", "1998-02-24");
-//		jsonBody.put("documentExpiryDate", "2028-01-23");
-//		jsonBody.put("gender", "M");
-//
-//		// Generate signature
-//		String data = objectMapper.writeValueAsString(jsonBody);
-//		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
-//		
-//		jsonBody.put("signature", requestSignature);
-//		
-//		Response response = given()
-//				.header("X-GEO-Location", "12,12")
-//				.header("X-Device-Id", requestDeviceId)
-//				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-//				.contentType("application/json")
-//				.body(jsonBody)
-//				.when()
-//				.post("/profile")
-//				.then()
-//				.statusCode(400)
-//				.log().all()
-//				.extract().response();
-//		
-//		 String code = response.jsonPath().getString("code");
-//	     String description = response.jsonPath().getString("description");
-//	     String signature = response.jsonPath().getString("signature");
-//	     
-//	     assertNotNull(description, "Description is missing from the response");
-//	     assertNotNull(code, "Code is missing");
-//	     assertNotNull(signature,"signature is missing");
-//	     
-//	     assertFalse(description.isEmpty(), "Description is empty");
-//	     assertFalse(code.isEmpty(), "Code is empty");
-//	     assertFalse(signature.isEmpty(),"signature is empty");
-//	     
-//	     assertEquals(code,"GNR_PARAM_MISSING");
-//		 assertEquals(description,"Required values missing.");
-//    	
-//    }
-//    
-//    @Test
-//    public void getUserwithInvalidDevice() throws Exception {
-//    	String requestDeviceId = "3efe6bbeb55f4411";
-//    	ObjectMapper objectMapper = new ObjectMapper();
-//    	Map<String, Object> jsonBody = new HashMap<>();
-//		jsonBody.put("fullName", "SINGH SAGAR");
-//		jsonBody.put("country", "IND");
-//		jsonBody.put("documentNumber", "R9079271");
-//		jsonBody.put("documentType", "PASSPORT");
-//		jsonBody.put("dateOfBirth", "1998-02-24");
-//		jsonBody.put("documentExpiryDate", "2028-01-23");
-//		jsonBody.put("gender", "M");
-//
-//		// Generate signature
-//		String data = objectMapper.writeValueAsString(jsonBody);
-//		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
-//		
-//		jsonBody.put("signature", requestSignature);
-//		
-//		Response response = given()
-//				.header("X-GEO-Location", "12,12")
-//				.header("X-Device-Id", requestDeviceId)
-//				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-//				.contentType("application/json")
-//				.body(jsonBody)
-//				.when()
-//				.post("/profile")
-//				.then()
-//				.statusCode(422)
-//				.log().all()
-//				.extract().response();
-//		
-//		 String code = response.jsonPath().getString("code");
-//	     String description = response.jsonPath().getString("description");
-//	     String signature = response.jsonPath().getString("signature");
-//	     
-//	     assertNotNull(description, "Description is missing from the response");
-//	     assertNotNull(code, "Code is missing");
-//	     assertNotNull(signature,"signature is missing");
-//	     
-//	     assertFalse(description.isEmpty(), "Description is empty");
-//	     assertFalse(code.isEmpty(), "Code is empty");
-//	     assertFalse(signature.isEmpty(),"signature is empty");
-//	     
-//	     assertEquals(code,"GNR_INVALID_DATA");
-//		 assertEquals(description,"Unable to process request as data is invalid.");
-//    	
-//    }
-//    @Test
-//	public void getUserDetailswithInvalidGeo() throws Exception {
-//    	String requestDeviceId = "3efe6bbeb55f4411";
-//    	ObjectMapper objectMapper = new ObjectMapper();
-//    	Map<String, Object> jsonBody = new HashMap<>();
-//		jsonBody.put("fullName", "SINGH SAGAR");
-//		jsonBody.put("country", "IND");
-//		jsonBody.put("documentNumber", "R9079271");
-//		jsonBody.put("documentType", "PASSPORT");
-//		jsonBody.put("dateOfBirth", "1998-02-24");
-//		jsonBody.put("documentExpiryDate", "2028-01-23");
-//		jsonBody.put("gender", "M");
-//
-//		// Generate signature
-//		String data = objectMapper.writeValueAsString(jsonBody);
-//		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
-//		
-//		jsonBody.put("signature", requestSignature);
-//		
-//		Response response = given()
-//				.header("X-GEO-Location", "12,12")
-//				.header("X-Device-Id", requestDeviceId)
-//				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-//				.contentType("application/json")
-//				.body(jsonBody)
-//				.when()
-//				.post("/profile")
-//				.then()
-//				.statusCode(422)
-//				.log().all()
-//				.extract().response();
-//		
-//		 String code = response.jsonPath().getString("code");
-//	     String description = response.jsonPath().getString("description");
-//	     String signature = response.jsonPath().getString("signature");
-//	     
-//	     assertNotNull(description, "Description is missing from the response");
-//	     assertNotNull(code, "Code is missing");
-//	     assertNotNull(signature,"signature is missing");
-//	     
-//	     assertFalse(description.isEmpty(), "Description is empty");
-//	     assertFalse(code.isEmpty(), "Code is empty");
-//	     assertFalse(signature.isEmpty(),"signature is empty");
-//	     
-//	     assertEquals(code,"GNR_INVALID_DATA");
-//		 assertEquals(description,"Unable to process request as data is invalid.");
-//    	
-//    }
-//    
-//    @Test
-//    public void getUserDetailswithInvalidUser() throws Exception {
-//    	String requestDeviceId = "3efe6bbeb55f4411";
-//    	ObjectMapper objectMapper = new ObjectMapper();
-//    	Map<String, Object> jsonBody = new HashMap<>();
-//		jsonBody.put("fullName", "SINGH SAGAR");
-//		jsonBody.put("country", "IND");
-//		jsonBody.put("documentNumber", "R9079271");
-//		jsonBody.put("documentType", "PASSPORT");
-//		jsonBody.put("dateOfBirth", "1998-02-24");
-//		jsonBody.put("documentExpiryDate", "2028-01-23");
-//		jsonBody.put("gender", "M");
-//		// Generate signature
-//		String data = objectMapper.writeValueAsString(jsonBody);
-//		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
-//		
-//		jsonBody.put("signature", requestSignature);
-//		
-//		Response response = given()
-//				.header("X-GEO-Location", "12,12")
-//				.header("X-Device-Id", requestDeviceId)
-//				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-//				.contentType("application/json")
-//				.body(jsonBody)
-//				.when()
-//				.post("/profile")
-//				.then()
-//				.statusCode(422)
-//				.log().all()
-//				.extract().response();
-//		
-//		 String code = response.jsonPath().getString("code");
-//	     String description = response.jsonPath().getString("description");
-//	     String signature = response.jsonPath().getString("signature");
-//	     
-//	     assertNotNull(description, "Description is missing from the response");
-//	     assertNotNull(code, "Code is missing");
-//	     assertNotNull(signature,"signature is missing");
-//	     
-//	     assertFalse(description.isEmpty(), "Description is empty");
-//	     assertFalse(code.isEmpty(), "Code is empty");
-//	     assertFalse(signature.isEmpty(),"signature is empty");
-//	     
-//	     assertEquals(code,"GNR_INVALID_DATA");
-//		 assertEquals(description,"Unable to process request as data is invalid.");
-//    	
-//    	
-//    }
-//    
-//    @Test
-//    public void getUserwithoutName() throws Exception {
-//    	String requestDeviceId = "3efe6bbeb55f4411";
-//    	ObjectMapper objectMapper = new ObjectMapper();
-//    	Map<String, Object> jsonBody = new HashMap<>();
-//		jsonBody.put("fullName", "SINGH SAGAR");
-//		jsonBody.put("country", "IND");
-//		jsonBody.put("documentNumber", "R9079271");
-//		jsonBody.put("documentType", "PASSPORT");
-//		jsonBody.put("dateOfBirth", "1998-02-24");
-//		jsonBody.put("documentExpiryDate", "2028-01-23");
-//		jsonBody.put("gender", "M");
-//
-//		// Generate signature
-//		String data = objectMapper.writeValueAsString(jsonBody);
-//		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
-//		
-//		jsonBody.put("signature", requestSignature);
-//		
-//		Response response = given()
-//				.header("X-GEO-Location", "12,12")
-//				.header("X-Device-Id", requestDeviceId)
-//				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-//				.contentType("application/json")
-//				.body(jsonBody)
-//				.when()
-//				.post("/profile")
-//				.then()
-//				.statusCode(400)
-//				.log().all()
-//				.extract().response();
-//		
-//		 String code = response.jsonPath().getString("code");
-//	     String description = response.jsonPath().getString("description");
-//	     String signature = response.jsonPath().getString("signature");
-//	     
-//	     assertNotNull(description, "Description is missing from the response");
-//	     assertNotNull(code, "Code is missing");
-//	     assertNotNull(signature,"signature is missing");
-//	     
-//	     assertFalse(description.isEmpty(), "Description is empty");
-//	     assertFalse(code.isEmpty(), "Code is empty");
-//	     assertFalse(signature.isEmpty(),"signature is empty");
-//	     
-//	     assertEquals(code,"GNR_PARAM_MISSING");
-//		 assertEquals(description,"Required values missing.");
-//    	
-//    
-//    }
-//    
-//    @Test
-//    public void getUserDetailswithoutCountry() throws Exception {
-//    	String requestDeviceId = "3efe6bbeb55f4411";
-//    	ObjectMapper objectMapper = new ObjectMapper();
-//		Map<String, Object> jsonBody = new HashMap<>();
-//		jsonBody.put("fullName", "");
-//		jsonBody.put("country", "");
-//		jsonBody.put("documentNumber", "");
-//		jsonBody.put("documentType", "");
-//		jsonBody.put("dateOfBirth", "");
-//		jsonBody.put("documentExpiryDate", "");
-//		jsonBody.put("gender", "");
-//
-//		// Generate signature
-//		String data = objectMapper.writeValueAsString(jsonBody);
-//		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
-//		
-//		jsonBody.put("signature", requestSignature);
-//		
-//		Response response = given()
-//				.header("X-GEO-Location", "12,12")
-//				.header("X-Device-Id", requestDeviceId)
-//				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-//				.contentType("application/json")
-//				.body(jsonBody)
-//				.when()
-//				.post("/profile")
-//				.then()
-//				.statusCode(400)
-//				.log().all()
-//				.extract().response();
-//		
-//		 String code = response.jsonPath().getString("code");
-//	     String description = response.jsonPath().getString("description");
-//	     String signature = response.jsonPath().getString("signature");
-//	     
-//	     assertNotNull(description, "Description is missing from the response");
-//	     assertNotNull(code, "Code is missing");
-//	     assertNotNull(signature,"signature is missing");
-//	     
-//	     assertFalse(description.isEmpty(), "Description is empty");
-//	     assertFalse(code.isEmpty(), "Code is empty");
-//	     assertFalse(signature.isEmpty(),"signature is empty");
-//	     
-//	     assertEquals(code,"GNR_PARAM_MISSING");
-//		 assertEquals(description,"Required values missing.");
-//    }
-//    
-//    @Test
-//    public void getUserDetailswithoutDocumentNumber() throws Exception {
-//    	String requestDeviceId = "3efe6bbeb55f4411";
-//    	ObjectMapper objectMapper = new ObjectMapper();
-//		Map<String, Object> jsonBody = new HashMap<>();
-//		jsonBody.put("fullName", "");
-//		jsonBody.put("country", "");
-//		jsonBody.put("documentNumber", "");
-//		jsonBody.put("documentType", "");
-//		jsonBody.put("dateOfBirth", "");
-//		jsonBody.put("documentExpiryDate", "");
-//		jsonBody.put("gender", "");
-//
-//		// Generate signature
-//		String data = objectMapper.writeValueAsString(jsonBody);
-//		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
-//		
-//		jsonBody.put("signature", requestSignature);
-//		
-//		Response response = given()
-//				.header("X-GEO-Location", "12,12")
-//				.header("X-Device-Id", requestDeviceId)
-//				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-//				.contentType("application/json")
-//				.body(jsonBody)
-//				.when()
-//				.post("/profile")
-//				.then()
-//				.statusCode(400)
-//				.log().all()
-//				.extract().response();
-//		
-//		 String code = response.jsonPath().getString("code");
-//	     String description = response.jsonPath().getString("description");
-//	     String signature = response.jsonPath().getString("signature");
-//	     
-//	     assertNotNull(description, "Description is missing from the response");
-//	     assertNotNull(code, "Code is missing");
-//	     assertNotNull(signature,"signature is missing");
-//	     
-//	     assertFalse(description.isEmpty(), "Description is empty");
-//	     assertFalse(code.isEmpty(), "Code is empty");
-//	     assertFalse(signature.isEmpty(),"signature is empty");
-//	     
-//	     assertEquals(code,"GNR_PARAM_MISSING");
-//		 assertEquals(description,"Required values missing.");
-//    }
-//    
-//    @Test
-//    public void getUserDetailswithoutDocumentType() throws Exception {
-//    	String requestDeviceId = "3efe6bbeb55f4411";
-//    	ObjectMapper objectMapper = new ObjectMapper();
-//		Map<String, Object> jsonBody = new HashMap<>();
-//		jsonBody.put("fullName", "");
-//		jsonBody.put("country", "");
-//		jsonBody.put("documentNumber", "");
-//		jsonBody.put("documentType", "");
-//		jsonBody.put("dateOfBirth", "");
-//		jsonBody.put("documentExpiryDate", "");
-//		jsonBody.put("gender", "");
-//
-//		// Generate signature
-//		String data = objectMapper.writeValueAsString(jsonBody);
-//		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
-//		
-//		jsonBody.put("signature", requestSignature);
-//		
-//		Response response = given()
-//				.header("X-GEO-Location", "12,12")
-//				.header("X-Device-Id", requestDeviceId)
-//				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-//				.contentType("application/json")
-//				.body(jsonBody)
-//				.when()
-//				.post("/profile")
-//				.then()
-//				.statusCode(400)
-//				.log().all()
-//				.extract().response();
-//		
-//		 String code = response.jsonPath().getString("code");
-//	     String description = response.jsonPath().getString("description");
-//	     String signature = response.jsonPath().getString("signature");
-//	     
-//	     assertNotNull(description, "Description is missing from the response");
-//	     assertNotNull(code, "Code is missing");
-//	     assertNotNull(signature,"signature is missing");
-//	     
-//	     assertFalse(description.isEmpty(), "Description is empty");
-//	     assertFalse(code.isEmpty(), "Code is empty");
-//	     assertFalse(signature.isEmpty(),"signature is empty");
-//	     
-//	     assertEquals(code,"GNR_PARAM_MISSING");
-//		 assertEquals(description,"Required values missing.");
-//    }
-//    
-//    @Test
-//    public void getUserDetailswithoutDateofBirth() throws Exception {
-//    	String requestDeviceId = "3efe6bbeb55f4411";
-//    	ObjectMapper objectMapper = new ObjectMapper();
-//		Map<String, Object> jsonBody = new HashMap<>();
-//		jsonBody.put("fullName", "");
-//		jsonBody.put("country", "");
-//		jsonBody.put("documentNumber", "");
-//		jsonBody.put("documentType", "");
-//		jsonBody.put("dateOfBirth", "");
-//		jsonBody.put("documentExpiryDate", "");
-//		jsonBody.put("gender", "");
-//
-//		// Generate signature
-//		String data = objectMapper.writeValueAsString(jsonBody);
-//		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
-//		
-//		jsonBody.put("signature", requestSignature);
-//		
-//		Response response = given()
-//				.header("X-GEO-Location", "12,12")
-//				.header("X-Device-Id", requestDeviceId)
-//				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-//				.contentType("application/json")
-//				.body(jsonBody)
-//				.when()
-//				.post("/profile")
-//				.then()
-//				.statusCode(400)
-//				.log().all()
-//				.extract().response();
-//		
-//		 String code = response.jsonPath().getString("code");
-//	     String description = response.jsonPath().getString("description");
-//	     String signature = response.jsonPath().getString("signature");
-//	     
-//	     assertNotNull(description, "Description is missing from the response");
-//	     assertNotNull(code, "Code is missing");
-//	     assertNotNull(signature,"signature is missing");
-//	     
-//	     assertFalse(description.isEmpty(), "Description is empty");
-//	     assertFalse(code.isEmpty(), "Code is empty");
-//	     assertFalse(signature.isEmpty(),"signature is empty");
-//	     
-//	     assertEquals(code,"GNR_PARAM_MISSING");
-//		 assertEquals(description,"Required values missing.");
-//    }
-//    
-//    @Test
-//    public void getUserDetailswithoutDocumentExpiryDate() throws Exception {
-//    	String requestDeviceId = "3efe6bbeb55f4411";
-//    	ObjectMapper objectMapper = new ObjectMapper();
-//		Map<String, Object> jsonBody = new HashMap<>();
-//		jsonBody.put("fullName", "");
-//		jsonBody.put("country", "");
-//		jsonBody.put("documentNumber", "");
-//		jsonBody.put("documentType", "");
-//		jsonBody.put("dateOfBirth", "");
-//		jsonBody.put("documentExpiryDate", "");
-//		jsonBody.put("gender", "");
-//
-//		// Generate signature
-//		String data = objectMapper.writeValueAsString(jsonBody);
-//		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
-//		
-//		jsonBody.put("signature", requestSignature);
-//		
-//		Response response = given()
-//				.header("X-GEO-Location", "12,12")
-//				.header("X-Device-Id", requestDeviceId)
-//				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-//				.contentType("application/json")
-//				.body(jsonBody)
-//				.when()
-//				.post("/profile")
-//				.then()
-//				.statusCode(400)
-//				.log().all()
-//				.extract().response();
-//		
-//		 String code = response.jsonPath().getString("code");
-//	     String description = response.jsonPath().getString("description");
-//	     String signature = response.jsonPath().getString("signature");
-//	     
-//	     assertNotNull(description, "Description is missing from the response");
-//	     assertNotNull(code, "Code is missing");
-//	     assertNotNull(signature,"signature is missing");
-//	     
-//	     assertFalse(description.isEmpty(), "Description is empty");
-//	     assertFalse(code.isEmpty(), "Code is empty");
-//	     assertFalse(signature.isEmpty(),"signature is empty");
-//	     
-//	     assertEquals(code,"GNR_PARAM_MISSING");
-//		 assertEquals(description,"Required values missing.");
-//    	
-//    }
-//    
-//    @Test
-//    public void getUserDetailswithoutGender() throws Exception {
-//    	String requestDeviceId = "3efe6bbeb55f4411";
-//    	ObjectMapper objectMapper = new ObjectMapper();
-//		Map<String, Object> jsonBody = new HashMap<>();
-//		jsonBody.put("fullName", "");
-//		jsonBody.put("country", "");
-//		jsonBody.put("documentNumber", "");
-//		jsonBody.put("documentType", "");
-//		jsonBody.put("dateOfBirth", "");
-//		jsonBody.put("documentExpiryDate", "");
-//		jsonBody.put("gender", "");
-//
-//		// Generate signature
-//		String data = objectMapper.writeValueAsString(jsonBody);
-//		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
-//		
-//		jsonBody.put("signature", requestSignature);
-//		
-//		Response response = given()
-//				.header("X-GEO-Location", "12,12")
-//				.header("X-Device-Id", requestDeviceId)
-//				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-//				.contentType("application/json")
-//				.body(jsonBody)
-//				.when()
-//				.post("/profile")
-//				.then()
-//				.statusCode(400)
-//				.log().all()
-//				.extract().response();
-//		
-//		 String code = response.jsonPath().getString("code");
-//	     String description = response.jsonPath().getString("description");
-//	     String signature = response.jsonPath().getString("signature");
-//	     
-//	     assertNotNull(description, "Description is missing from the response");
-//	     assertNotNull(code, "Code is missing");
-//	     assertNotNull(signature,"signature is missing");
-//	     
-//	     assertFalse(description.isEmpty(), "Description is empty");
-//	     assertFalse(code.isEmpty(), "Code is empty");
-//	     assertFalse(signature.isEmpty(),"signature is empty");
-//	     
-//	     assertEquals(code,"GNR_PARAM_MISSING");
-//		 assertEquals(description,"Required values missing.");
-//    }
-//    
-//    @Test
-//    public void getUserDetailswithoutSignature() throws Exception {
-//    	String requestDeviceId = "3efe6bbeb55f4411";
-//    	ObjectMapper objectMapper = new ObjectMapper();
-//		Map<String, Object> jsonBody = new HashMap<>();
-//		jsonBody.put("fullName", "");
-//		jsonBody.put("country", "");
-//		jsonBody.put("documentNumber", "");
-//		jsonBody.put("documentType", "");
-//		jsonBody.put("dateOfBirth", "");
-//		jsonBody.put("documentExpiryDate", "");
-//		jsonBody.put("gender", "");
-//
-//		// Generate signature
-//		String data = objectMapper.writeValueAsString(jsonBody);
-//		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
-//		
-//		jsonBody.put("signature", requestSignature);
-//		
-//		Response response = given()
-//				.header("X-GEO-Location", "12,12")
-//				.header("X-Device-Id", requestDeviceId)
-//				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-//				.contentType("application/json")
-//				.body(jsonBody)
-//				.when()
-//				.post("/profile")
-//				.then()
-//				.statusCode(400)
-//				.log().all()
-//				.extract().response();
-//		
-//		 String code = response.jsonPath().getString("code");
-//	     String description = response.jsonPath().getString("description");
-//	     String signature = response.jsonPath().getString("signature");
-//	     
-//	     assertNotNull(description, "Description is missing from the response");
-//	     assertNotNull(code, "Code is missing");
-//	     assertNotNull(signature,"signature is missing");
-//	     
-//	     assertFalse(description.isEmpty(), "Description is empty");
-//	     assertFalse(code.isEmpty(), "Code is empty");
-//	     assertFalse(signature.isEmpty(),"signature is empty");
-//	     
-//	     assertEquals(code,"GNR_PARAM_MISSING");
-//		 assertEquals(description,"Required values missing.");
-//    }
-//    
-//    @Test
-//    public void getUserDetailswithInvalidfullname() throws Exception {
-//    	String requestDeviceId = "3efe6bbeb55f4411";
-//    	ObjectMapper objectMapper = new ObjectMapper();
-//		Map<String, Object> jsonBody = new HashMap<>();
-//		jsonBody.put("fullName", "");
-//		jsonBody.put("country", "");
-//		jsonBody.put("documentNumber", "");
-//		jsonBody.put("documentType", "");
-//		jsonBody.put("dateOfBirth", "");
-//		jsonBody.put("documentExpiryDate", "");
-//		jsonBody.put("gender", "");
-//
-//		// Generate signature
-//		String data = objectMapper.writeValueAsString(jsonBody);
-//		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
-//		
-//		jsonBody.put("signature", requestSignature);
-//		
-//		Response response = given()
-//				.header("X-GEO-Location", "12,12")
-//				.header("X-Device-Id", requestDeviceId)
-//				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-//				.contentType("application/json")
-//				.body(jsonBody)
-//				.when()
-//				.post("/profile")
-//				.then()
-//				.statusCode(422)
-//				.log().all()
-//				.extract().response();
-//		
-//		 String code = response.jsonPath().getString("code");
-//	     String description = response.jsonPath().getString("description");
-//	     String signature = response.jsonPath().getString("signature");
-//	     
-//	     assertNotNull(description, "Description is missing from the response");
-//	     assertNotNull(code, "Code is missing");
-//	     assertNotNull(signature,"signature is missing");
-//	     
-//	     assertFalse(description.isEmpty(), "Description is empty");
-//	     assertFalse(code.isEmpty(), "Code is empty");
-//	     assertFalse(signature.isEmpty(),"signature is empty");
-//	     
-//	     assertEquals(code,"GNR_INVALID_DATA");
-//		 assertEquals(description,"Invalid data.");
-//    	
-//    }
-//    @Test
-//    public void getUserDetailswithInvalidCountry() throws Exception {
-//    	String requestDeviceId = "3efe6bbeb55f4411";
-//    	ObjectMapper objectMapper = new ObjectMapper();
-//		Map<String, Object> jsonBody = new HashMap<>();
-//		jsonBody.put("fullName", "");
-//		jsonBody.put("country", "");
-//		jsonBody.put("documentNumber", "");
-//		jsonBody.put("documentType", "");
-//		jsonBody.put("dateOfBirth", "");
-//		jsonBody.put("documentExpiryDate", "");
-//		jsonBody.put("gender", "");
-//
-//		// Generate signature
-//		String data = objectMapper.writeValueAsString(jsonBody);
-//		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
-//		
-//		jsonBody.put("signature", requestSignature);
-//		
-//		Response response = given()
-//				.header("X-GEO-Location", "12,12")
-//				.header("X-Device-Id", requestDeviceId)
-//				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-//				.contentType("application/json")
-//				.body(jsonBody)
-//				.when()
-//				.post("/profile")
-//				.then()
-//				.statusCode(422)
-//				.log().all()
-//				.extract().response();
-//		
-//		 String code = response.jsonPath().getString("code");
-//	     String description = response.jsonPath().getString("description");
-//	     String signature = response.jsonPath().getString("signature");
-//	     
-//	     assertNotNull(description, "Description is missing from the response");
-//	     assertNotNull(code, "Code is missing");
-//	     assertNotNull(signature,"signature is missing");
-//	     
-//	     assertFalse(description.isEmpty(), "Description is empty");
-//	     assertFalse(code.isEmpty(), "Code is empty");
-//	     assertFalse(signature.isEmpty(),"signature is empty");
-//	     
-//	     assertEquals(code,"GNR_INVALID_DATA");
-//		 assertEquals(description,"Invalid data.");
-//    	
-//    }
-//    
-//    @Test
-//    public void getUserDetailswithInvalidDocumentNumber() throws Exception {
-//    	String requestDeviceId = "3efe6bbeb55f4411";
-//    	ObjectMapper objectMapper = new ObjectMapper();
-//		Map<String, Object> jsonBody = new HashMap<>();
-//		jsonBody.put("fullName", "");
-//		jsonBody.put("country", "");
-//		jsonBody.put("documentNumber", "");
-//		jsonBody.put("documentType", "");
-//		jsonBody.put("dateOfBirth", "");
-//		jsonBody.put("documentExpiryDate", "");
-//		jsonBody.put("gender", "");
-//
-//		// Generate signature
-//		String data = objectMapper.writeValueAsString(jsonBody);
-//		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
-//		
-//		jsonBody.put("signature", requestSignature);
-//		
-//		Response response = given()
-//				.header("X-GEO-Location", "12,12")
-//				.header("X-Device-Id", requestDeviceId)
-//				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-//				.contentType("application/json")
-//				.body(jsonBody)
-//				.when()
-//				.post("/profile")
-//				.then()
-//				.statusCode(422)
-//				.log().all()
-//				.extract().response();
-//		
-//		 String code = response.jsonPath().getString("code");
-//	     String description = response.jsonPath().getString("description");
-//	     String signature = response.jsonPath().getString("signature");
-//	     
-//	     assertNotNull(description, "Description is missing from the response");
-//	     assertNotNull(code, "Code is missing");
-//	     assertNotNull(signature,"signature is missing");
-//	     
-//	     assertFalse(description.isEmpty(), "Description is empty");
-//	     assertFalse(code.isEmpty(), "Code is empty");
-//	     assertFalse(signature.isEmpty(),"signature is empty");
-//	     
-//	     assertEquals(code,"GNR_INVALID_DATA");
-//		 assertEquals(description,"Invalid data.");
-//    }
-//    
-//    @Test
-//    public void getUserDetailswithInvalidDocumentType() throws Exception{
-//    	String requestDeviceId = "3efe6bbeb55f4411";
-//    	ObjectMapper objectMapper = new ObjectMapper();
-//		Map<String, Object> jsonBody = new HashMap<>();
-//		jsonBody.put("fullName", "");
-//		jsonBody.put("country", "");
-//		jsonBody.put("documentNumber", "");
-//		jsonBody.put("documentType", "");
-//		jsonBody.put("dateOfBirth", "");
-//		jsonBody.put("documentExpiryDate", "");
-//		jsonBody.put("gender", "");
-//
-//		// Generate signature
-//		String data = objectMapper.writeValueAsString(jsonBody);
-//		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
-//		
-//		jsonBody.put("signature", requestSignature);
-//		
-//		Response response = given()
-//				.header("X-GEO-Location", "12,12")
-//				.header("X-Device-Id", requestDeviceId)
-//				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-//				.contentType("application/json")
-//				.body(jsonBody)
-//				.when()
-//				.post("/profile")
-//				.then()
-//				.statusCode(422)
-//				.log().all()
-//				.extract().response();
-//		
-//		 String code = response.jsonPath().getString("code");
-//	     String description = response.jsonPath().getString("description");
-//	     String signature = response.jsonPath().getString("signature");
-//	     
-//	     assertNotNull(description, "Description is missing from the response");
-//	     assertNotNull(code, "Code is missing");
-//	     assertNotNull(signature,"signature is missing");
-//	     
-//	     assertFalse(description.isEmpty(), "Description is empty");
-//	     assertFalse(code.isEmpty(), "Code is empty");
-//	     assertFalse(signature.isEmpty(),"signature is empty");
-//	     
-//	     assertEquals(code,"GNR_INVALID_DATA");
-//		 assertEquals(description,"Invalid data.");
-//    }
-//    @Test
-//    public void getUserDetailswithInvalidGender() throws Exception {
-//    	String requestDeviceId = "3efe6bbeb55f4411";
-//    	ObjectMapper objectMapper = new ObjectMapper();
-//		Map<String, Object> jsonBody = new HashMap<>();
-//		jsonBody.put("fullName", "");
-//		jsonBody.put("country", "");
-//		jsonBody.put("documentNumber", "");
-//		jsonBody.put("documentType", "");
-//		jsonBody.put("dateOfBirth", "");
-//		jsonBody.put("documentExpiryDate", "");
-//		jsonBody.put("gender", "");
-//
-//		// Generate signature
-//		String data = objectMapper.writeValueAsString(jsonBody);
-//		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
-//		
-//		jsonBody.put("signature", requestSignature);
-//		
-//		Response response = given()
-//				.header("X-GEO-Location", "12,12")
-//				.header("X-Device-Id", requestDeviceId)
-//				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-//				.contentType("application/json")
-//				.body(jsonBody)
-//				.when()
-//				.post("/profile")
-//				.then()
-//				.statusCode(422)
-//				.log().all()
-//				.extract().response();
-//		
-//		 String code = response.jsonPath().getString("code");
-//	     String description = response.jsonPath().getString("description");
-//	     String signature = response.jsonPath().getString("signature");
-//	     
-//	     assertNotNull(description, "Description is missing from the response");
-//	     assertNotNull(code, "Code is missing");
-//	     assertNotNull(signature,"signature is missing");
-//	     
-//	     assertFalse(description.isEmpty(), "Description is empty");
-//	     assertFalse(code.isEmpty(), "Code is empty");
-//	     assertFalse(signature.isEmpty(),"signature is empty");
-//	     
-//	     assertEquals(code,"GNR_INVALID_DATA");
-//		 assertEquals(description,"Invalid data.");
-//    	
-//    }
-//     @Test
-//     public void getUserDetailswithInvalidDateofBirth() throws Exception {
-//    	 String requestDeviceId = "3efe6bbeb55f4411";
-//     	ObjectMapper objectMapper = new ObjectMapper();
-// 		Map<String, Object> jsonBody = new HashMap<>();
-// 		jsonBody.put("fullName", "");
-// 		jsonBody.put("country", "");
-// 		jsonBody.put("documentNumber", "");
-// 		jsonBody.put("documentType", "");
-// 		jsonBody.put("dateOfBirth", "");
-// 		jsonBody.put("documentExpiryDate", "");
-// 		jsonBody.put("gender", "");
-//
-// 		// Generate signature
-// 		String data = objectMapper.writeValueAsString(jsonBody);
-// 		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
-// 		
-// 		jsonBody.put("signature", requestSignature);
-// 		
-// 		Response response = given()
-// 				.header("X-GEO-Location", "12,12")
-// 				.header("X-Device-Id", requestDeviceId)
-// 				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-// 				.contentType("application/json")
-// 				.body(jsonBody)
-// 				.when()
-// 				.post("/profile")
-// 				.then()
-// 				.statusCode(422)
-// 				.log().all()
-// 				.extract().response();
-// 		
-// 		 String code = response.jsonPath().getString("code");
-// 	     String description = response.jsonPath().getString("description");
-// 	     String signature = response.jsonPath().getString("signature");
-// 	     
-// 	     assertNotNull(description, "Description is missing from the response");
-// 	     assertNotNull(code, "Code is missing");
-// 	     assertNotNull(signature,"signature is missing");
-// 	     
-// 	     assertFalse(description.isEmpty(), "Description is empty");
-// 	     assertFalse(code.isEmpty(), "Code is empty");
-// 	     assertFalse(signature.isEmpty(),"signature is empty");
-// 	     
-// 	     assertEquals(code,"GNR_INVALID_DATA");
-// 		 assertEquals(description,"Invalid data.");
-//     }
-//     
-//     @Test
-//     public void getUserDetailswithInvalidExpiryDate() throws Exception {
-//    	 String requestDeviceId = "3efe6bbeb55f4411";
-//     	ObjectMapper objectMapper = new ObjectMapper();
-// 		Map<String, Object> jsonBody = new HashMap<>();
-// 		jsonBody.put("fullName", "");
-// 		jsonBody.put("country", "");
-// 		jsonBody.put("documentNumber", "");
-// 		jsonBody.put("documentType", "");
-// 		jsonBody.put("dateOfBirth", "");
-// 		jsonBody.put("documentExpiryDate", "");
-// 		jsonBody.put("gender", "");
-//
-// 		// Generate signature
-// 		String data = objectMapper.writeValueAsString(jsonBody);
-// 		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
-// 		
-// 		jsonBody.put("signature", requestSignature);
-// 		
-// 		Response response = given()
-// 				.header("X-GEO-Location", "12,12")
-// 				.header("X-Device-Id", requestDeviceId)
-// 				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-// 				.contentType("application/json")
-// 				.body(jsonBody)
-// 				.when()
-// 				.post("/profile")
-// 				.then()
-// 				.statusCode(422)
-// 				.log().all()
-// 				.extract().response();
-// 		
-// 		 String code = response.jsonPath().getString("code");
-// 	     String description = response.jsonPath().getString("description");
-// 	     String signature = response.jsonPath().getString("signature");
-// 	     
-// 	     assertNotNull(description, "Description is missing from the response");
-// 	     assertNotNull(code, "Code is missing");
-// 	     assertNotNull(signature,"signature is missing");
-// 	     
-// 	     assertFalse(description.isEmpty(), "Description is empty");
-// 	     assertFalse(code.isEmpty(), "Code is empty");
-// 	     assertFalse(signature.isEmpty(),"signature is empty");
-// 	     
-// 	     assertEquals(code,"GNR_INVALID_DATA");
-// 		 assertEquals(description,"Invalid data.");
-//     }
-//     
-//     @Test
-//     public void getUserDetailswithInvalidSignature() throws Exception {
-//    	 String requestDeviceId = "3efe6bbeb55f4411";
-//     	ObjectMapper objectMapper = new ObjectMapper();
-// 		Map<String, Object> jsonBody = new HashMap<>();
-// 		jsonBody.put("fullName", "");
-// 		jsonBody.put("country", "");
-// 		jsonBody.put("documentNumber", "");
-// 		jsonBody.put("documentType", "");
-// 		jsonBody.put("dateOfBirth", "");
-// 		jsonBody.put("documentExpiryDate", "");
-// 		jsonBody.put("gender", "");
-//
-// 		// Generate signature
-// 		String data = objectMapper.writeValueAsString(jsonBody);
-// 		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
-// 		
-// 		jsonBody.put("signature", requestSignature);
-// 		
-// 		Response response = given()
-// 				.header("X-GEO-Location", "12,12")
-// 				.header("X-Device-Id", requestDeviceId)
-// 				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-// 				.contentType("application/json")
-// 				.body(jsonBody)
-// 				.when()
-// 				.post("/profile")
-// 				.then()
-// 				.statusCode(401)
-// 				.log().all()
-// 				.extract().response();
-// 		
-// 		 String code = response.jsonPath().getString("code");
-// 	     String description = response.jsonPath().getString("description");
-// 	     String signature = response.jsonPath().getString("signature");
-// 	     
-// 	     assertNotNull(description, "Description is missing from the response");
-// 	     assertNotNull(code, "Code is missing");
-// 	     assertNotNull(signature,"signature is missing");
-// 	     
-// 	     assertFalse(description.isEmpty(), "Description is empty");
-// 	     assertFalse(code.isEmpty(), "Code is empty");
-// 	     assertFalse(signature.isEmpty(),"signature is empty");
-// 	     
-// 	     assertEquals(code,"GNR_AUTHENTICATION_FAIL");
-// 		 assertEquals(description,"Authentication Failed.");
-//     }
-//     
-//     @Test
-//     public void getUserDetailswhenServerdown() throws Exception {
-//    	 String requestDeviceId = "3efe6bbeb55f4411";
-//      	ObjectMapper objectMapper = new ObjectMapper();
-//  		Map<String, Object> jsonBody = new HashMap<>();
-//  		jsonBody.put("fullName", "");
-//  		jsonBody.put("country", "");
-//  		jsonBody.put("documentNumber", "");
-//  		jsonBody.put("documentType", "");
-//  		jsonBody.put("dateOfBirth", "");
-//  		jsonBody.put("documentExpiryDate", "");
-//  		jsonBody.put("gender", "");
-//
-//  		// Generate signature
-//  		String data = objectMapper.writeValueAsString(jsonBody);
-//  		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
-//  		
-//  		jsonBody.put("signature", requestSignature);
-//  		
-//  		Response response = given()
-//  				.header("X-GEO-Location", "12,12")
-//  				.header("X-Device-Id", requestDeviceId)
-//  				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-//  				.contentType("application/json")
-//  				.body(jsonBody)
-//  				.when()
-//  				.post("/profile")
-//  				.then()
-//  				.statusCode(500)
-//  				.log().all()
-//  				.extract().response();
-//  		
-//  		 String code = response.jsonPath().getString("code");
-//  	     String description = response.jsonPath().getString("description");
-//  	     String signature = response.jsonPath().getString("signature");
-//  	     
-//  	     assertNotNull(description, "Description is missing from the response");
-//  	     assertNotNull(code, "Code is missing");
-//  	     assertNotNull(signature,"signature is missing");
-//  	     
-//  	     assertFalse(description.isEmpty(), "Description is empty");
-//  	     assertFalse(code.isEmpty(), "Code is empty");
-//  	     assertFalse(signature.isEmpty(),"signature is empty");
-//  	     
-//  	     assertEquals(code,"GNR_ERR");
-//  		 assertEquals(description,"Internal Server Error");
-//    	 
-//     }
-//     @Test
-//     public void getUserDetailswhenUserisVerified() throws Exception {
-//    	 String requestDeviceId = "3efe6bbeb55f4411";
-//       	ObjectMapper objectMapper = new ObjectMapper();
-//   		Map<String, Object> jsonBody = new HashMap<>();
-//   		jsonBody.put("fullName", "");
-//   		jsonBody.put("country", "");
-//   		jsonBody.put("documentNumber", "");
-//   		jsonBody.put("documentType", "");
-//   		jsonBody.put("dateOfBirth", "");
-//   		jsonBody.put("documentExpiryDate", "");
-//   		jsonBody.put("gender", "");
-//
-//   		// Generate signature
-//   		String data = objectMapper.writeValueAsString(jsonBody);
-//   		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
-//   		
-//   		jsonBody.put("signature", requestSignature);
-//   		
-//   		Response response = given()
-//   				.header("X-GEO-Location", "12,12")
-//   				.header("X-Device-Id", requestDeviceId)
-//   				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-//   				.contentType("application/json")
-//   				.body(jsonBody)
-//   				.when()
-//   				.post("/profile")
-//   				.then()
-//   				.statusCode(403)
-//   				.log().all()
-//   				.extract().response();
-//   		
-//   		 String code = response.jsonPath().getString("code");
-//   	     String description = response.jsonPath().getString("description");
-//   	     String signature = response.jsonPath().getString("signature");
-//   	     
-//   	     assertNotNull(description, "Description is missing from the response");
-//   	     assertNotNull(code, "Code is missing");
-//   	     assertNotNull(signature,"signature is missing");
-//   	     
-//   	     assertFalse(description.isEmpty(), "Description is empty");
-//   	     assertFalse(code.isEmpty(), "Code is empty");
-//   	     assertFalse(signature.isEmpty(),"signature is empty");
-//   	     
-//   	     assertEquals(code,"GNR_FORBIDDEN");
-//   		 assertEquals(description,"Internal Server Error");
-//    	 
-//     }
-//     @Test
-//     public void getUserDetailswithoutSelfie() throws Exception {
-//    	 String requestDeviceId = "3efe6bbeb55f4411";
-//        	ObjectMapper objectMapper = new ObjectMapper();
-//    		Map<String, Object> jsonBody = new HashMap<>();
-//    		jsonBody.put("fullName", "");
-//    		jsonBody.put("country", "");
-//    		jsonBody.put("documentNumber", "");
-//    		jsonBody.put("documentType", "");
-//    		jsonBody.put("dateOfBirth", "");
-//    		jsonBody.put("documentExpiryDate", "");
-//    		jsonBody.put("gender", "");
-//
-//    		// Generate signature
-//    		String data = objectMapper.writeValueAsString(jsonBody);
-//    		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
-//    		
-//    		jsonBody.put("signature", requestSignature);
-//    		
-//    		Response response = given()
-//    				.header("X-GEO-Location", "12,12")
-//    				.header("X-Device-Id", requestDeviceId)
-//    				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-//    				.contentType("application/json")
-//    				.body(jsonBody)
-//    				.when()
-//    				.post("/profile")
-//    				.then()
-//    				.statusCode(406)
-//    				.log().all()
-//    				.extract().response();
-//    		
-//    		 String code = response.jsonPath().getString("code");
-//    	     String description = response.jsonPath().getString("description");
-//    	     String signature = response.jsonPath().getString("signature");
-//    	     
-//    	     assertNotNull(description, "Description is missing from the response");
-//    	     assertNotNull(code, "Code is missing");
-//    	     assertNotNull(signature,"signature is missing");
-//    	     
-//    	     assertFalse(description.isEmpty(), "Description is empty");
-//    	     assertFalse(code.isEmpty(), "Code is empty");
-//    	     assertFalse(signature.isEmpty(),"signature is empty");
-//    	     
-//    	     assertEquals(code,"GNR_NOT_ALLOWED");
-//    		 assertEquals(description,"Upload selfie and document first.");
-//    	 
-//     }
+    @Test
+    public void getUserDetailswithoutGeo() throws Exception {
+    	String requestDeviceId = "3efe6bbeb55f4411";
+    	ObjectMapper objectMapper = new ObjectMapper();
+		Map<String, Object> jsonBody = new LinkedHashMap<>();
+		jsonBody.put("fullName", "SINGH SAGAR");
+		jsonBody.put("country", "IND");
+		jsonBody.put("documentNumber", "R9079271");
+		jsonBody.put("documentType", "PASSPORT");
+		jsonBody.put("dateOfBirth", "1998-02-24");
+		jsonBody.put("documentExpiryDate", "2028-01-23");
+		jsonBody.put("gender", "M");
+
+		// Generate signature
+		String data = objectMapper.writeValueAsString(jsonBody);
+		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+		
+		jsonBody.put("signature", requestSignature);
+		
+		Response response = given()
+				.header("X-GEO-Location", "")
+				.header("X-Device-Id", requestDeviceId)
+				.header("User-Agent", "NepalTravelApp/1.0.0 android")
+				.header("X-AUTH-TOKEN",AuthToken)
+				.contentType("application/json")
+				.body(jsonBody)
+				.when()
+				.post("/profile")
+				.then()
+				.statusCode(400)
+				.log().all()
+				.extract().response();
+		
+		 String code = response.jsonPath().getString("code");
+	     String description = response.jsonPath().getString("description");
+	     String signature = response.jsonPath().getString("signature");
+	     
+	     assertNotNull(description, "Description is missing from the response");
+	     assertNotNull(code, "Code is missing");
+	     assertNotNull(signature,"signature is missing");
+	     
+	     assertFalse(description.isEmpty(), "Description is empty");
+	     assertFalse(code.isEmpty(), "Code is empty");
+	     assertFalse(signature.isEmpty(),"signature is empty");
+	     
+	     assertEquals(code,"GNR_PARAM_MISSING");
+		 assertEquals(description,"Required values missing.");
+    }
+    
+    @Test
+    public void getUserDetailswithoutDevice() throws Exception{
+    	String requestDeviceId = "";
+    	ObjectMapper objectMapper = new ObjectMapper();
+		Map<String, Object> jsonBody = new LinkedHashMap<>();
+		jsonBody.put("fullName", "SINGH SAGAR");
+		jsonBody.put("country", "IND");
+		jsonBody.put("documentNumber", "R9079271");
+		jsonBody.put("documentType", "PASSPORT");
+		jsonBody.put("dateOfBirth", "1998-02-24");
+		jsonBody.put("documentExpiryDate", "2028-01-23");
+		jsonBody.put("gender", "M");
+
+		// Generate signature
+		String data = objectMapper.writeValueAsString(jsonBody);
+		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+		
+		jsonBody.put("signature", requestSignature);
+		
+		Response response = given()
+				.header("X-GEO-Location", "12,12")
+				.header("X-Device-Id", requestDeviceId)
+				.header("User-Agent", "NepalTravelApp/1.0.0 android")
+				.contentType("application/json")
+				.body(jsonBody)
+				.when()
+				.post("/profile")
+				.then()
+				.statusCode(400)
+				.log().all()
+				.extract().response();
+		
+		 String code = response.jsonPath().getString("code");
+	     String description = response.jsonPath().getString("description");
+	     String signature = response.jsonPath().getString("signature");
+	     
+	     assertNotNull(description, "Description is missing from the response");
+	     assertNotNull(code, "Code is missing");
+	     assertNotNull(signature,"signature is missing");
+	     
+	     assertFalse(description.isEmpty(), "Description is empty");
+	     assertFalse(code.isEmpty(), "Code is empty");
+	     assertFalse(signature.isEmpty(),"signature is empty");
+	     
+	     assertEquals(code,"GNR_PARAM_MISSING");
+		 assertEquals(description,"Required values missing.");
+    	
+    	
+    }
+    
+    @Test
+    public void getUserDetailswithoutUserAgent() throws Exception {
+    	String requestDeviceId = "3efe6bbeb55f4411";
+    	ObjectMapper objectMapper = new ObjectMapper();
+		Map<String, Object> jsonBody = new LinkedHashMap<>();
+		jsonBody.put("fullName", "SINGH SAGAR");
+		jsonBody.put("country", "IND");
+		jsonBody.put("documentNumber", "R9079271");
+		jsonBody.put("documentType", "PASSPORT");
+		jsonBody.put("dateOfBirth", "1998-02-24");
+		jsonBody.put("documentExpiryDate", "2028-01-23");
+		jsonBody.put("gender", "M");
+
+		// Generate signature
+		String data = objectMapper.writeValueAsString(jsonBody);
+		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+		
+		jsonBody.put("signature", requestSignature);
+		
+		Response response = given()
+				.header("X-GEO-Location", "12,12")
+				.header("X-Device-Id", requestDeviceId)
+				.header("User-Agent", "")
+				.contentType("application/json")
+				.body(jsonBody)
+				.when()
+				.post("/profile")
+				.then()
+				.statusCode(400)
+				.log().all()
+				.extract().response();
+		
+		 String code = response.jsonPath().getString("code");
+	     String description = response.jsonPath().getString("description");
+	     String signature = response.jsonPath().getString("signature");
+	     
+	     assertNotNull(description, "Description is missing from the response");
+	     assertNotNull(code, "Code is missing");
+	     assertNotNull(signature,"signature is missing");
+	     
+	     assertFalse(description.isEmpty(), "Description is empty");
+	     assertFalse(code.isEmpty(), "Code is empty");
+	     assertFalse(signature.isEmpty(),"signature is empty");
+	     
+	     assertEquals(code,"GNR_PARAM_MISSING");
+		 assertEquals(description,"Required values missing.");
+    }
+    
+    @Test
+    public void getUserDetailswithoutAuth() throws Exception {
+    	String requestDeviceId = "3efe6bbeb55f4411";
+    	ObjectMapper objectMapper = new ObjectMapper();
+		Map<String, Object> jsonBody = new LinkedHashMap<>();
+		jsonBody.put("fullName", "SINGH SAGAR");
+		jsonBody.put("country", "IND");
+		jsonBody.put("documentNumber", "R9079271");
+		jsonBody.put("documentType", "PASSPORT");
+		jsonBody.put("dateOfBirth", "1998-02-24");
+		jsonBody.put("documentExpiryDate", "2028-01-23");
+		jsonBody.put("gender", "M");
+
+		// Generate signature
+		String data = objectMapper.writeValueAsString(jsonBody);
+		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+		
+		jsonBody.put("signature", requestSignature);
+		
+		Response response = given()
+				.header("X-GEO-Location", "12,12")
+				.header("X-Device-Id", requestDeviceId)
+				.header("User-Agent", "NepalTravelApp/1.0.0 android")
+				.contentType("application/json")
+				.body(jsonBody)
+				.when()
+				.post("/profile")
+				.then()
+				.statusCode(400)
+				.log().all()
+				.extract().response();
+		
+		 String code = response.jsonPath().getString("code");
+	     String description = response.jsonPath().getString("description");
+	     String signature = response.jsonPath().getString("signature");
+	     
+	     assertNotNull(description, "Description is missing from the response");
+	     assertNotNull(code, "Code is missing");
+	     assertNotNull(signature,"signature is missing");
+	     
+	     assertFalse(description.isEmpty(), "Description is empty");
+	     assertFalse(code.isEmpty(), "Code is empty");
+	     assertFalse(signature.isEmpty(),"signature is empty");
+	     
+	     assertEquals(code,"GNR_PARAM_MISSING");
+		 assertEquals(description,"Required values missing.");
+    	
+    }
+    
+    @Test
+    public void getUserwithInvalidDevice() throws Exception {
+    	String requestDeviceId = "3efe6bbeb55f4411";
+    	ObjectMapper objectMapper = new ObjectMapper();
+    	Map<String, Object> jsonBody = new LinkedHashMap<>();
+		jsonBody.put("fullName", "SINGH SAGAR");
+		jsonBody.put("country", "IND");
+		jsonBody.put("documentNumber", "R9079271");
+		jsonBody.put("documentType", "PASSPORT");
+		jsonBody.put("dateOfBirth", "1998-02-24");
+		jsonBody.put("documentExpiryDate", "2028-01-23");
+		jsonBody.put("gender", "M");
+
+		// Generate signature
+		String data = objectMapper.writeValueAsString(jsonBody);
+		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+		
+		jsonBody.put("signature", requestSignature);
+		
+		Response response = given()
+				.header("X-GEO-Location", "12,12")
+				.header("X-Device-Id", requestDeviceId)
+				.header("User-Agent", "NepalTravelApp/1.0.0 android")
+				.contentType("application/json")
+				.body(jsonBody)
+				.when()
+				.post("/profile")
+				.then()
+				.statusCode(422)
+				.log().all()
+				.extract().response();
+		
+		 String code = response.jsonPath().getString("code");
+	     String description = response.jsonPath().getString("description");
+	     String signature = response.jsonPath().getString("signature");
+	     
+	     assertNotNull(description, "Description is missing from the response");
+	     assertNotNull(code, "Code is missing");
+	     assertNotNull(signature,"signature is missing");
+	     
+	     assertFalse(description.isEmpty(), "Description is empty");
+	     assertFalse(code.isEmpty(), "Code is empty");
+	     assertFalse(signature.isEmpty(),"signature is empty");
+	     
+	     assertEquals(code,"GNR_INVALID_DATA");
+		 assertEquals(description,"Unable to process request as data is invalid.");
+    	
+    }
+    @Test
+	public void getUserDetailswithInvalidGeo() throws Exception {
+    	String requestDeviceId = "3efe6bbeb55f4411";
+    	ObjectMapper objectMapper = new ObjectMapper();
+    	Map<String, Object> jsonBody = new LinkedHashMap<>();
+		jsonBody.put("fullName", "SINGH SAGAR");
+		jsonBody.put("country", "IND");
+		jsonBody.put("documentNumber", "R9079271");
+		jsonBody.put("documentType", "PASSPORT");
+		jsonBody.put("dateOfBirth", "1998-02-24");
+		jsonBody.put("documentExpiryDate", "2028-01-23");
+		jsonBody.put("gender", "M");
+
+		// Generate signature
+		String data = objectMapper.writeValueAsString(jsonBody);
+		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+		
+		jsonBody.put("signature", requestSignature);
+		
+		Response response = given()
+				.header("X-GEO-Location", "12,12")
+				.header("X-Device-Id", requestDeviceId)
+				.header("User-Agent", "NepalTravelApp/1.0.0 android")
+				.contentType("application/json")
+				.body(jsonBody)
+				.when()
+				.post("/profile")
+				.then()
+				.statusCode(422)
+				.log().all()
+				.extract().response();
+		
+		 String code = response.jsonPath().getString("code");
+	     String description = response.jsonPath().getString("description");
+	     String signature = response.jsonPath().getString("signature");
+	     
+	     assertNotNull(description, "Description is missing from the response");
+	     assertNotNull(code, "Code is missing");
+	     assertNotNull(signature,"signature is missing");
+	     
+	     assertFalse(description.isEmpty(), "Description is empty");
+	     assertFalse(code.isEmpty(), "Code is empty");
+	     assertFalse(signature.isEmpty(),"signature is empty");
+	     
+	     assertEquals(code,"GNR_INVALID_DATA");
+		 assertEquals(description,"Unable to process request as data is invalid.");
+    	
+    }
+    
+    @Test
+    public void getUserDetailswithInvalidUser() throws Exception {
+    	String requestDeviceId = "3efe6bbeb55f4411";
+    	ObjectMapper objectMapper = new ObjectMapper();
+    	Map<String, Object> jsonBody = new LinkedHashMap<>();
+		jsonBody.put("fullName", "SINGH SAGAR");
+		jsonBody.put("country", "IND");
+		jsonBody.put("documentNumber", "R9079271");
+		jsonBody.put("documentType", "PASSPORT");
+		jsonBody.put("dateOfBirth", "1998-02-24");
+		jsonBody.put("documentExpiryDate", "2028-01-23");
+		jsonBody.put("gender", "M");
+		// Generate signature
+		String data = objectMapper.writeValueAsString(jsonBody);
+		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+		
+		jsonBody.put("signature", requestSignature);
+		
+		Response response = given()
+				.header("X-GEO-Location", "12,12")
+				.header("X-Device-Id", requestDeviceId)
+				.header("User-Agent", "NepalTravelApp/1.0.0 android")
+				.contentType("application/json")
+				.body(jsonBody)
+				.when()
+				.post("/profile")
+				.then()
+				.statusCode(422)
+				.log().all()
+				.extract().response();
+		
+		 String code = response.jsonPath().getString("code");
+	     String description = response.jsonPath().getString("description");
+	     String signature = response.jsonPath().getString("signature");
+	     
+	     assertNotNull(description, "Description is missing from the response");
+	     assertNotNull(code, "Code is missing");
+	     assertNotNull(signature,"signature is missing");
+	     
+	     assertFalse(description.isEmpty(), "Description is empty");
+	     assertFalse(code.isEmpty(), "Code is empty");
+	     assertFalse(signature.isEmpty(),"signature is empty");
+	     
+	     assertEquals(code,"GNR_INVALID_DATA");
+		 assertEquals(description,"Unable to process request as data is invalid.");
+    	
+    	
+    }
+    
+    @Test
+    public void getUserwithoutName() throws Exception {
+    	String requestDeviceId = "3efe6bbeb55f4411";
+    	ObjectMapper objectMapper = new ObjectMapper();
+    	Map<String, Object> jsonBody = new LinkedHashMap<>();
+		jsonBody.put("fullName", "SINGH SAGAR");
+		jsonBody.put("country", "IND");
+		jsonBody.put("documentNumber", "R9079271");
+		jsonBody.put("documentType", "PASSPORT");
+		jsonBody.put("dateOfBirth", "1998-02-24");
+		jsonBody.put("documentExpiryDate", "2028-01-23");
+		jsonBody.put("gender", "M");
+
+		// Generate signature
+		String data = objectMapper.writeValueAsString(jsonBody);
+		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+		
+		jsonBody.put("signature", requestSignature);
+		
+		Response response = given()
+				.header("X-GEO-Location", "12,12")
+				.header("X-Device-Id", requestDeviceId)
+				.header("User-Agent", "NepalTravelApp/1.0.0 android")
+				.contentType("application/json")
+				.body(jsonBody)
+				.when()
+				.post("/profile")
+				.then()
+				.statusCode(400)
+				.log().all()
+				.extract().response();
+		
+		 String code = response.jsonPath().getString("code");
+	     String description = response.jsonPath().getString("description");
+	     String signature = response.jsonPath().getString("signature");
+	     
+	     assertNotNull(description, "Description is missing from the response");
+	     assertNotNull(code, "Code is missing");
+	     assertNotNull(signature,"signature is missing");
+	     
+	     assertFalse(description.isEmpty(), "Description is empty");
+	     assertFalse(code.isEmpty(), "Code is empty");
+	     assertFalse(signature.isEmpty(),"signature is empty");
+	     
+	     assertEquals(code,"GNR_PARAM_MISSING");
+		 assertEquals(description,"Required values missing.");
+    	
+    
+    }
+    
+    @Test
+    public void getUserDetailswithoutCountry() throws Exception {
+    	String requestDeviceId = "3efe6bbeb55f4411";
+    	ObjectMapper objectMapper = new ObjectMapper();
+		Map<String, Object> jsonBody = new LinkedHashMap<>();
+		jsonBody.put("fullName", "");
+		jsonBody.put("country", "");
+		jsonBody.put("documentNumber", "");
+		jsonBody.put("documentType", "");
+		jsonBody.put("dateOfBirth", "");
+		jsonBody.put("documentExpiryDate", "");
+		jsonBody.put("gender", "");
+
+		// Generate signature
+		String data = objectMapper.writeValueAsString(jsonBody);
+		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+		
+		jsonBody.put("signature", requestSignature);
+		
+		Response response = given()
+				.header("X-GEO-Location", "12,12")
+				.header("X-Device-Id", requestDeviceId)
+				.header("User-Agent", "NepalTravelApp/1.0.0 android")
+				.contentType("application/json")
+				.body(jsonBody)
+				.when()
+				.post("/profile")
+				.then()
+				.statusCode(400)
+				.log().all()
+				.extract().response();
+		
+		 String code = response.jsonPath().getString("code");
+	     String description = response.jsonPath().getString("description");
+	     String signature = response.jsonPath().getString("signature");
+	     
+	     assertNotNull(description, "Description is missing from the response");
+	     assertNotNull(code, "Code is missing");
+	     assertNotNull(signature,"signature is missing");
+	     
+	     assertFalse(description.isEmpty(), "Description is empty");
+	     assertFalse(code.isEmpty(), "Code is empty");
+	     assertFalse(signature.isEmpty(),"signature is empty");
+	     
+	     assertEquals(code,"GNR_PARAM_MISSING");
+		 assertEquals(description,"Required values missing.");
+    }
+    
+    @Test
+    public void getUserDetailswithoutDocumentNumber() throws Exception {
+    	String requestDeviceId = "3efe6bbeb55f4411";
+    	ObjectMapper objectMapper = new ObjectMapper();
+		Map<String, Object> jsonBody = new LinkedHashMap<>();
+		jsonBody.put("fullName", "");
+		jsonBody.put("country", "");
+		jsonBody.put("documentNumber", "");
+		jsonBody.put("documentType", "");
+		jsonBody.put("dateOfBirth", "");
+		jsonBody.put("documentExpiryDate", "");
+		jsonBody.put("gender", "");
+
+		// Generate signature
+		String data = objectMapper.writeValueAsString(jsonBody);
+		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+		
+		jsonBody.put("signature", requestSignature);
+		
+		Response response = given()
+				.header("X-GEO-Location", "12,12")
+				.header("X-Device-Id", requestDeviceId)
+				.header("User-Agent", "NepalTravelApp/1.0.0 android")
+				.contentType("application/json")
+				.body(jsonBody)
+				.when()
+				.post("/profile")
+				.then()
+				.statusCode(400)
+				.log().all()
+				.extract().response();
+		
+		 String code = response.jsonPath().getString("code");
+	     String description = response.jsonPath().getString("description");
+	     String signature = response.jsonPath().getString("signature");
+	     
+	     assertNotNull(description, "Description is missing from the response");
+	     assertNotNull(code, "Code is missing");
+	     assertNotNull(signature,"signature is missing");
+	     
+	     assertFalse(description.isEmpty(), "Description is empty");
+	     assertFalse(code.isEmpty(), "Code is empty");
+	     assertFalse(signature.isEmpty(),"signature is empty");
+	     
+	     assertEquals(code,"GNR_PARAM_MISSING");
+		 assertEquals(description,"Required values missing.");
+    }
+    
+    @Test
+    public void getUserDetailswithoutDocumentType() throws Exception {
+    	String requestDeviceId = "3efe6bbeb55f4411";
+    	ObjectMapper objectMapper = new ObjectMapper();
+		Map<String, Object> jsonBody = new LinkedHashMap<>();
+		jsonBody.put("fullName", "");
+		jsonBody.put("country", "");
+		jsonBody.put("documentNumber", "");
+		jsonBody.put("documentType", "");
+		jsonBody.put("dateOfBirth", "");
+		jsonBody.put("documentExpiryDate", "");
+		jsonBody.put("gender", "");
+
+		// Generate signature
+		String data = objectMapper.writeValueAsString(jsonBody);
+		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+		
+		jsonBody.put("signature", requestSignature);
+		
+		Response response = given()
+				.header("X-GEO-Location", "12,12")
+				.header("X-Device-Id", requestDeviceId)
+				.header("User-Agent", "NepalTravelApp/1.0.0 android")
+				.contentType("application/json")
+				.body(jsonBody)
+				.when()
+				.post("/profile")
+				.then()
+				.statusCode(400)
+				.log().all()
+				.extract().response();
+		
+		 String code = response.jsonPath().getString("code");
+	     String description = response.jsonPath().getString("description");
+	     String signature = response.jsonPath().getString("signature");
+	     
+	     assertNotNull(description, "Description is missing from the response");
+	     assertNotNull(code, "Code is missing");
+	     assertNotNull(signature,"signature is missing");
+	     
+	     assertFalse(description.isEmpty(), "Description is empty");
+	     assertFalse(code.isEmpty(), "Code is empty");
+	     assertFalse(signature.isEmpty(),"signature is empty");
+	     
+	     assertEquals(code,"GNR_PARAM_MISSING");
+		 assertEquals(description,"Required values missing.");
+    }
+    
+    @Test
+    public void getUserDetailswithoutDateofBirth() throws Exception {
+    	String requestDeviceId = "3efe6bbeb55f4411";
+    	ObjectMapper objectMapper = new ObjectMapper();
+		Map<String, Object> jsonBody = new LinkedHashMap<>();
+		jsonBody.put("fullName", "");
+		jsonBody.put("country", "");
+		jsonBody.put("documentNumber", "");
+		jsonBody.put("documentType", "");
+		jsonBody.put("dateOfBirth", "");
+		jsonBody.put("documentExpiryDate", "");
+		jsonBody.put("gender", "");
+
+		// Generate signature
+		String data = objectMapper.writeValueAsString(jsonBody);
+		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+		
+		jsonBody.put("signature", requestSignature);
+		
+		Response response = given()
+				.header("X-GEO-Location", "12,12")
+				.header("X-Device-Id", requestDeviceId)
+				.header("User-Agent", "NepalTravelApp/1.0.0 android")
+				.contentType("application/json")
+				.body(jsonBody)
+				.when()
+				.post("/profile")
+				.then()
+				.statusCode(400)
+				.log().all()
+				.extract().response();
+		
+		 String code = response.jsonPath().getString("code");
+	     String description = response.jsonPath().getString("description");
+	     String signature = response.jsonPath().getString("signature");
+	     
+	     assertNotNull(description, "Description is missing from the response");
+	     assertNotNull(code, "Code is missing");
+	     assertNotNull(signature,"signature is missing");
+	     
+	     assertFalse(description.isEmpty(), "Description is empty");
+	     assertFalse(code.isEmpty(), "Code is empty");
+	     assertFalse(signature.isEmpty(),"signature is empty");
+	     
+	     assertEquals(code,"GNR_PARAM_MISSING");
+		 assertEquals(description,"Required values missing.");
+    }
+    
+    @Test
+    public void getUserDetailswithoutDocumentExpiryDate() throws Exception {
+    	String requestDeviceId = "3efe6bbeb55f4411";
+    	ObjectMapper objectMapper = new ObjectMapper();
+		Map<String, Object> jsonBody = new LinkedHashMap<>();
+		jsonBody.put("fullName", "");
+		jsonBody.put("country", "");
+		jsonBody.put("documentNumber", "");
+		jsonBody.put("documentType", "");
+		jsonBody.put("dateOfBirth", "");
+		jsonBody.put("documentExpiryDate", "");
+		jsonBody.put("gender", "");
+
+		// Generate signature
+		String data = objectMapper.writeValueAsString(jsonBody);
+		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+		
+		jsonBody.put("signature", requestSignature);
+		
+		Response response = given()
+				.header("X-GEO-Location", "12,12")
+				.header("X-Device-Id", requestDeviceId)
+				.header("User-Agent", "NepalTravelApp/1.0.0 android")
+				.contentType("application/json")
+				.body(jsonBody)
+				.when()
+				.post("/profile")
+				.then()
+				.statusCode(400)
+				.log().all()
+				.extract().response();
+		
+		 String code = response.jsonPath().getString("code");
+	     String description = response.jsonPath().getString("description");
+	     String signature = response.jsonPath().getString("signature");
+	     
+	     assertNotNull(description, "Description is missing from the response");
+	     assertNotNull(code, "Code is missing");
+	     assertNotNull(signature,"signature is missing");
+	     
+	     assertFalse(description.isEmpty(), "Description is empty");
+	     assertFalse(code.isEmpty(), "Code is empty");
+	     assertFalse(signature.isEmpty(),"signature is empty");
+	     
+	     assertEquals(code,"GNR_PARAM_MISSING");
+		 assertEquals(description,"Required values missing.");
+    	
+    }
+    
+    @Test
+    public void getUserDetailswithoutGender() throws Exception {
+    	String requestDeviceId = "3efe6bbeb55f4411";
+    	ObjectMapper objectMapper = new ObjectMapper();
+		Map<String, Object> jsonBody = new LinkedHashMap<>();
+		jsonBody.put("fullName", "");
+		jsonBody.put("country", "");
+		jsonBody.put("documentNumber", "");
+		jsonBody.put("documentType", "");
+		jsonBody.put("dateOfBirth", "");
+		jsonBody.put("documentExpiryDate", "");
+		jsonBody.put("gender", "");
+
+		// Generate signature
+		String data = objectMapper.writeValueAsString(jsonBody);
+		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+		
+		jsonBody.put("signature", requestSignature);
+		
+		Response response = given()
+				.header("X-GEO-Location", "12,12")
+				.header("X-Device-Id", requestDeviceId)
+				.header("User-Agent", "NepalTravelApp/1.0.0 android")
+				.contentType("application/json")
+				.body(jsonBody)
+				.when()
+				.post("/profile")
+				.then()
+				.statusCode(400)
+				.log().all()
+				.extract().response();
+		
+		 String code = response.jsonPath().getString("code");
+	     String description = response.jsonPath().getString("description");
+	     String signature = response.jsonPath().getString("signature");
+	     
+	     assertNotNull(description, "Description is missing from the response");
+	     assertNotNull(code, "Code is missing");
+	     assertNotNull(signature,"signature is missing");
+	     
+	     assertFalse(description.isEmpty(), "Description is empty");
+	     assertFalse(code.isEmpty(), "Code is empty");
+	     assertFalse(signature.isEmpty(),"signature is empty");
+	     
+	     assertEquals(code,"GNR_PARAM_MISSING");
+		 assertEquals(description,"Required values missing.");
+    }
+    
+    @Test
+    public void getUserDetailswithoutSignature() throws Exception {
+    	String requestDeviceId = "3efe6bbeb55f4411";
+    	ObjectMapper objectMapper = new ObjectMapper();
+		Map<String, Object> jsonBody = new LinkedHashMap<>();
+		jsonBody.put("fullName", "");
+		jsonBody.put("country", "");
+		jsonBody.put("documentNumber", "");
+		jsonBody.put("documentType", "");
+		jsonBody.put("dateOfBirth", "");
+		jsonBody.put("documentExpiryDate", "");
+		jsonBody.put("gender", "");
+
+		// Generate signature
+		String data = objectMapper.writeValueAsString(jsonBody);
+		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+		
+		jsonBody.put("signature", requestSignature);
+		
+		Response response = given()
+				.header("X-GEO-Location", "12,12")
+				.header("X-Device-Id", requestDeviceId)
+				.header("User-Agent", "NepalTravelApp/1.0.0 android")
+				.contentType("application/json")
+				.body(jsonBody)
+				.when()
+				.post("/profile")
+				.then()
+				.statusCode(400)
+				.log().all()
+				.extract().response();
+		
+		 String code = response.jsonPath().getString("code");
+	     String description = response.jsonPath().getString("description");
+	     String signature = response.jsonPath().getString("signature");
+	     
+	     assertNotNull(description, "Description is missing from the response");
+	     assertNotNull(code, "Code is missing");
+	     assertNotNull(signature,"signature is missing");
+	     
+	     assertFalse(description.isEmpty(), "Description is empty");
+	     assertFalse(code.isEmpty(), "Code is empty");
+	     assertFalse(signature.isEmpty(),"signature is empty");
+	     
+	     assertEquals(code,"GNR_PARAM_MISSING");
+		 assertEquals(description,"Required values missing.");
+    }
+    
+    @Test
+    public void getUserDetailswithInvalidfullname() throws Exception {
+    	String requestDeviceId = "3efe6bbeb55f4411";
+    	ObjectMapper objectMapper = new ObjectMapper();
+		Map<String, Object> jsonBody = new LinkedHashMap<>();
+		jsonBody.put("fullName", "");
+		jsonBody.put("country", "");
+		jsonBody.put("documentNumber", "");
+		jsonBody.put("documentType", "");
+		jsonBody.put("dateOfBirth", "");
+		jsonBody.put("documentExpiryDate", "");
+		jsonBody.put("gender", "");
+
+		// Generate signature
+		String data = objectMapper.writeValueAsString(jsonBody);
+		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+		
+		jsonBody.put("signature", requestSignature);
+		
+		Response response = given()
+				.header("X-GEO-Location", "12,12")
+				.header("X-Device-Id", requestDeviceId)
+				.header("User-Agent", "NepalTravelApp/1.0.0 android")
+				.contentType("application/json")
+				.body(jsonBody)
+				.when()
+				.post("/profile")
+				.then()
+				.statusCode(422)
+				.log().all()
+				.extract().response();
+		
+		 String code = response.jsonPath().getString("code");
+	     String description = response.jsonPath().getString("description");
+	     String signature = response.jsonPath().getString("signature");
+	     
+	     assertNotNull(description, "Description is missing from the response");
+	     assertNotNull(code, "Code is missing");
+	     assertNotNull(signature,"signature is missing");
+	     
+	     assertFalse(description.isEmpty(), "Description is empty");
+	     assertFalse(code.isEmpty(), "Code is empty");
+	     assertFalse(signature.isEmpty(),"signature is empty");
+	     
+	     assertEquals(code,"GNR_INVALID_DATA");
+		 assertEquals(description,"Invalid data.");
+    	
+    }
+    @Test
+    public void getUserDetailswithInvalidCountry() throws Exception {
+    	String requestDeviceId = "3efe6bbeb55f4411";
+    	ObjectMapper objectMapper = new ObjectMapper();
+		Map<String, Object> jsonBody = new LinkedHashMap<>();
+		jsonBody.put("fullName", "");
+		jsonBody.put("country", "");
+		jsonBody.put("documentNumber", "");
+		jsonBody.put("documentType", "");
+		jsonBody.put("dateOfBirth", "");
+		jsonBody.put("documentExpiryDate", "");
+		jsonBody.put("gender", "");
+
+		// Generate signature
+		String data = objectMapper.writeValueAsString(jsonBody);
+		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+		
+		jsonBody.put("signature", requestSignature);
+		
+		Response response = given()
+				.header("X-GEO-Location", "12,12")
+				.header("X-Device-Id", requestDeviceId)
+				.header("User-Agent", "NepalTravelApp/1.0.0 android")
+				.contentType("application/json")
+				.body(jsonBody)
+				.when()
+				.post("/profile")
+				.then()
+				.statusCode(422)
+				.log().all()
+				.extract().response();
+		
+		 String code = response.jsonPath().getString("code");
+	     String description = response.jsonPath().getString("description");
+	     String signature = response.jsonPath().getString("signature");
+	     
+	     assertNotNull(description, "Description is missing from the response");
+	     assertNotNull(code, "Code is missing");
+	     assertNotNull(signature,"signature is missing");
+	     
+	     assertFalse(description.isEmpty(), "Description is empty");
+	     assertFalse(code.isEmpty(), "Code is empty");
+	     assertFalse(signature.isEmpty(),"signature is empty");
+	     
+	     assertEquals(code,"GNR_INVALID_DATA");
+		 assertEquals(description,"Invalid data.");
+    	
+    }
+    
+    @Test
+    public void getUserDetailswithInvalidDocumentNumber() throws Exception {
+    	String requestDeviceId = "3efe6bbeb55f4411";
+    	ObjectMapper objectMapper = new ObjectMapper();
+		Map<String, Object> jsonBody = new LinkedHashMap<>();
+		jsonBody.put("fullName", "");
+		jsonBody.put("country", "");
+		jsonBody.put("documentNumber", "");
+		jsonBody.put("documentType", "");
+		jsonBody.put("dateOfBirth", "");
+		jsonBody.put("documentExpiryDate", "");
+		jsonBody.put("gender", "");
+
+		// Generate signature
+		String data = objectMapper.writeValueAsString(jsonBody);
+		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+		
+		jsonBody.put("signature", requestSignature);
+		
+		Response response = given()
+				.header("X-GEO-Location", "12,12")
+				.header("X-Device-Id", requestDeviceId)
+				.header("User-Agent", "NepalTravelApp/1.0.0 android")
+				.contentType("application/json")
+				.body(jsonBody)
+				.when()
+				.post("/profile")
+				.then()
+				.statusCode(422)
+				.log().all()
+				.extract().response();
+		
+		 String code = response.jsonPath().getString("code");
+	     String description = response.jsonPath().getString("description");
+	     String signature = response.jsonPath().getString("signature");
+	     
+	     assertNotNull(description, "Description is missing from the response");
+	     assertNotNull(code, "Code is missing");
+	     assertNotNull(signature,"signature is missing");
+	     
+	     assertFalse(description.isEmpty(), "Description is empty");
+	     assertFalse(code.isEmpty(), "Code is empty");
+	     assertFalse(signature.isEmpty(),"signature is empty");
+	     
+	     assertEquals(code,"GNR_INVALID_DATA");
+		 assertEquals(description,"Invalid data.");
+    }
+    
+    @Test
+    public void getUserDetailswithInvalidDocumentType() throws Exception{
+    	String requestDeviceId = "3efe6bbeb55f4411";
+    	ObjectMapper objectMapper = new ObjectMapper();
+		Map<String, Object> jsonBody = new LinkedHashMap<>();
+		jsonBody.put("fullName", "");
+		jsonBody.put("country", "");
+		jsonBody.put("documentNumber", "");
+		jsonBody.put("documentType", "");
+		jsonBody.put("dateOfBirth", "");
+		jsonBody.put("documentExpiryDate", "");
+		jsonBody.put("gender", "");
+
+		// Generate signature
+		String data = objectMapper.writeValueAsString(jsonBody);
+		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+		
+		jsonBody.put("signature", requestSignature);
+		
+		Response response = given()
+				.header("X-GEO-Location", "12,12")
+				.header("X-Device-Id", requestDeviceId)
+				.header("User-Agent", "NepalTravelApp/1.0.0 android")
+				.contentType("application/json")
+				.body(jsonBody)
+				.when()
+				.post("/profile")
+				.then()
+				.statusCode(422)
+				.log().all()
+				.extract().response();
+		
+		 String code = response.jsonPath().getString("code");
+	     String description = response.jsonPath().getString("description");
+	     String signature = response.jsonPath().getString("signature");
+	     
+	     assertNotNull(description, "Description is missing from the response");
+	     assertNotNull(code, "Code is missing");
+	     assertNotNull(signature,"signature is missing");
+	     
+	     assertFalse(description.isEmpty(), "Description is empty");
+	     assertFalse(code.isEmpty(), "Code is empty");
+	     assertFalse(signature.isEmpty(),"signature is empty");
+	     
+	     assertEquals(code,"GNR_INVALID_DATA");
+		 assertEquals(description,"Invalid data.");
+    }
+    @Test
+    public void getUserDetailswithInvalidGender() throws Exception {
+    	String requestDeviceId = "3efe6bbeb55f4411";
+    	ObjectMapper objectMapper = new ObjectMapper();
+		Map<String, Object> jsonBody = new LinkedHashMap<>();
+		jsonBody.put("fullName", "");
+		jsonBody.put("country", "");
+		jsonBody.put("documentNumber", "");
+		jsonBody.put("documentType", "");
+		jsonBody.put("dateOfBirth", "");
+		jsonBody.put("documentExpiryDate", "");
+		jsonBody.put("gender", "");
+
+		// Generate signature
+		String data = objectMapper.writeValueAsString(jsonBody);
+		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+		
+		jsonBody.put("signature", requestSignature);
+		
+		Response response = given()
+				.header("X-GEO-Location", "12,12")
+				.header("X-Device-Id", requestDeviceId)
+				.header("User-Agent", "NepalTravelApp/1.0.0 android")
+				.contentType("application/json")
+				.body(jsonBody)
+				.when()
+				.post("/profile")
+				.then()
+				.statusCode(422)
+				.log().all()
+				.extract().response();
+		
+		 String code = response.jsonPath().getString("code");
+	     String description = response.jsonPath().getString("description");
+	     String signature = response.jsonPath().getString("signature");
+	     
+	     assertNotNull(description, "Description is missing from the response");
+	     assertNotNull(code, "Code is missing");
+	     assertNotNull(signature,"signature is missing");
+	     
+	     assertFalse(description.isEmpty(), "Description is empty");
+	     assertFalse(code.isEmpty(), "Code is empty");
+	     assertFalse(signature.isEmpty(),"signature is empty");
+	     
+	     assertEquals(code,"GNR_INVALID_DATA");
+		 assertEquals(description,"Invalid data.");
+    	
+    }
+     @Test
+     public void getUserDetailswithInvalidDateofBirth() throws Exception {
+    	 String requestDeviceId = "3efe6bbeb55f4411";
+     	ObjectMapper objectMapper = new ObjectMapper();
+ 		Map<String, Object> jsonBody = new LinkedHashMap<>();
+ 		jsonBody.put("fullName", "");
+ 		jsonBody.put("country", "");
+ 		jsonBody.put("documentNumber", "");
+ 		jsonBody.put("documentType", "");
+ 		jsonBody.put("dateOfBirth", "");
+ 		jsonBody.put("documentExpiryDate", "");
+ 		jsonBody.put("gender", "");
+
+ 		// Generate signature
+ 		String data = objectMapper.writeValueAsString(jsonBody);
+ 		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+ 		
+ 		jsonBody.put("signature", requestSignature);
+ 		
+ 		Response response = given()
+ 				.header("X-GEO-Location", "12,12")
+ 				.header("X-Device-Id", requestDeviceId)
+ 				.header("User-Agent", "NepalTravelApp/1.0.0 android")
+ 				.contentType("application/json")
+ 				.body(jsonBody)
+ 				.when()
+ 				.post("/profile")
+ 				.then()
+ 				.statusCode(422)
+ 				.log().all()
+ 				.extract().response();
+ 		
+ 		 String code = response.jsonPath().getString("code");
+ 	     String description = response.jsonPath().getString("description");
+ 	     String signature = response.jsonPath().getString("signature");
+ 	     
+ 	     assertNotNull(description, "Description is missing from the response");
+ 	     assertNotNull(code, "Code is missing");
+ 	     assertNotNull(signature,"signature is missing");
+ 	     
+ 	     assertFalse(description.isEmpty(), "Description is empty");
+ 	     assertFalse(code.isEmpty(), "Code is empty");
+ 	     assertFalse(signature.isEmpty(),"signature is empty");
+ 	     
+ 	     assertEquals(code,"GNR_INVALID_DATA");
+ 		 assertEquals(description,"Invalid data.");
+     }
+     
+     @Test
+     public void getUserDetailswithInvalidExpiryDate() throws Exception {
+    	 String requestDeviceId = "3efe6bbeb55f4411";
+     	ObjectMapper objectMapper = new ObjectMapper();
+ 		Map<String, Object> jsonBody = new LinkedHashMap<>();
+ 		jsonBody.put("fullName", "");
+ 		jsonBody.put("country", "");
+ 		jsonBody.put("documentNumber", "");
+ 		jsonBody.put("documentType", "");
+ 		jsonBody.put("dateOfBirth", "");
+ 		jsonBody.put("documentExpiryDate", "");
+ 		jsonBody.put("gender", "");
+
+ 		// Generate signature
+ 		String data = objectMapper.writeValueAsString(jsonBody);
+ 		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+ 		
+ 		jsonBody.put("signature", requestSignature);
+ 		
+ 		Response response = given()
+ 				.header("X-GEO-Location", "12,12")
+ 				.header("X-Device-Id", requestDeviceId)
+ 				.header("User-Agent", "NepalTravelApp/1.0.0 android")
+ 				.contentType("application/json")
+ 				.body(jsonBody)
+ 				.when()
+ 				.post("/profile")
+ 				.then()
+ 				.statusCode(422)
+ 				.log().all()
+ 				.extract().response();
+ 		
+ 		 String code = response.jsonPath().getString("code");
+ 	     String description = response.jsonPath().getString("description");
+ 	     String signature = response.jsonPath().getString("signature");
+ 	     
+ 	     assertNotNull(description, "Description is missing from the response");
+ 	     assertNotNull(code, "Code is missing");
+ 	     assertNotNull(signature,"signature is missing");
+ 	     
+ 	     assertFalse(description.isEmpty(), "Description is empty");
+ 	     assertFalse(code.isEmpty(), "Code is empty");
+ 	     assertFalse(signature.isEmpty(),"signature is empty");
+ 	     
+ 	     assertEquals(code,"GNR_INVALID_DATA");
+ 		 assertEquals(description,"Invalid data.");
+     }
+     
+     @Test
+     public void getUserDetailswithInvalidSignature() throws Exception {
+    	 String requestDeviceId = "3efe6bbeb55f4411";
+     	ObjectMapper objectMapper = new ObjectMapper();
+ 		Map<String, Object> jsonBody = new LinkedHashMap<>();
+ 		jsonBody.put("fullName", "");
+ 		jsonBody.put("country", "");
+ 		jsonBody.put("documentNumber", "");
+ 		jsonBody.put("documentType", "");
+ 		jsonBody.put("dateOfBirth", "");
+ 		jsonBody.put("documentExpiryDate", "");
+ 		jsonBody.put("gender", "");
+
+ 		// Generate signature
+ 		String data = objectMapper.writeValueAsString(jsonBody);
+ 		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+ 		
+ 		jsonBody.put("signature", requestSignature);
+ 		
+ 		Response response = given()
+ 				.header("X-GEO-Location", "12,12")
+ 				.header("X-Device-Id", requestDeviceId)
+ 				.header("User-Agent", "NepalTravelApp/1.0.0 android")
+ 				.contentType("application/json")
+ 				.body(jsonBody)
+ 				.when()
+ 				.post("/profile")
+ 				.then()
+ 				.statusCode(401)
+ 				.log().all()
+ 				.extract().response();
+ 		
+ 		 String code = response.jsonPath().getString("code");
+ 	     String description = response.jsonPath().getString("description");
+ 	     String signature = response.jsonPath().getString("signature");
+ 	     
+ 	     assertNotNull(description, "Description is missing from the response");
+ 	     assertNotNull(code, "Code is missing");
+ 	     assertNotNull(signature,"signature is missing");
+ 	     
+ 	     assertFalse(description.isEmpty(), "Description is empty");
+ 	     assertFalse(code.isEmpty(), "Code is empty");
+ 	     assertFalse(signature.isEmpty(),"signature is empty");
+ 	     
+ 	     assertEquals(code,"GNR_AUTHENTICATION_FAIL");
+ 		 assertEquals(description,"Authentication Failed.");
+     }
+     
+     @Test
+     public void getUserDetailswhenServerdown() throws Exception {
+    	 String requestDeviceId = "3efe6bbeb55f4411";
+      	ObjectMapper objectMapper = new ObjectMapper();
+  		Map<String, Object> jsonBody = new LinkedHashMap<>();
+  		jsonBody.put("fullName", "");
+  		jsonBody.put("country", "");
+  		jsonBody.put("documentNumber", "");
+  		jsonBody.put("documentType", "");
+  		jsonBody.put("dateOfBirth", "");
+  		jsonBody.put("documentExpiryDate", "");
+  		jsonBody.put("gender", "");
+
+  		// Generate signature
+  		String data = objectMapper.writeValueAsString(jsonBody);
+  		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+  		
+  		jsonBody.put("signature", requestSignature);
+  		
+  		Response response = given()
+  				.header("X-GEO-Location", "12,12")
+  				.header("X-Device-Id", requestDeviceId)
+  				.header("User-Agent", "NepalTravelApp/1.0.0 android")
+  				.contentType("application/json")
+  				.body(jsonBody)
+  				.when()
+  				.post("/profile")
+  				.then()
+  				.statusCode(500)
+  				.log().all()
+  				.extract().response();
+  		
+  		 String code = response.jsonPath().getString("code");
+  	     String description = response.jsonPath().getString("description");
+  	     String signature = response.jsonPath().getString("signature");
+  	     
+  	     assertNotNull(description, "Description is missing from the response");
+  	     assertNotNull(code, "Code is missing");
+  	     assertNotNull(signature,"signature is missing");
+  	     
+  	     assertFalse(description.isEmpty(), "Description is empty");
+  	     assertFalse(code.isEmpty(), "Code is empty");
+  	     assertFalse(signature.isEmpty(),"signature is empty");
+  	     
+  	     assertEquals(code,"GNR_ERR");
+  		 assertEquals(description,"Internal Server Error");
+    	 
+     }
+     @Test
+     public void getUserDetailswhenUserisVerified() throws Exception {
+    	 String requestDeviceId = "3efe6bbeb55f4411";
+       	ObjectMapper objectMapper = new ObjectMapper();
+   		Map<String, Object> jsonBody = new LinkedHashMap<>();
+   		jsonBody.put("fullName", "");
+   		jsonBody.put("country", "");
+   		jsonBody.put("documentNumber", "");
+   		jsonBody.put("documentType", "");
+   		jsonBody.put("dateOfBirth", "");
+   		jsonBody.put("documentExpiryDate", "");
+   		jsonBody.put("gender", "");
+
+   		// Generate signature
+   		String data = objectMapper.writeValueAsString(jsonBody);
+   		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+   		
+   		jsonBody.put("signature", requestSignature);
+   		
+   		Response response = given()
+   				.header("X-GEO-Location", "12,12")
+   				.header("X-Device-Id", requestDeviceId)
+   				.header("User-Agent", "NepalTravelApp/1.0.0 android")
+   				.contentType("application/json")
+   				.body(jsonBody)
+   				.when()
+   				.post("/profile")
+   				.then()
+   				.statusCode(403)
+   				.log().all()
+   				.extract().response();
+   		
+   		 String code = response.jsonPath().getString("code");
+   	     String description = response.jsonPath().getString("description");
+   	     String signature = response.jsonPath().getString("signature");
+   	     
+   	     assertNotNull(description, "Description is missing from the response");
+   	     assertNotNull(code, "Code is missing");
+   	     assertNotNull(signature,"signature is missing");
+   	     
+   	     assertFalse(description.isEmpty(), "Description is empty");
+   	     assertFalse(code.isEmpty(), "Code is empty");
+   	     assertFalse(signature.isEmpty(),"signature is empty");
+   	     
+   	     assertEquals(code,"GNR_FORBIDDEN");
+   		 assertEquals(description,"Internal Server Error");
+    	 
+     }
+     @Test
+     public void getUserDetailswithoutSelfie() throws Exception {
+    	 String requestDeviceId = "3efe6bbeb55f4411";
+        	ObjectMapper objectMapper = new ObjectMapper();
+    		Map<String, Object> jsonBody = new LinkedHashMap<>();
+    		jsonBody.put("fullName", "");
+    		jsonBody.put("country", "");
+    		jsonBody.put("documentNumber", "");
+    		jsonBody.put("documentType", "");
+    		jsonBody.put("dateOfBirth", "");
+    		jsonBody.put("documentExpiryDate", "");
+    		jsonBody.put("gender", "");
+
+    		// Generate signature
+    		String data = objectMapper.writeValueAsString(jsonBody);
+    		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+    		
+    		jsonBody.put("signature", requestSignature);
+    		
+    		Response response = given()
+    				.header("X-GEO-Location", "12,12")
+    				.header("X-Device-Id", requestDeviceId)
+    				.header("User-Agent", "NepalTravelApp/1.0.0 android")
+    				.contentType("application/json")
+    				.body(jsonBody)
+    				.when()
+    				.post("/profile")
+    				.then()
+    				.statusCode(406)
+    				.log().all()
+    				.extract().response();
+    		
+    		 String code = response.jsonPath().getString("code");
+    	     String description = response.jsonPath().getString("description");
+    	     String signature = response.jsonPath().getString("signature");
+    	     
+    	     assertNotNull(description, "Description is missing from the response");
+    	     assertNotNull(code, "Code is missing");
+    	     assertNotNull(signature,"signature is missing");
+    	     
+    	     assertFalse(description.isEmpty(), "Description is empty");
+    	     assertFalse(code.isEmpty(), "Code is empty");
+    	     assertFalse(signature.isEmpty(),"signature is empty");
+    	     
+    	     assertEquals(code,"GNR_NOT_ALLOWED");
+    		 assertEquals(description,"Upload selfie and document first.");
+    	 
+  }
     
 }
