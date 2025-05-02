@@ -21,7 +21,7 @@ public class signupOtp {
 
         Response response = given()
                 .header("X-GEO-Location", "12,12")
-                .header("X-Device-Id", "sandesh-thapa-app")
+                .header("X-Device-Id", "moco-dev")
                 .header("User-Agent", "NepalTravelApp/1.0.0 android")
             .when()
                 .get("/key")
@@ -529,7 +529,7 @@ public class signupOtp {
     @Test
     public void signUpwithValidCredentials() throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
-        String email = "sandeshthapa@moco.com.np";
+        String email = "learner.bibekdas@gmail.com";
         String requestTimestamp = signatureCreate.generateTimestamp();
 
 
@@ -548,7 +548,7 @@ public class signupOtp {
         // Send request
         Response response = given()
                 .header("X-GEO-Location", "12,12")
-                .header("X-Device-Id", "sandesh-thapa-app")
+                .header("X-Device-Id", "moco-dev")
                 .header("User-Agent", "NepalTravelApp/1.0.0 android")
                 .contentType("application/json")
                 .body(jsonBody)

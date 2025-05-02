@@ -16,7 +16,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class profile {
-	String AuthToken = "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzYW5kZXNodGhhcGFAbW9jby5jb20ubnAiLCJpc3MiOiJWSVNJVE9SLVNFUlZJQ0UiLCJqdGkiOiJzYW5kZXNoLXRoYXBhLWFwcCIsImlhdCI6MTc0NjAwNjY0NywiZXhwIjoxNzQ2MDEwMjQ3fQ.p_hXnJEQRS1R5gcGWE7DogFnxKT6xZHfkOnFL2cbpADPzJqGPZ9WgcYmejp6jckg";
+	String AuthToken = "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJsZWFybmVyLmJpYmVrZGFzQGdtYWlsLmNvbSIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tZGV2IiwiaWF0IjoxNzQ2MTc5MTM5LCJleHAiOjE3NDYxODI3Mzl9.d42Wq5TJHmnjShYerTyNumd_GxTDRH2gddfcxlK38YapXvA4DbqpXkM6Myq2zL4w";
 	String secretKey = "+8qCXF5kx75wAnNFTRvxzOQye/dO8bxiZSc+EcQNdleSKOEHLHyNNlBs+5hU+uoo";
 //    @BeforeClass
 //    public void getToken() throws Exception {

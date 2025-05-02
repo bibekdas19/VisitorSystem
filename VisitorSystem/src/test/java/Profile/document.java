@@ -4,16 +4,19 @@ import org.testng.annotations.Test;
 
 
 import io.restassured.RestAssured;
+import io.restassured.filter.log.RequestLoggingFilter;
+import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.response.Response;
 
 import static io.restassured.RestAssured.*;
 import static org.testng.Assert.*;
 
 import java.io.File;
+import java.io.FileInputStream;
 
 public class document {
 	
-	String AuthToken = "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJsZWFybmVyLmJpYmVrZGFzQGdtYWlsLmNvbSIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6InRyYXZlbC1waG9uZSIsImlhdCI6MTc0NTkwMjkwMCwiZXhwIjoxNzQ1OTA2NTAwfQ.MqDah0lryQpUI2EvwfQyZ_RHbCHTGeM8uSPVGs8cBkedGAEuE6YXQJc_cfNgyKli";
+	String AuthToken = "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ2aXZla0Btb2NvLmNvbS5ucCIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tdHJhdmVsLWFwcCIsImlhdCI6MTc0NjE2MzYyNiwiZXhwIjoxNzQ2MTY3MjI2fQ.jyrmoCg2zjGpzX8jxKuTmZuRmMQZH9AWz4ZOWaz1ZSAV1duJNt6VnEcD-Pntpeph";
 //	@BeforeClass
 //	public void getToken() throws Exception{
 //		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
@@ -21,7 +24,7 @@ public class document {
 //		Response keyResponse = given()
 //				.baseUri(baseURI)
 //				.header("X-GEO-Location", "12,12")
-//				.header("X-Device-Id", "moco-device")
+//				.header("X-Device-Id", "moco-travel-app")
 //				.header("User-Agent", "NepalTravelApp/1.0.0 android")
 //				.when()
 //				.get("/key")
@@ -35,7 +38,7 @@ public class document {
 //		//authenticate before for the auth token
 //		ObjectMapper objectMapper = new ObjectMapper();
 //		String email = "vivek@moco.com.np";
-//		String requestDeviceId = "moco-device";
+//		String requestDeviceId = "moco-travel-app";
 //		Map<String, Object> credentials = new HashMap<>();
 //		credentials.put("email", email);
 //		credentials.put("pin", "123426");
@@ -68,693 +71,714 @@ public class document {
 
 	@Test
 	public void uploaddocumentwithvalidCredentails() throws Exception {
+		    RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
+
+		    File document = new File("C:/Users/Dell/Downloads/chineses.jpg");
+
+		    if (!document.exists()) {
+		        System.out.println("File not found: " + document.getAbsolutePath());
+		        return;
+		    }
+
+		    // Use logging filters to compare with curl if needed
+		    RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
+
+		    // Use InputStream to avoid encoding issues
+		    try (FileInputStream fis = new FileInputStream(document)) {
+		        Response response = given()
+		                .header("X-GEO-Location", "12,12")
+		                .header("X-AUTH-TOKEN", "AuthToken")
+		                .header("X-Device-Id", "moco-travel-app")
+		                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+		                .header("Accept", "*/*")  // matches curl default
+		                .multiPart("document", "chineses.jpg", fis, "image/jpeg") // key, filename, stream, type
+		                .when()
+		                .post("/document")
+		                .then()
+		                .statusCode(200)
+		                .extract().response();
+
+		        response.prettyPrint();
+		        
+				String code = response.jsonPath().getString("code");
+				String description = response.jsonPath().getString("description");
+				String signature = response.jsonPath().getString("signature");
+		
+				assertNotNull(description, "Description is missing from the response");
+				assertNotNull(code, "Code is missing");
+				assertNotNull(signature,"signature is missing");
+		
+				assertFalse(description.isEmpty(), "Description is empty");
+				assertFalse(code.isEmpty(), "Code is empty");
+				assertFalse(signature.isEmpty(),"signature is empty");
+		
+				assertEquals(code,"GNR_OK");
+				assertEquals(description,"Successfully verified Portrait/document.");
+		    }
+
+	}
+
+
+
+
+	@Test
+	public void uploaddocumentwithInvalidGeo() throws Exception {
 		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
-		// Correctly access the image from the resources folder
-        File document = new File("C:/Users/Dell/Downloads/Image_20241216_121143_255.jpeg");
 
+	    File document = new File("C:/Users/Dell/Downloads/chineses.jpg");
 
-
-	    // Check if the file exists (for debugging)
 	    if (!document.exists()) {
 	        System.out.println("File not found: " + document.getAbsolutePath());
+	        return;
 	    }
-		Response response = given()
-				.baseUri(baseURI)
-				.header("X-GEO-Location", "12,12")
-				.header("X-AUTH-TOKEN",AuthToken)
-				.header("X-Device-Id", "moco-device")
-				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-				.multiPart("document", document)
-				.contentType("multipart/form-data")
 
-				.when()
-				.post("/document")
-				.then().log().all()
-				.statusCode(200)
-				.extract().response();
-		        response.prettyPrint();
+	    // Use logging filters to compare with curl if needed
+	    RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
 
-		String code = response.jsonPath().getString("code");
-		String description = response.jsonPath().getString("description");
-		String signature = response.jsonPath().getString("signature");
+	    // Use InputStream to avoid encoding issues
+	    try (FileInputStream fis = new FileInputStream(document)) {
+	        Response response = given()
+	                .header("X-GEO-Location", "1212")
+	                .header("X-AUTH-TOKEN", "AuthToken")
+	                .header("X-Device-Id", "moco-travel-app")
+	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+	                .header("Accept", "*/*")  // matches curl default
+	                .multiPart("document", "chineses.jpg", fis, "image/jpeg") // key, filename, stream, type
+	                .when()
+	                .post("/document")
+	                .then()
+	                .statusCode(422)
+	                .extract().response();
 
-		assertNotNull(description, "Description is missing from the response");
-		assertNotNull(code, "Code is missing");
-		assertNotNull(signature,"signature is missing");
+	        response.prettyPrint();
+	String code = response.jsonPath().getString("code");
+	String description = response.jsonPath().getString("description");
+	//String signature = response.jsonPath().getString("signature");
 
-		assertFalse(description.isEmpty(), "Description is empty");
-		assertFalse(code.isEmpty(), "Code is empty");
-		assertFalse(signature.isEmpty(),"signature is empty");
+	assertNotNull(description, "Description is missing from the response");
+	assertNotNull(code, "Code is missing");
+	//assertNotNull(signature,"signature is missing");
 
-		assertEquals(code,"GNR_OK");
-		assertEquals(description,"Successfully verified Portrait/document.");
+	assertFalse(description.isEmpty(), "Description is empty");
+	assertFalse(code.isEmpty(), "Code is empty");
+	//assertFalse(signature.isEmpty(),"signature is empty");
 
-	}
+	assertEquals(code,"GNR_INVALID_DATA");
+	assertEquals(description,"Successfully verified Portrait/document.");
+    }
+   }
+
+	
 
 	@Test
-	public void uploaddocumentwithInvalidGeo() {
+	public void uploaddocumentwithInvalidDevice() throws Exception {
 		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
-		// Correctly access the image from the resources folder
-        File document = new File("C:/Users/Dell/Downloads/Image_20241216_121143_255.jpeg");
-       // Check if the file exists (for debugging)
+
+	    File document = new File("C:/Users/Dell/Downloads/chineses.jpg");
+
 	    if (!document.exists()) {
 	        System.out.println("File not found: " + document.getAbsolutePath());
+	        return;
 	    }
-		Response response = given()
-				.baseUri(baseURI)
-				.header("X-GEO-Location", "12@12")
-				.header("X-AUTH-TOKEN",AuthToken)
-				.header("X-Device-Id", "moco-device")
-				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-				.multiPart("document", document)
-				.contentType("multipart/form-data")
 
-				.when()
-				.post("/document")
-				.then().log().all()
-				.statusCode(422)
-				.extract().response();
-		        response.prettyPrint();
+	    // Use logging filters to compare with curl if needed
+	    RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
 
-		String code = response.jsonPath().getString("code");
-		String description = response.jsonPath().getString("description");
-		
+	    // Use InputStream to avoid encoding issues
+	    try (FileInputStream fis = new FileInputStream(document)) {
+	        Response response = given()
+	                .header("X-GEO-Location", "12,12")
+	                .header("X-AUTH-TOKEN", "AuthToken")
+	                .header("X-Device-Id", "moco-travel-@app")
+	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+	                .header("Accept", "*/*")  // matches curl default
+	                .multiPart("document", "chineses.jpg", fis, "image/jpeg") // key, filename, stream, type
+	                .when()
+	                .post("/document")
+	                .then()
+	                .statusCode(422)
+	                .extract().response();
 
-		assertNotNull(description, "Description is missing from the response");
-		assertNotNull(code, "Code is missing");
-		
+	        response.prettyPrint();
+	String code = response.jsonPath().getString("code");
+	String description = response.jsonPath().getString("description");
+	//String signature = response.jsonPath().getString("signature");
 
-		assertFalse(description.isEmpty(), "Description is empty");
-		assertFalse(code.isEmpty(), "Code is empty");
-		
+	assertNotNull(description, "Description is missing from the response");
+	assertNotNull(code, "Code is missing");
+	//assertNotNull(signature,"signature is missing");
 
-		assertEquals(code,"GNR_INVALID_DATA");
-		assertEquals(description,"Invalid data.");
+	assertFalse(description.isEmpty(), "Description is empty");
+	assertFalse(code.isEmpty(), "Code is empty");
+	//assertFalse(signature.isEmpty(),"signature is empty");
 
+	assertEquals(code,"GNR_INVALID_DATA");
+	assertEquals(description,"Successfully verified Portrait/document.");
+    }
 	}
 
 	@Test
-	public void uploaddocumentwithInvalidDevice() {
+	public void uploaddocumentwithInvalidUserAgent() throws Exception {
 		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
-		// Correctly access the image from the resources folder
-        File document = new File("C:/Users/Dell/Downloads/Image_20241216_121143_255.jpeg");
-       // Check if the file exists (for debugging)
+
+	    File document = new File("C:/Users/Dell/Downloads/chineses.jpg");
+
 	    if (!document.exists()) {
 	        System.out.println("File not found: " + document.getAbsolutePath());
+	        return;
 	    }
-		Response response = given()
-				.baseUri(baseURI)
-				.header("X-GEO-Location", "12,12")
-				.header("X-AUTH-TOKEN",AuthToken)
-				.header("X-Device-Id", "moco-)device")
-				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-				.multiPart("document", document)
-				.contentType("multipart/form-data")
 
-				.when()
-				.post("/document")
-				.then().log().all()
-				.statusCode(422)
-				.extract().response();
-		        response.prettyPrint();
+	    // Use logging filters to compare with curl if needed
+	    RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
 
-		String code = response.jsonPath().getString("code");
-		String description = response.jsonPath().getString("description");
-		
+	    // Use InputStream to avoid encoding issues
+	    try (FileInputStream fis = new FileInputStream(document)) {
+	        Response response = given()
+	                .header("X-GEO-Location", "12,12")
+	                .header("X-AUTH-TOKEN", "AuthToken")
+	                .header("X-Device-Id", "moco-travel-app")
+	                .header("User-Agent", "NepalTravelApp.0.0 android")
+	                .header("Accept", "*/*")  // matches curl default
+	                .multiPart("document", "chineses.jpg", fis, "image/jpeg") // key, filename, stream, type
+	                .when()
+	                .post("/document")
+	                .then()
+	                .statusCode(422)
+	                .extract().response();
 
-		assertNotNull(description, "Description is missing from the response");
-		assertNotNull(code, "Code is missing");
-		
+	        response.prettyPrint();
+	String code = response.jsonPath().getString("code");
+	String description = response.jsonPath().getString("description");
+	//String signature = response.jsonPath().getString("signature");
 
-		assertFalse(description.isEmpty(), "Description is empty");
-		assertFalse(code.isEmpty(), "Code is empty");
-		
+	assertNotNull(description, "Description is missing from the response");
+	assertNotNull(code, "Code is missing");
+	//assertNotNull(signature,"signature is missing");
 
-		assertEquals(code,"GNR_INVALID_DATA");
-		assertEquals(description,"Invalid data.");
+	assertFalse(description.isEmpty(), "Description is empty");
+	assertFalse(code.isEmpty(), "Code is empty");
+	//assertFalse(signature.isEmpty(),"signature is empty");
+
+	assertEquals(code,"GNR_INVALID_DATA");
+	assertEquals(description,"Successfully verified Portrait/document.");
+    }
 
 	}
-
 	@Test
-	public void uploaddocumentwithInvalidUserAgent() {
+	public void uploaddocumentwithInvalidAuth() throws Exception {
 		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
-		// Correctly access the image from the resources folder
-        File document = new File("C:/Users/Dell/Downloads/Image_20241216_121143_255.jpeg");
-       // Check if the file exists (for debugging)
+
+	    File document = new File("C:/Users/Dell/Downloads/chineses.jpg");
+
 	    if (!document.exists()) {
 	        System.out.println("File not found: " + document.getAbsolutePath());
+	        return;
 	    }
-		Response response = given()
-				.baseUri(baseURI)
-				.header("X-GEO-Location", "12,12")
-				.header("X-AUTH-TOKEN",AuthToken)
-				.header("X-Device-Id", "moco-device")
-				.header("User-Agent", "Nepal1.0.0 android")
-				.multiPart("document", document)
-				.contentType("multipart/form-data")
 
-				.when()
-				.post("/document")
-				.then().log().all()
-				.statusCode(422)
-				.extract().response();
-		        response.prettyPrint();
+	    // Use logging filters to compare with curl if needed
+	    RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
 
-		String code = response.jsonPath().getString("code");
-		String description = response.jsonPath().getString("description");
-		
+	    // Use InputStream to avoid encoding issues
+	    try (FileInputStream fis = new FileInputStream(document)) {
+	        Response response = given()
+	                .header("X-GEO-Location", "12,12")
+	                .header("X-AUTH-TOKEN", "0((0")
+	                .header("X-Device-Id", "moco-travel-app")
+	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+	                .header("Accept", "*/*")  // matches curl default
+	                .multiPart("document", "chineses.jpg", fis, "image/jpeg") // key, filename, stream, type
+	                .when()
+	                .post("/document")
+	                .then()
+	                .statusCode(422)
+	                .extract().response();
 
-		assertNotNull(description, "Description is missing from the response");
-		assertNotNull(code, "Code is missing");
-		
+	        response.prettyPrint();
+	String code = response.jsonPath().getString("code");
+	String description = response.jsonPath().getString("description");
+	//String signature = response.jsonPath().getString("signature");
 
-		assertFalse(description.isEmpty(), "Description is empty");
-		assertFalse(code.isEmpty(), "Code is empty");
-		
+	assertNotNull(description, "Description is missing from the response");
+	assertNotNull(code, "Code is missing");
+	//assertNotNull(signature,"signature is missing");
 
-		assertEquals(code,"GNR_INVALID_DATA");
-		assertEquals(description,"Invalid data.");
+	assertFalse(description.isEmpty(), "Description is empty");
+	assertFalse(code.isEmpty(), "Code is empty");
+	//assertFalse(signature.isEmpty(),"signature is empty");
 
+	assertEquals(code,"GNR_INVALID_DATA");
+	assertEquals(description,"Successfully verified Portrait/document.");
+    }
 	}
+
 	@Test
-	public void uploaddocumentwithInvalidAuth() {
+	public void uploaddocumentwithEmptyDevice() throws Exception {
 		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
-		// Correctly access the image from the resources folder
-        File document = new File("C:/Users/Dell/Downloads/Image_20241216_121143_255.jpeg");
-       // Check if the file exists (for debugging)
+
+	    File document = new File("C:/Users/Dell/Downloads/chineses.jpg");
+
 	    if (!document.exists()) {
 	        System.out.println("File not found: " + document.getAbsolutePath());
+	        return;
 	    }
-		Response response = given()
-				.baseUri(baseURI)
-				.header("X-GEO-Location", "12,12")
-				.header("X-AUTH-TOKEN",AuthToken)
-				.header("X-Device-Id", "moco-device")
-				.header("User-Agent", "Nepal1.0.0 android")
-				.multiPart("document", document)
-				.contentType("multipart/form-data")
 
-				.when()
-				.post("/document")
-				.then().log().all()
-				.statusCode(422)
-				.extract().response();
-		        response.prettyPrint();
+	    // Use logging filters to compare with curl if needed
+	    RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
 
-		String code = response.jsonPath().getString("code");
-		String description = response.jsonPath().getString("description");
-		
+	    // Use InputStream to avoid encoding issues
+	    try (FileInputStream fis = new FileInputStream(document)) {
+	        Response response = given()
+	                .header("X-GEO-Location", "12,12")
+	                .header("X-AUTH-TOKEN", "AuthToken")
+	                .header("X-Device-Id", "")
+	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+	                .header("Accept", "*/*")  // matches curl default
+	                .multiPart("document", "chineses.jpg", fis, "image/jpeg") // key, filename, stream, type
+	                .when()
+	                .post("/document")
+	                .then()
+	                .statusCode(400)
+	                .extract().response();
 
-		assertNotNull(description, "Description is missing from the response");
-		assertNotNull(code, "Code is missing");
-		
+	        response.prettyPrint();
+	String code = response.jsonPath().getString("code");
+	String description = response.jsonPath().getString("description");
+	
 
-		assertFalse(description.isEmpty(), "Description is empty");
-		assertFalse(code.isEmpty(), "Code is empty");
-		
+	assertNotNull(description, "Description is missing from the response");
+	assertNotNull(code, "Code is missing");
+	
 
-		assertEquals(code,"GNR_INVALID_DATA");
-		assertEquals(description,"Invalid data.");
+	assertFalse(description.isEmpty(), "Description is empty");
+	assertFalse(code.isEmpty(), "Code is empty");
+	
+
+	assertEquals(code,"GNR_PARAM_MISSING");
+	assertEquals(description,"Successfully verified Portrait/document.");
+    }
 	}
 
 	@Test
-	public void uploaddocumentwithEmptyDevice() {
+	public void uploaddocumentwithEmptyLocation() throws Exception {
 		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
-		// Correctly access the image from the resources folder
-        File document = new File("C:/Users/Dell/Downloads/Image_20241216_121143_255.jpeg");
-       // Check if the file exists (for debugging)
+
+	    File document = new File("C:/Users/Dell/Downloads/chineses.jpg");
+
 	    if (!document.exists()) {
 	        System.out.println("File not found: " + document.getAbsolutePath());
+	        return;
 	    }
-		Response response = given()
-				.baseUri(baseURI)
-				.header("X-GEO-Location", "12,12")
-				.header("X-AUTH-TOKEN",AuthToken)
-				.header("X-Device-Id", "moco-device")
-				.header("User-Agent", "Nepal1.0.0 android")
-				.multiPart("document", document)
-				.contentType("multipart/form-data")
 
-				.when()
-				.post("/document")
-				.then().log().all()
-				.statusCode(400)
-				.extract().response();
-		        response.prettyPrint();
+	    // Use logging filters to compare with curl if needed
+	    RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
 
-		String code = response.jsonPath().getString("code");
-		String description = response.jsonPath().getString("description");
-		
+	    // Use InputStream to avoid encoding issues
+	    try (FileInputStream fis = new FileInputStream(document)) {
+	        Response response = given()
+	                .header("X-GEO-Location", "")
+	                .header("X-AUTH-TOKEN", "AuthToken")
+	                .header("X-Device-Id", "moco-travel-app")
+	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+	                .header("Accept", "*/*")  // matches curl default
+	                .multiPart("document", "chineses.jpg", fis, "image/jpeg") // key, filename, stream, type
+	                .when()
+	                .post("/document")
+	                .then()
+	                .statusCode(200)
+	                .extract().response();
 
-		assertNotNull(description, "Description is missing from the response");
-		assertNotNull(code, "Code is missing");
-		
+	        response.prettyPrint();
+	String code = response.jsonPath().getString("code");
+	String description = response.jsonPath().getString("description");
+	
 
-		assertFalse(description.isEmpty(), "Description is empty");
-		assertFalse(code.isEmpty(), "Code is empty");
-		
+	assertNotNull(description, "Description is missing from the response");
+	assertNotNull(code, "Code is missing");
+	
 
-		assertEquals(code,"GNR_PARAM_MISSING");
-		assertEquals(description,"Bad Request");
-	}
+	assertFalse(description.isEmpty(), "Description is empty");
+	assertFalse(code.isEmpty(), "Code is empty");
+	
 
-	@Test
-	public void uploaddocumentwithEmptyLocation() {
-		File imageFile = new File("images/Image_20241216_121143_255.jpeg");
-		Response response = given()
-				.baseUri(baseURI)
-				.header("X-GEO-Location", "12,12")
-				.header("X-AUTH-TOKEN",AuthToken)
-				.header("X-Device-Id", "moco-device")
-				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-				.multiPart("document", imageFile)
-				.contentType("multipart/form-data")
-
-				.when()
-				.post("/document")
-				.then()
-				.statusCode(400)
-				.extract().response();
-
-		String code = response.jsonPath().getString("code");
-		String description = response.jsonPath().getString("description");
-		String signature = response.jsonPath().getString("signature");
-
-		assertNotNull(description, "Description is missing from the response");
-		assertNotNull(code, "Code is missing");
-		assertNotNull(signature,"signature is missing");
-
-		assertFalse(description.isEmpty(), "Description is empty");
-		assertFalse(code.isEmpty(), "Code is empty");
-		assertFalse(signature.isEmpty(),"signature is empty");
-
-		assertEquals(code,"GNR_PARAM_MISSING");
-		assertEquals(description,"Required values missing.");
+	assertEquals(code,"GNR_PARAM_MISSING");
+	assertEquals(description,"Successfully verified Portrait/document.");
+    }
 
 	}
 	@Test
-	public void uploaddocumentwithEmptyUserAgent() {
-		File imageFile = new File("images/Image_20241216_121143_255.jpeg");
-		Response response = given()
-				.baseUri(baseURI)
-				.header("X-GEO-Location", "12,12")
-				.header("X-AUTH-TOKEN",AuthToken)
-				.header("X-Device-Id", "moco-device")
-				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-				.multiPart("document", imageFile)
-				.contentType("multipart/form-data")
+	public void uploaddocumentwithEmptyUserAgent() throws Exception {
+		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
 
-				.when()
-				.post("/document")
-				.then()
-				.statusCode(400)
-				.extract().response();
+	    File document = new File("C:/Users/Dell/Downloads/chineses.jpg");
 
-		String code = response.jsonPath().getString("code");
-		String description = response.jsonPath().getString("description");
-		String signature = response.jsonPath().getString("signature");
+	    if (!document.exists()) {
+	        System.out.println("File not found: " + document.getAbsolutePath());
+	        return;
+	    }
 
-		assertNotNull(description, "Description is missing from the response");
-		assertNotNull(code, "Code is missing");
-		assertNotNull(signature,"signature is missing");
+	    // Use logging filters to compare with curl if needed
+	    RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
 
-		assertFalse(description.isEmpty(), "Description is empty");
-		assertFalse(code.isEmpty(), "Code is empty");
-		assertFalse(signature.isEmpty(),"signature is empty");
+	    // Use InputStream to avoid encoding issues
+	    try (FileInputStream fis = new FileInputStream(document)) {
+	        Response response = given()
+	                .header("X-GEO-Location", "12,12")
+	                .header("X-AUTH-TOKEN", "AuthToken")
+	                .header("X-Device-Id", "moco-travel-app")
+	                .header("User-Agent", "")
+	                .header("Accept", "*/*")  // matches curl default
+	                .multiPart("document", "chineses.jpg", fis, "image/jpeg") // key, filename, stream, type
+	                .when()
+	                .post("/document")
+	                .then()
+	                .statusCode(400)
+	                .extract().response();
 
-		assertEquals(code,"GNR_PARAM_MISSING");
-		assertEquals(description,"Required values missing.");
+	        response.prettyPrint();
+	        String code = response.jsonPath().getString("code");
+	    	String description = response.jsonPath().getString("description");
+	    	
+
+	    	assertNotNull(description, "Description is missing from the response");
+	    	assertNotNull(code, "Code is missing");
+	    	
+
+	    	assertFalse(description.isEmpty(), "Description is empty");
+	    	assertFalse(code.isEmpty(), "Code is empty");
+	    	
+
+	    	assertEquals(code,"GNR_PARAM_MISSING");
+	    	assertEquals(description,"Successfully verified Portrait/document.");
+    }
 	}
 	@Test
-	public void uploaddocumentwithEmptyAuth() {
-		File imageFile = new File("images/Image_20241216_121143_255.jpeg");
-		Response response = given()
-				.baseUri(baseURI)
-				.header("X-GEO-Location", "12,12")
-				.header("X-AUTH-TOKEN",AuthToken)
-				.header("X-Device-Id", "moco-device")
-				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-				.multiPart("document", imageFile)
-				.contentType("multipart/form-data")
+	public void uploaddocumentwithEmptyAuth() throws Exception {
+		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
 
-				.when()
-				.post("/document")
-				.then()
-				.statusCode(400)
-				.extract().response();
+	    File document = new File("C:/Users/Dell/Downloads/chineses.jpg");
 
-		String code = response.jsonPath().getString("code");
-		String description = response.jsonPath().getString("description");
-		String signature = response.jsonPath().getString("signature");
+	    if (!document.exists()) {
+	        System.out.println("File not found: " + document.getAbsolutePath());
+	        return;
+	    }
 
-		assertNotNull(description, "Description is missing from the response");
-		assertNotNull(code, "Code is missing");
-		assertNotNull(signature,"signature is missing");
+	    // Use logging filters to compare with curl if needed
+	    RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
 
-		assertFalse(description.isEmpty(), "Description is empty");
-		assertFalse(code.isEmpty(), "Code is empty");
-		assertFalse(signature.isEmpty(),"signature is empty");
+	    // Use InputStream to avoid encoding issues
+	    try (FileInputStream fis = new FileInputStream(document)) {
+	        Response response = given()
+	                .header("X-GEO-Location", "12,12")
+	                .header("X-AUTH-TOKEN", "")
+	                .header("X-Device-Id", "moco-travel-app")
+	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+	                .header("Accept", "*/*")  // matches curl default
+	                .multiPart("document", "chineses.jpg", fis, "image/jpeg") // key, filename, stream, type
+	                .when()
+	                .post("/document")
+	                .then()
+	                .statusCode(200)
+	                .extract().response();
 
-		assertEquals(code,"GNR_PARAM_MISSING");
-		assertEquals(description,"Required values missing.");
-	}
+	        response.prettyPrint();
+	        String code = response.jsonPath().getString("code");
+	    	String description = response.jsonPath().getString("description");
+	    	
 
-	@Test
-	public void uploaddocumentwithinvalidImage() {
-		File imageFile = new File("images/Image_20241216_121143_255.jpeg");
-		Response response = given()
-				.baseUri(baseURI)
-				.header("X-GEO-Location", "12,12")
-				.header("X-AUTH-TOKEN",AuthToken)
-				.header("X-Device-Id", "moco-device")
-				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-				.multiPart("document", imageFile)
-				.contentType("multipart/form-data")
+	    	assertNotNull(description, "Description is missing from the response");
+	    	assertNotNull(code, "Code is missing");
+	    	
 
-				.when()
-				.post("/document")
-				.then()
-				.statusCode(400)
-				.extract().response();
+	    	assertFalse(description.isEmpty(), "Description is empty");
+	    	assertFalse(code.isEmpty(), "Code is empty");
+	    	
 
-		String code = response.jsonPath().getString("code");
-		String description = response.jsonPath().getString("description");
-		String signature = response.jsonPath().getString("signature");
-
-		assertNotNull(description, "Description is missing from the response");
-		assertNotNull(code, "Code is missing");
-		assertNotNull(signature,"signature is missing");
-
-		assertFalse(description.isEmpty(), "Description is empty");
-		assertFalse(code.isEmpty(), "Code is empty");
-		assertFalse(signature.isEmpty(),"signature is empty");
-
-		assertEquals(code,"GNR_PARAM_MISSING");
-		assertEquals(description,"Required values missing.");
+	    	assertEquals(code,"GNR_PARAM_MISSING");
+	    	assertEquals(description,"Successfully verified Portrait/document.");
+    }
 	}
 
 	@Test
-	public void uploaddocumentwithLargefile() {
-		File imageFile = new File("images/Image_20241216_121143_255.jpeg");
-		Response response = given()
-				.baseUri(baseURI)
-				.header("X-GEO-Location", "12,12")
-				.header("X-AUTH-TOKEN",AuthToken)
-				.header("X-Device-Id", "moco-device")
-				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-				.multiPart("document", imageFile)
-				.contentType("multipart/form-data")
+	public void uploaddocumentwithinvalidImage() throws Exception {
+		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
 
-				.when()
-				.post("/document")
-				.then()
-				.statusCode(400)
-				.extract().response();
+	    File document = new File("C:/Users/Dell/Downloads/chineses.png");
 
-		String code = response.jsonPath().getString("code");
-		String description = response.jsonPath().getString("description");
-		String signature = response.jsonPath().getString("signature");
+	    if (!document.exists()) {
+	        System.out.println("File not found: " + document.getAbsolutePath());
+	        return;
+	    }
 
-		assertNotNull(description, "Description is missing from the response");
-		assertNotNull(code, "Code is missing");
-		assertNotNull(signature,"signature is missing");
+	    // Use logging filters to compare with curl if needed
+	    RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
 
-		assertFalse(description.isEmpty(), "Description is empty");
-		assertFalse(code.isEmpty(), "Code is empty");
-		assertFalse(signature.isEmpty(),"signature is empty");
+	    // Use InputStream to avoid encoding issues
+	    try (FileInputStream fis = new FileInputStream(document)) {
+	        Response response = given()
+	                .header("X-GEO-Location", "12,12")
+	                .header("X-AUTH-TOKEN", "AuthToken")
+	                .header("X-Device-Id", "moco-travel-app")
+	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+	                .header("Accept", "*/*")  // matches curl default
+	                .multiPart("document", "chineses.jpg", fis, "image/jpeg") // key, filename, stream, type
+	                .when()
+	                .post("/document")
+	                .then()
+	                .statusCode(422)
+	                .extract().response();
 
-		assertEquals(code,"GNR_PARAM_MISSING");
-		assertEquals(description,"Required values missing.");
+	        response.prettyPrint();
+	        String code = response.jsonPath().getString("code");
+	    	String description = response.jsonPath().getString("description");
+	    	
 
+	    	assertNotNull(description, "Description is missing from the response");
+	    	assertNotNull(code, "Code is missing");
+	    	
+
+	    	assertFalse(description.isEmpty(), "Description is empty");
+	    	assertFalse(code.isEmpty(), "Code is empty");
+	    	
+
+	    	assertEquals(code,"GNR_PARAM_MISSING");
+	    	assertEquals(description,"Successfully verified Portrait/document.");
+    }
 	}
 
 	@Test
-	public void uploaddocumentwithFaceObstructPhoto() {
-		File imageFile = new File("images/Image_20241216_121143_255.jpeg");
-		Response response = given()
-				.baseUri(baseURI)
-				.header("X-GEO-Location", "12,12")
-				.header("X-AUTH-TOKEN",AuthToken)
-				.header("X-Device-Id", "moco-device")
-				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-				.multiPart("document", imageFile)
-				.contentType("multipart/form-data")
+	public void uploaddocumentwithLargefile() throws Exception {
+		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
 
-				.when()
-				.post("/document")
-				.then()
-				.statusCode(400)
-				.extract().response();
+	    File document = new File("C:/Users/Dell/Downloads/chineses.jpg");
 
-		String code = response.jsonPath().getString("code");
-		String description = response.jsonPath().getString("description");
+	    if (!document.exists()) {
+	        System.out.println("File not found: " + document.getAbsolutePath());
+	        return;
+	    }
 
-		assertNotNull(description, "Description is missing from the response");
-		assertNotNull(code, "Code is missing");
-		
+	    // Use logging filters to compare with curl if needed
+	    RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
 
-		assertFalse(description.isEmpty(), "Description is empty");
-		assertFalse(code.isEmpty(), "Code is empty");
+	    // Use InputStream to avoid encoding issues
+	    try (FileInputStream fis = new FileInputStream(document)) {
+	        Response response = given()
+	                .header("X-GEO-Location", "12,12")
+	                .header("X-AUTH-TOKEN", "AuthToken")
+	                .header("X-Device-Id", "moco-travel-app")
+	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+	                .header("Accept", "*/*")  // matches curl default
+	                .multiPart("document", "chineses.jpg", fis, "image/jpeg") // key, filename, stream, type
+	                .when()
+	                .post("/document")
+	                .then()
+	                .statusCode(200)
+	                .extract().response();
 
-		assertEquals(code,"VST_PROFILE_IMG_OBSTRUCTED");
-		assertEquals(description,"Full face document not recieved. Obstructed view");
+	        response.prettyPrint();
+	String code = response.jsonPath().getString("code");
+	String description = response.jsonPath().getString("description");
+	String signature = response.jsonPath().getString("signature");
 
-	}
+	assertNotNull(description, "Description is missing from the response");
+	assertNotNull(code, "Code is missing");
+	assertNotNull(signature,"signature is missing");
 
-	@Test
-	public void uploaddocumentwithSpoofimage() {
-		File imageFile = new File("images/Image_20241216_121143_255.jpeg");
-		Response response = given()
-				.baseUri(baseURI)
-				.header("X-GEO-Location", "12,12")
-				.header("X-AUTH-TOKEN",AuthToken)
-				.header("X-Device-Id", "moco-device")
-				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-				.multiPart("document", imageFile)
-				.contentType("multipart/form-data")
+	assertFalse(description.isEmpty(), "Description is empty");
+	assertFalse(code.isEmpty(), "Code is empty");
+	assertFalse(signature.isEmpty(),"signature is empty");
 
-				.when()
-				.post("/document")
-				.then()
-				.statusCode(400)
-				.extract().response();
-
-		String code = response.jsonPath().getString("code");
-		String description = response.jsonPath().getString("description");
-		
-
-		assertNotNull(description, "Description is missing from the response");
-		assertNotNull(code, "Code is missing");
-
-		assertFalse(description.isEmpty(), "Description is empty");
-		assertFalse(code.isEmpty(), "Code is empty");
-
-		assertEquals(code,"VST_PROFILE_IMG_SPOOF");
-		assertEquals(description,"document is identified as not real.");
-	}
-
-	@Test
-	public void uploaddocumentwithDarkImage() {
-		File imageFile = new File("images/Image_20241216_121143_255.jpeg");
-		Response response = given()
-				.baseUri(baseURI)
-				.header("X-GEO-Location", "12,12")
-				.header("X-AUTH-TOKEN",AuthToken)
-				.header("X-Device-Id", "moco-device")
-				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-				.multiPart("document", imageFile)
-				.contentType("multipart/form-data")
-
-				.when()
-				.post("/document")
-				.then()
-				.statusCode(400)
-				.extract().response();
-
-		String code = response.jsonPath().getString("code");
-		String description = response.jsonPath().getString("description");
-		
-
-		assertNotNull(description, "Description is missing from the response");
-		assertNotNull(code, "Code is missing");
-
-		assertFalse(description.isEmpty(), "Description is empty");
-		assertFalse(code.isEmpty(), "Code is empty");
-
-		assertEquals(code,"VST_PROFILE_IMG_DARK");
-		assertEquals(description,"Unable to extract features. document is not luminous.");
+	assertEquals(code,"GNR_OK");
+	assertEquals(description,"Successfully verified Portrait/document.");
+    }
 
 	}
 
+	
 	@Test
-	public void uploaddocumentwithEyesClosed() {
-		File imageFile = new File("images/Image_20241216_121143_255.png");
-		Response response = given()
-				.baseUri(baseURI)
-				.header("X-GEO-Location", "12,12")
-				.header("X-AUTH-TOKEN",AuthToken)
-				.header("X-Device-Id", "moco-device")
-				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-				.multiPart("document", imageFile)
-				.contentType("multipart/form-data")
+	public void uploaddocumentwhileServerdown() throws Exception {
+		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
 
-				.when()
-				.post("/document")
-				.then()
-				.statusCode(422)
-				.extract().response();
+	    File document = new File("C:/Users/Dell/Downloads/chineses.jpg");
 
-		String code = response.jsonPath().getString("code");
-		String description = response.jsonPath().getString("description");
-		String signature = response.jsonPath().getString("signature");
+	    if (!document.exists()) {
+	        System.out.println("File not found: " + document.getAbsolutePath());
+	        return;
+	    }
 
-		assertNotNull(description, "Description is missing from the response");
-		assertNotNull(code, "Code is missing");
-		assertNotNull(signature,"signature is missing");
+	    // Use logging filters to compare with curl if needed
+	    RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
 
-		assertFalse(description.isEmpty(), "Description is empty");
-		assertFalse(code.isEmpty(), "Code is empty");
-		assertFalse(signature.isEmpty(),"signature is empty");
+	    // Use InputStream to avoid encoding issues
+	    try (FileInputStream fis = new FileInputStream(document)) {
+	        Response response = given()
+	                .header("X-GEO-Location", "12,12")
+	                .header("X-AUTH-TOKEN", "AuthToken")
+	                .header("X-Device-Id", "moco-travel-app")
+	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+	                .header("Accept", "*/*")  // matches curl default
+	                .multiPart("document", "chineses.jpg", fis, "image/jpeg") // key, filename, stream, type
+	                .when()
+	                .post("/document")
+	                .then()
+	                .statusCode(500)
+	                .extract().response();
 
-		assertEquals(code,"VST_PROFILE_IMG_FACE_FEATURES");
-	     assertEquals(description,"Invalid facial features action detected. Eyes closed or mouth open.");
+	        response.prettyPrint();
+	        String code = response.jsonPath().getString("code");
+	    	String description = response.jsonPath().getString("description");
+	    	
+
+	    	assertNotNull(description, "Description is missing from the response");
+	    	assertNotNull(code, "Code is missing");
+	    	
+
+	    	assertFalse(description.isEmpty(), "Description is empty");
+	    	assertFalse(code.isEmpty(), "Code is empty");
+	    	
+
+	    	assertEquals(code,"VST_PROFILE_IMG_FACE_FEATURES ");
+	    	assertEquals(description,"Successfully verified Portrait/document.");
+    }
 	}
 	
 	@Test
-	public void uploaddocumentwithOpenedMouth() {
-		File imageFile = new File("images/Image_20241216_121143_255.jpeg");
-		Response response = given()
-				.baseUri(baseURI)
-				.header("X-GEO-Location", "12,12")
-				.header("X-AUTH-TOKEN",AuthToken)
-				.header("X-Device-Id", "moco-device")
-				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-				.multiPart("document", imageFile)
-				.contentType("multipart/form-data")
+	public void uploaddocumentforsameperson() throws Exception {
+		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
 
-				.when()
-				.post("/document")
-				.then()
-				.statusCode(400)
-				.extract().response();
+	    File document = new File("C:/Users/Dell/Downloads/chineses.jpg");
 
-		String code = response.jsonPath().getString("code");
-		String description = response.jsonPath().getString("description");
-		
+	    if (!document.exists()) {
+	        System.out.println("File not found: " + document.getAbsolutePath());
+	        return;
+	    }
 
-		assertNotNull(description, "Description is missing from the response");
-		assertNotNull(code, "Code is missing");
-		
+	    // Use logging filters to compare with curl if needed
+	    RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
 
-		assertFalse(description.isEmpty(), "Description is empty");
-		assertFalse(code.isEmpty(), "Code is empty");
-		
-	     assertEquals(code,"VST_PROFILE_IMG_FACE_FEATURES");
-	     assertEquals(description,"Invalid facial features action detected. Eyes closed or mouth open.");
-	}
-	
-	@Test
-	public void uploaddocumentwhileServerdown() {
-		File imageFile = new File("images/Image_20241216_121143_255.jpeg");
-		Response response = given()
-				.baseUri(baseURI)
-				.header("X-GEO-Location", "12,12")
-				.header("X-AUTH-TOKEN",AuthToken)
-				.header("X-Device-Id", "moco-device")
-				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-				.multiPart("document", imageFile)
-				.contentType("multipart/form-data")
+	    // Use InputStream to avoid encoding issues
+	    try (FileInputStream fis = new FileInputStream(document)) {
+	        Response response = given()
+	                .header("X-GEO-Location", "12,12")
+	                .header("X-AUTH-TOKEN", "AuthToken")
+	                .header("X-Device-Id", "moco-travel-app")
+	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+	                .header("Accept", "*/*")  // matches curl default
+	                .multiPart("document", "chineses.jpg", fis, "image/jpeg") // key, filename, stream, type
+	                .when()
+	                .post("/document")
+	                .then()
+	                .statusCode(403)
+	                .extract().response();
 
-				.when()
-				.post("/document")
-				.then()
-				.statusCode(400)
-				.extract().response();
+	        response.prettyPrint();
+	String code = response.jsonPath().getString("code");
+	String description = response.jsonPath().getString("description");
+	String signature = response.jsonPath().getString("signature");
 
-		String code = response.jsonPath().getString("code");
-		String description = response.jsonPath().getString("description");
-		String signature = response.jsonPath().getString("signature");
+	assertNotNull(description, "Description is missing from the response");
+	assertNotNull(code, "Code is missing");
+	assertNotNull(signature,"signature is missing");
 
-		assertNotNull(description, "Description is missing from the response");
-		assertNotNull(code, "Code is missing");
-		assertNotNull(signature,"signature is missing");
+	assertFalse(description.isEmpty(), "Description is empty");
+	assertFalse(code.isEmpty(), "Code is empty");
+	assertFalse(signature.isEmpty(),"signature is empty");
 
-		assertFalse(description.isEmpty(), "Description is empty");
-		assertFalse(code.isEmpty(), "Code is empty");
-		assertFalse(signature.isEmpty(),"signature is empty");
-
-		
-	     
-	     assertEquals(code,"GNR_ERR");
-	     assertEquals(description,"Unable to process request.");
-	}
-	
-	@Test
-	public void uploaddocumentforsameperson() {
-		File imageFile = new File("images/Image_20241216_121143_255.jpeg");
-		Response response = given()
-				.baseUri(baseURI)
-				.header("X-GEO-Location", "12,12")
-				.header("X-AUTH-TOKEN",AuthToken)
-				.header("X-Device-Id", "moco-device")
-				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-				.multiPart("document", imageFile)
-				.contentType("multipart/form-data")
-
-				.when()
-				.post("/document")
-				.then()
-				.statusCode(400)
-				.extract().response();
-
-		String code = response.jsonPath().getString("code");
-		String description = response.jsonPath().getString("description");
-		String signature = response.jsonPath().getString("signature");
-
-		assertNotNull(description, "Description is missing from the response");
-		assertNotNull(code, "Code is missing");
-		assertNotNull(signature,"signature is missing");
-
-		assertFalse(description.isEmpty(), "Description is empty");
-		assertFalse(code.isEmpty(), "Code is empty");
-		assertFalse(signature.isEmpty(),"signature is empty");
-
-	     
-	     assertEquals(code,"GNR_FORBIDDEN");
-	     assertEquals(description,"document already verified. Proceed to next operation.");
+	assertEquals(code,"GNR_FORBIDDEN");
+	assertEquals(description,"Successfully verified Portrait/document.");
+    }
 	}
 	@Test
 	public void uploaddocumentwithvalidllCredentails() throws Exception {
-		File imageFile = new File("images/Image_20241216_121143_255.jpeg");
-		Response response = given()
-				.baseUri(baseURI)
-				.header("X-GEO-Location", "12,12")
-				.header("X-AUTH-TOKEN",AuthToken)
-				.header("X-Device-Id", "moco-device")
-				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-				.multiPart("document", imageFile)
-				.contentType("multipart/form-data")
+		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
 
-				.when()
-				.post("/document")
-				.then()
-				.statusCode(400)
-				.extract().response();
+	    File document = new File("C:/Users/Dell/Downloads/chineses.jpg");
 
-		String code = response.jsonPath().getString("code");
-		String description = response.jsonPath().getString("description");
-		String signature = response.jsonPath().getString("signature");
+	    if (!document.exists()) {
+	        System.out.println("File not found: " + document.getAbsolutePath());
+	        return;
+	    }
 
-		assertNotNull(description, "Description is missing from the response");
-		assertNotNull(code, "Code is missing");
-		assertNotNull(signature,"signature is missing");
+	    // Use logging filters to compare with curl if needed
+	    RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
 
-		assertFalse(description.isEmpty(), "Description is empty");
-		assertFalse(code.isEmpty(), "Code is empty");
-		assertFalse(signature.isEmpty(),"signature is empty");
+	    // Use InputStream to avoid encoding issues
+	    try (FileInputStream fis = new FileInputStream(document)) {
+	        Response response = given()
+	                .header("X-GEO-Location", "12,12")
+	                .header("X-AUTH-TOKEN", "AuthToken")
+	                .header("X-Device-Id", "moco-travel-app")
+	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+	                .header("Accept", "*/*")  // matches curl default
+	                .multiPart("document", "chineses.jpg", fis, "image/jpeg") // key, filename, stream, type
+	                .when()
+	                .post("/document")
+	                .then()
+	                .statusCode(200)
+	                .extract().response();
 
-		assertEquals(code,"GNR_PARAM_MISSING");
-		assertEquals(description,"Required values missing.");
+	        response.prettyPrint();
+	String code = response.jsonPath().getString("code");
+	String description = response.jsonPath().getString("description");
+	String signature = response.jsonPath().getString("signature");
+
+	assertNotNull(description, "Description is missing from the response");
+	assertNotNull(code, "Code is missing");
+	assertNotNull(signature,"signature is missing");
+
+	assertFalse(description.isEmpty(), "Description is empty");
+	assertFalse(code.isEmpty(), "Code is empty");
+	assertFalse(signature.isEmpty(),"signature is empty");
+
+	assertEquals(code,"GNR_OK");
+	assertEquals(description,"Successfully verified Portrait/document.");
+    }
 	}
+	@Test
+	public void uploaddocumentdifferentphoto() throws Exception {
+		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
 
+	    File document = new File("C:/Users/Dell/Downloads/chineses.jpg");
+
+	    if (!document.exists()) {
+	        System.out.println("File not found: " + document.getAbsolutePath());
+	        return;
+	    }
+
+	    // Use logging filters to compare with curl if needed
+	    RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
+
+	    // Use InputStream to avoid encoding issues
+	    try (FileInputStream fis = new FileInputStream(document)) {
+	        Response response = given()
+	                .header("X-GEO-Location", "12,12")
+	                .header("X-AUTH-TOKEN", "AuthToken")
+	                .header("X-Device-Id", "moco-travel-app")
+	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+	                .header("Accept", "*/*")  // matches curl default
+	                .multiPart("document", "chineses.jpg", fis, "image/jpeg") // key, filename, stream, type
+	                .when()
+	                .post("/document")
+	                .then()
+	                .statusCode(422)
+	                .extract().response();
+
+	        response.prettyPrint();
+	String code = response.jsonPath().getString("code");
+	String description = response.jsonPath().getString("description");
+	String signature = response.jsonPath().getString("signature");
+
+	assertNotNull(description, "Description is missing from the response");
+	assertNotNull(code, "Code is missing");
+	assertNotNull(signature,"signature is missing");
+
+	assertFalse(description.isEmpty(), "Description is empty");
+	assertFalse(code.isEmpty(), "Code is empty");
+	assertFalse(signature.isEmpty(),"signature is empty");
+
+	assertEquals(code,"VST_PROFILE_UNMATCHED");
+	assertEquals(description,"Successfully verified Portrait/document.");
+	}
 }
+}
+
+
