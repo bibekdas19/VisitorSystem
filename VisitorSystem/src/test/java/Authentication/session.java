@@ -7,14 +7,14 @@ import static io.restassured.RestAssured.*;
 import static org.testng.Assert.*;
 
 public class session {
-	String requestDeviceId = "sandesh-thapa-app";
+	String requestDeviceId = "moco-travel-app";
 	String secretKey = "ABC123XYZ";
-	String AuthToken = "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzYW5kZXNodGhhcGFAbW9jby5jb20ubnAiLCJpc3MiOiJWSVNJVE9SLVNFUlZJQ0UiLCJqdGkiOiJzYW5kZXNoLXRoYXBhLWFwcCIsImlhdCI6MTc0NjAwNjY0NywiZXhwIjoxNzQ2MDEwMjQ3fQ.p_hXnJEQRS1R5gcGWE7DogFnxKT6xZHfkOnFL2cbpADPzJqGPZ9WgcYmejp6jckg";
+	String AuthToken = "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ2aXZla0Btb2NvLmNvbS5ucCIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tdHJhdmVsLWFwcCIsImlhdCI6MTc0NjUyMjU0NCwiZXhwIjoxNzQ2NTUyNTQ0fQ.c1CYwaduAWc9ZW83w76LNMcadWW9WKStr6hqT0ItxQPMni9vjl21QxcaR4GkomyV";
 	@Test
 	public void GetSessionInformation() throws Exception {
 		baseURI = "https://visitor0.moco.com.np/visitor";
 		
-		String data = "12,12"+AuthToken+requestDeviceId+"NepalTravelApp/1.0.0 android"+"transaction"+""+"2025-04-30 15:16:00";
+		String data = "12,12"+AuthToken+requestDeviceId+"NepalTravelApp/1.0.0 android"+"transaction"+""+"2025-05-05 14:38:00";
 //		: X-GEO-LOCATION+ X-AUTH-TOKEN + X-DEVICE-ID+ User-Agent + X-SYSTEM-ID+ X-CREDENTIAL(Optional) + Request-Timestamp
 		String Signature = signatureCreate.generateHMACSHA256(data, secretKey);
 		System.out.println(Signature);
@@ -26,12 +26,14 @@ public class session {
             .header("X-AUTH-TOKEN",AuthToken)
             .header("X-SYSTEM-ID","transaction")
             .header("X-SYSTEM-SIGNATURE",Signature) 
-            .header("Request-Timestamp","2025-04-30 15:16:00")
+            .header("Request-Timestamp","2025-05-05 14:38:00")
             .when()
             .get("/session")
         .then()
             .statusCode(200)
             .extract().response();
+        
+        response.prettyPrint();
         
         String signature = response.jsonPath().getString("signature");
         String sessionKey = response.jsonPath().getString("sessionKey");
@@ -333,13 +335,13 @@ public class session {
 	public void GetSessionwithInvalidDevice() throws Exception {
 		baseURI = "https://visitor0.moco.com.np/visitor";
 		
-		String data = "12,12"+AuthToken+requestDeviceId+"NepalTravelApp/1.0.0 android"+"transaction"+""+"2025-04-30 11:00:00";
+		String data = "12,12"+AuthToken+"op00$"+"NepalTravelApp/1.0.0 android"+"transaction"+""+"2025-04-30 11:00:00";
 //		: X-GEO-LOCATION+ X-AUTH-TOKEN + X-DEVICE-ID+ User-Agent + X-SYSTEM-ID+ X-CREDENTIAL(Optional) + Request-Timestamp
 		String Signature = signatureCreate.generateHMACSHA256(data, secretKey);
 		System.out.println(Signature);
 
         Response response = (Response) given()
-            .header("X-GEO-Location", "")
+            .header("X-GEO-Location", "12,12")
             .header("X-Device-Id", "op00$")
             .header("User-Agent", "NepalTravelApp/1.0.0 android")
             .header("X-AUTH-TOKEN",AuthToken)
@@ -349,7 +351,7 @@ public class session {
             .when()
             .get("/session")
         .then()
-            .statusCode(400)
+            .statusCode(422)
             .extract().response();
         
         String code = response.jsonPath().getString("code");
@@ -360,8 +362,8 @@ public class session {
          assertNotNull(description, "description is missing from the response");
          assertFalse(description.isEmpty(), "description is empty in the response");
          //check if the code value is as per the decided
-         assertEquals(code,"GNR_PARAM_MISSING");
-         assertEquals(description,"Bad Request.");
+         assertEquals(code,"GNR_INVALID_DATA");
+         assertEquals(description,"Invalid device Id found.");
 		
 	}
 	@Test
@@ -396,7 +398,7 @@ public class session {
          assertFalse(description.isEmpty(), "description is empty in the response");
          //check if the code value is as per the decided
          assertEquals(code,"GNR_INVALID_DATA");
-         assertEquals(description,"Invalid device Id found.");
+         assertEquals(description,"Invalid Geo location found.");
 	}
 	@Test
 	public void GetSessionwithInvalidUser() throws Exception {
@@ -410,7 +412,7 @@ public class session {
         Response response = (Response) given()
             .header("X-GEO-Location", "12,12")
             .header("X-Device-Id", requestDeviceId)
-            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+            .header("User-Agent", "NepalTravelApp/.0.0 android")
             .header("X-AUTH-TOKEN",AuthToken)
             .header("X-SYSTEM-ID","transaction")
             .header("X-SYSTEM-SIGNATURE",Signature) 
@@ -430,7 +432,7 @@ public class session {
          assertFalse(description.isEmpty(), "description is empty in the response");
          //check if the code value is as per the decided
          assertEquals(code,"GNR_INVALID_DATA");
-         assertEquals(description,"Invalid device Id found.");
+         assertEquals(description,"Invalid user agent found.");
 	}
 	@Test
 	public void GetSessionwithInvalidAuth() throws Exception {
@@ -442,17 +444,17 @@ public class session {
 		System.out.println(Signature);
 
         Response response = (Response) given()
-            .header("X-GEO-Location", "$%")
+            .header("X-GEO-Location", "12,12")
             .header("X-Device-Id", requestDeviceId)
             .header("User-Agent", "NepalTravelApp/1.0.0 android")
-            .header("X-AUTH-TOKEN",AuthToken)
+            .header("X-AUTH-TOKEN","7887")
             .header("X-SYSTEM-ID","transaction")
             .header("X-SYSTEM-SIGNATURE",Signature) 
             .header("Request-Timestamp","2025-04-30 15:16:00")
             .when()
             .get("/session")
         .then()
-            .statusCode(422)
+            .statusCode(401)
             .extract().response();
         
         String code = response.jsonPath().getString("code");
@@ -463,20 +465,20 @@ public class session {
          assertNotNull(description, "description is missing from the response");
          assertFalse(description.isEmpty(), "description is empty in the response");
          //check if the code value is as per the decided
-         assertEquals(code,"GNR_INVALID_DATA");
-         assertEquals(description,"Invalid device Id found.");
+         assertEquals(code,"GNR_AUTHENTICATION_FAIL");
+         assertEquals(description,"Authentication failed.");
 	}
 	@Test
 	public void GetSessionwithInvalidSystemID() throws Exception {
          baseURI = "https://visitor0.moco.com.np/visitor";
 		
-		String data = "12,12"+AuthToken+requestDeviceId+"NepalTravelApp/1.0.0 android"+"transaction"+""+"2025-04-30 11:00:00";
+		String data = "12,12"+AuthToken+requestDeviceId+"NepalTravelApp/1.0.0 android"+"transactisss)()(n"+""+"2025-04-30 15:16:00";
 //		: X-GEO-LOCATION+ X-AUTH-TOKEN + X-DEVICE-ID+ User-Agent + X-SYSTEM-ID+ X-CREDENTIAL(Optional) + Request-Timestamp
 		String Signature = signatureCreate.generateHMACSHA256(data, secretKey);
 		System.out.println(Signature);
 
         Response response = (Response) given()
-            .header("X-GEO-Location", "$%")
+            .header("X-GEO-Location", "12,12")
             .header("X-Device-Id", requestDeviceId)
             .header("User-Agent", "NepalTravelApp/1.0.0 android")
             .header("X-AUTH-TOKEN",AuthToken)
@@ -486,7 +488,7 @@ public class session {
             .when()
             .get("/session")
             .then()
-            .statusCode(422)
+            .statusCode(401)
             .extract().response();
         
         String code = response.jsonPath().getString("code");
@@ -497,8 +499,8 @@ public class session {
          assertNotNull(description, "description is missing from the response");
          assertFalse(description.isEmpty(), "description is empty in the response");
          //check if the code value is as per the decided
-         assertEquals(code,"GNR_INVALID_DATA");
-         assertEquals(description,"Invalid device Id found.");
+         assertEquals(code,"GNR_AUTHENTICATION_FAIL");
+         assertEquals(description,"Authentication failed.");
 	}
 	@Test
 	public void GetSessionwithInvalidSignature() throws Exception {
@@ -510,7 +512,7 @@ public class session {
 		System.out.println(Signature);
 
         Response response = (Response) given()
-            .header("X-GEO-Location", "$%")
+            .header("X-GEO-Location", "12,12")
             .header("X-Device-Id", requestDeviceId)
             .header("User-Agent", "NepalTravelApp/1.0.0 android")
             .header("X-AUTH-TOKEN",AuthToken)
@@ -532,20 +534,20 @@ public class session {
          assertFalse(description.isEmpty(), "description is empty in the response");
          //check if the code value is as per the decided
          assertEquals(code,"GNR_AUTHENTICATION_FAIL");
-         assertEquals(description,"Authentication Failed.");
+         assertEquals(description,"Authentication failed.");
 	}
 	
 	@Test
 	public void GetSessionwithInvalidRequestTimestamp() throws Exception {
          baseURI = "https://visitor0.moco.com.np/visitor";
 		
-		String data = "12,12"+AuthToken+requestDeviceId+"NepalTravelApp/1.0.0 android"+"transaction"+""+"2025-04-30 11:00:00";
+		String data = "12,12"+AuthToken+requestDeviceId+"NepalTravelApp/1.0.0 android"+"transaction"+""+"2025-04-30 25:16:00";
 //		: X-GEO-LOCATION+ X-AUTH-TOKEN + X-DEVICE-ID+ User-Agent + X-SYSTEM-ID+ X-CREDENTIAL(Optional) + Request-Timestamp
 		String Signature = signatureCreate.generateHMACSHA256(data, secretKey);
 		System.out.println(Signature);
 
         Response response = (Response) given()
-            .header("X-GEO-Location", "$%")
+            .header("X-GEO-Location", "12,12")
             .header("X-Device-Id", requestDeviceId)
             .header("User-Agent", "NepalTravelApp/1.0.0 android")
             .header("X-AUTH-TOKEN",AuthToken)
@@ -567,7 +569,7 @@ public class session {
          assertFalse(description.isEmpty(), "description is empty in the response");
          //check if the code value is as per the decided
          assertEquals(code,"GNR_INVALID_DATA");
-         assertEquals(description,"Invalid Data.");
+         assertEquals(description,"Invalid request timestamp found.");
 		
 	}
 	@Test
@@ -580,11 +582,12 @@ public class session {
 			System.out.println(Signature);
 
 	        Response response = (Response) given()
-	            .header("X-GEO-Location", "$%")
+	            .header("X-GEO-Location", "12,12")
 	            .header("X-Device-Id", requestDeviceId)
 	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
 	            .header("X-AUTH-TOKEN",AuthToken)
 	            .header("X-SYSTEM-ID","transaction")
+	            .header("X-CREDENTIAL","qq")
 	            .header("X-SYSTEM-SIGNATURE",Signature) 
 	            .header("Request-Timestamp","2025-04-30 11:00:00")
 	            .when()
@@ -602,7 +605,7 @@ public class session {
 	         assertFalse(description.isEmpty(), "description is empty in the response");
 	         //check if the code value is as per the decided
 	         assertEquals(code,"GNR_INVALID_DATA");
-	         assertEquals(description,"Invalid Data.");
+	         assertEquals(description,"Invalid Geo location found.");
 			
 	}
 

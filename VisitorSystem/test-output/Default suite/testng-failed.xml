@@ -3,18 +3,11 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="Profile.selfie">
+      <class name="Authentication.session">
         <methods>
-          <include name="uploadSelfiewithDarkImage"/>
-          <include name="uploadSelfiewithOpenedMouth"/>
-          <include name="uploadSelfieforsameperson"/>
-          <include name="uploadSelfiewithEyesClosed"/>
-          <include name="uploadSelfiewithFaceObstructPhoto"/>
-          <include name="uploadSelfiewhileServerdown"/>
-          <include name="uploadSelfiewithSpoofimage"/>
-          <include name="uploadSelfiewithInvalidAuth"/>
+          <include name="GetSessionwithinvalidSystemCredentials"/>
         </methods>
-      </class> <!-- Profile.selfie -->
+      </class> <!-- Authentication.session -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

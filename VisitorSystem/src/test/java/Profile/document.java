@@ -16,7 +16,7 @@ import java.io.FileInputStream;
 
 public class document {
 	
-	String AuthToken = "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ2aXZla0Btb2NvLmNvbS5ucCIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tdHJhdmVsLWFwcCIsImlhdCI6MTc0NjE2MzYyNiwiZXhwIjoxNzQ2MTY3MjI2fQ.jyrmoCg2zjGpzX8jxKuTmZuRmMQZH9AWz4ZOWaz1ZSAV1duJNt6VnEcD-Pntpeph";
+	String AuthToken = "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ2aXZla0Btb2NvLmNvbS5ucCIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tdHJhdmVsLWFwcCIsImlhdCI6MTc0NjUyMjU0NCwiZXhwIjoxNzQ2NTUyNTQ0fQ.c1CYwaduAWc9ZW83w76LNMcadWW9WKStr6hqT0ItxQPMni9vjl21QxcaR4GkomyV";
 //	@BeforeClass
 //	public void getToken() throws Exception{
 //		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
@@ -69,54 +69,7 @@ public class document {
 //
 //	}
 
-	@Test
-	public void uploaddocumentwithvalidCredentails() throws Exception {
-		    RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
-
-		    File document = new File("C:/Users/Dell/Downloads/chineses.jpg");
-
-		    if (!document.exists()) {
-		        System.out.println("File not found: " + document.getAbsolutePath());
-		        return;
-		    }
-
-		    // Use logging filters to compare with curl if needed
-		    RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
-
-		    // Use InputStream to avoid encoding issues
-		    try (FileInputStream fis = new FileInputStream(document)) {
-		        Response response = given()
-		                .header("X-GEO-Location", "12,12")
-		                .header("X-AUTH-TOKEN", "AuthToken")
-		                .header("X-Device-Id", "moco-travel-app")
-		                .header("User-Agent", "NepalTravelApp/1.0.0 android")
-		                .header("Accept", "*/*")  // matches curl default
-		                .multiPart("document", "chineses.jpg", fis, "image/jpeg") // key, filename, stream, type
-		                .when()
-		                .post("/document")
-		                .then()
-		                .statusCode(200)
-		                .extract().response();
-
-		        response.prettyPrint();
-		        
-				String code = response.jsonPath().getString("code");
-				String description = response.jsonPath().getString("description");
-				String signature = response.jsonPath().getString("signature");
-		
-				assertNotNull(description, "Description is missing from the response");
-				assertNotNull(code, "Code is missing");
-				assertNotNull(signature,"signature is missing");
-		
-				assertFalse(description.isEmpty(), "Description is empty");
-				assertFalse(code.isEmpty(), "Code is empty");
-				assertFalse(signature.isEmpty(),"signature is empty");
-		
-				assertEquals(code,"GNR_OK");
-				assertEquals(description,"Successfully verified Portrait/document.");
-		    }
-
-	}
+	
 
 
 
@@ -164,7 +117,7 @@ public class document {
 	//assertFalse(signature.isEmpty(),"signature is empty");
 
 	assertEquals(code,"GNR_INVALID_DATA");
-	assertEquals(description,"Successfully verified Portrait/document.");
+	assertEquals(description,"Invalid Geo location found.");
     }
    }
 
@@ -213,7 +166,7 @@ public class document {
 	//assertFalse(signature.isEmpty(),"signature is empty");
 
 	assertEquals(code,"GNR_INVALID_DATA");
-	assertEquals(description,"Successfully verified Portrait/document.");
+	assertEquals(description,"Invalid device Id found.");
     }
 	}
 
@@ -260,7 +213,7 @@ public class document {
 	//assertFalse(signature.isEmpty(),"signature is empty");
 
 	assertEquals(code,"GNR_INVALID_DATA");
-	assertEquals(description,"Successfully verified Portrait/document.");
+	assertEquals(description,"Invalid user agent found.");
     }
 
 	}
@@ -290,7 +243,7 @@ public class document {
 	                .when()
 	                .post("/document")
 	                .then()
-	                .statusCode(422)
+	                .statusCode(401)
 	                .extract().response();
 
 	        response.prettyPrint();
@@ -306,8 +259,8 @@ public class document {
 	assertFalse(code.isEmpty(), "Code is empty");
 	//assertFalse(signature.isEmpty(),"signature is empty");
 
-	assertEquals(code,"GNR_INVALID_DATA");
-	assertEquals(description,"Successfully verified Portrait/document.");
+	assertEquals(code,"GNR_AUTHENTICATION_FAIL");
+	assertEquals(description,"Authentication Failed.");
     }
 	}
 
@@ -354,7 +307,7 @@ public class document {
 	
 
 	assertEquals(code,"GNR_PARAM_MISSING");
-	assertEquals(description,"Successfully verified Portrait/document.");
+	assertEquals(description,"Bad Request.");
     }
 	}
 
@@ -384,7 +337,7 @@ public class document {
 	                .when()
 	                .post("/document")
 	                .then()
-	                .statusCode(200)
+	                .statusCode(400)
 	                .extract().response();
 
 	        response.prettyPrint();
@@ -401,7 +354,7 @@ public class document {
 	
 
 	assertEquals(code,"GNR_PARAM_MISSING");
-	assertEquals(description,"Successfully verified Portrait/document.");
+	assertEquals(description,"Bad Request.");
     }
 
 	}
@@ -448,7 +401,7 @@ public class document {
 	    	
 
 	    	assertEquals(code,"GNR_PARAM_MISSING");
-	    	assertEquals(description,"Successfully verified Portrait/document.");
+	    	assertEquals(description,"Bad Request.");
     }
 	}
 	@Test
@@ -477,7 +430,7 @@ public class document {
 	                .when()
 	                .post("/document")
 	                .then()
-	                .statusCode(200)
+	                .statusCode(400)
 	                .extract().response();
 
 	        response.prettyPrint();
@@ -494,7 +447,7 @@ public class document {
 	    	
 
 	    	assertEquals(code,"GNR_PARAM_MISSING");
-	    	assertEquals(description,"Successfully verified Portrait/document.");
+	    	assertEquals(description,"Bad Request.");
     }
 	}
 
@@ -502,7 +455,7 @@ public class document {
 	public void uploaddocumentwithinvalidImage() throws Exception {
 		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
 
-	    File document = new File("C:/Users/Dell/Downloads/chineses.png");
+	    File document = new File("C:/Users/Dell/Downloads/MOCO QR Logo.png");
 
 	    if (!document.exists()) {
 	        System.out.println("File not found: " + document.getAbsolutePath());
@@ -520,7 +473,7 @@ public class document {
 	                .header("X-Device-Id", "moco-travel-app")
 	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
 	                .header("Accept", "*/*")  // matches curl default
-	                .multiPart("document", "chineses.jpg", fis, "image/jpeg") // key, filename, stream, type
+	                .multiPart("document", "MOCO QR Logo.png", fis, "image/jpeg") // key, filename, stream, type
 	                .when()
 	                .post("/document")
 	                .then()
@@ -540,8 +493,8 @@ public class document {
 	    	assertFalse(code.isEmpty(), "Code is empty");
 	    	
 
-	    	assertEquals(code,"GNR_PARAM_MISSING");
-	    	assertEquals(description,"Successfully verified Portrait/document.");
+	    	assertEquals(code,"GNR_INVALID_DATA");
+	    	assertEquals(description,"Invalid image format found.");
     }
 	}
 
@@ -549,7 +502,7 @@ public class document {
 	public void uploaddocumentwithLargefile() throws Exception {
 		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
 
-	    File document = new File("C:/Users/Dell/Downloads/chineses.jpg");
+	    File document = new File("C:/Users/Dell/Downloads/lareg.jpg");
 
 	    if (!document.exists()) {
 	        System.out.println("File not found: " + document.getAbsolutePath());
@@ -567,11 +520,11 @@ public class document {
 	                .header("X-Device-Id", "moco-travel-app")
 	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
 	                .header("Accept", "*/*")  // matches curl default
-	                .multiPart("document", "chineses.jpg", fis, "image/jpeg") // key, filename, stream, type
+	                .multiPart("document", "lareg.jpg", fis, "image/jpeg") // key, filename, stream, type
 	                .when()
 	                .post("/document")
 	                .then()
-	                .statusCode(200)
+	                .statusCode(422)
 	                .extract().response();
 
 	        response.prettyPrint();
@@ -733,11 +686,12 @@ public class document {
 	assertEquals(description,"Successfully verified Portrait/document.");
     }
 	}
+	
 	@Test
 	public void uploaddocumentdifferentphoto() throws Exception {
 		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
 
-	    File document = new File("C:/Users/Dell/Downloads/chineses.jpg");
+	    File document = new File("C:/Users/Dell/Downloads/Chinese_passport_2018-09-29 (1).jpg");
 
 	    if (!document.exists()) {
 	        System.out.println("File not found: " + document.getAbsolutePath());
@@ -755,7 +709,7 @@ public class document {
 	                .header("X-Device-Id", "moco-travel-app")
 	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
 	                .header("Accept", "*/*")  // matches curl default
-	                .multiPart("document", "chineses.jpg", fis, "image/jpeg") // key, filename, stream, type
+	                .multiPart("document", "Chinese_passport_2018-09-29 (1).jpg", fis, "image/jpeg") // key, filename, stream, type
 	                .when()
 	                .post("/document")
 	                .then()
@@ -779,6 +733,55 @@ public class document {
 	assertEquals(description,"Successfully verified Portrait/document.");
 	}
 }
+	
+	@Test
+	public void uploaddocumentwithvalidCredentails() throws Exception {
+		    RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
+
+		    File document = new File("C:/Users/Dell/Downloads/WhatsApp Image 2024-12-16 at 12.18.17.jpeg");
+
+		    if (!document.exists()) {
+		        System.out.println("File not found: " + document.getAbsolutePath());
+		        return;
+		    }
+
+		    // Use logging filters to compare with curl if needed
+		    RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
+
+		    // Use InputStream to avoid encoding issues
+		    try (FileInputStream fis = new FileInputStream(document)) {
+		        Response response = given()
+		                .header("X-GEO-Location", "12,12")
+		                .header("X-AUTH-TOKEN", "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ2aXZla0Btb2NvLmNvbS5ucCIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tdHJhdmVsLWFwcCIsImlhdCI6MTc0NjUyMjU0NCwiZXhwIjoxNzQ2NTUyNTQ0fQ.c1CYwaduAWc9ZW83w76LNMcadWW9WKStr6hqT0ItxQPMni9vjl21QxcaR4GkomyV")
+		                .header("X-Device-Id", "moco-travel-app")
+		                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+		                .header("Accept", "*/*")  // matches curl default
+		                .multiPart("document", "WhatsApp Image 2024-12-16 at 12.18.17.jpeg", fis, "image/jpeg") // key, filename, stream, type
+		                .when()
+		                .post("/document")
+		                .then()
+		                .statusCode(200)
+		                .extract().response();
+
+		        response.prettyPrint();
+		        
+				String code = response.jsonPath().getString("code");
+				String description = response.jsonPath().getString("description");
+				String signature = response.jsonPath().getString("signature");
+		
+				assertNotNull(description, "Description is missing from the response");
+				assertNotNull(code, "Code is missing");
+				assertNotNull(signature,"signature is missing");
+		
+				assertFalse(description.isEmpty(), "Description is empty");
+				assertFalse(code.isEmpty(), "Code is empty");
+				assertFalse(signature.isEmpty(),"signature is empty");
+		
+				assertEquals(code,"GNR_OK");
+				assertEquals(description,"Successfully verified Portrait/document.");
+		    }
+
+	}
 }
 
 

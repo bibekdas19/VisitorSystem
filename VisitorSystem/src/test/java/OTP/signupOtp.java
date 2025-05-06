@@ -21,7 +21,7 @@ public class signupOtp {
 
         Response response = given()
                 .header("X-GEO-Location", "12,12")
-                .header("X-Device-Id", "moco-dev")
+                .header("X-Device-Id", "moco-travel-app")
                 .header("User-Agent", "NepalTravelApp/1.0.0 android")
             .when()
                 .get("/key")
@@ -40,7 +40,7 @@ public class signupOtp {
     @Test
     public void signUpwithoutDevice() throws Exception {
     	 ObjectMapper objectMapper = new ObjectMapper();
-         String email = "sandeshthapa017@gmail.com";
+         String email = "vivek@moco.com.np";
          String requestTimestamp = signatureCreate.generateTimestamp();
 
          // Prepare request without signature
@@ -237,7 +237,7 @@ public class signupOtp {
         Response response = given()
                 .baseUri(baseURI)
                 .header("X-GEO-Location", "12,12aa")
-                .header("X-Device-Id", "3efe6bbeb55f411")
+                .header("X-Device-Id", "moco-travel-app")
                 .header("User-Agent", "NepalTravelApp/1.0.0 android")
                 .contentType("application/json")
                 .body(jsonBody)
@@ -281,7 +281,7 @@ public class signupOtp {
             Response response = given()
                     .baseUri(baseURI)
                     .header("X-GEO-Location", "12,12")
-                    .header("X-Device-Id", "3efe6bbeb55f411")
+                    .header("X-Device-Id", "moco-travel-app")
                     .header("User-Agent", "NepalTravelApp/1.0.0 androidqqqq")
                     .contentType("application/json")
                     .body(jsonBody)
@@ -325,7 +325,7 @@ public class signupOtp {
         Response response = given()
                 .baseUri(baseURI)
                 .header("X-GEO-Location", "12,12")
-                .header("X-Device-Id", "3efe6bbeb55f411")
+                .header("X-Device-Id", "moco-travel-app")
                 .header("User-Agent", "NepalTravelApp/1.0.0 android")
                 .contentType("application/json")
                 .body(jsonBody)
@@ -370,7 +370,7 @@ public class signupOtp {
         Response response = given()
                 .baseUri(baseURI)
                 .header("X-GEO-Location", "12,12")
-                .header("X-Device-Id", "3efe6bbeb55f411")
+                .header("X-Device-Id", "moco-travel-app")
                 .header("User-Agent", "NepalTravelApp/1.0.0 android")
                 .contentType("application/json")
                 .body(jsonBody)
@@ -415,7 +415,7 @@ public class signupOtp {
         Response response = given()
                 .baseUri(baseURI)
                 .header("X-GEO-Location", "12,12")
-                .header("X-Device-Id", "3efe6bbeb55f411")
+                .header("X-Device-Id", "moco-travel-app")
                 .header("User-Agent", "NepalTravelApp/1.0.0 android")
                 .contentType("application/json")
                 .body(jsonBody)
@@ -459,7 +459,7 @@ public class signupOtp {
         Response response = given()
                 .baseUri(baseURI)
                 .header("X-GEO-Location", "12,12")
-                .header("X-Device-Id", "3efe6bbeb55f411")
+                .header("X-Device-Id", "moco-travel-app")
                 .header("User-Agent", "NepalTravelApp/1.0.0 android")
                 .contentType("application/json")
                 .body(jsonBody)
@@ -503,7 +503,7 @@ public class signupOtp {
         Response response = given()
                 .baseUri(baseURI)
                 .header("X-GEO-Location", "12,12")
-                .header("X-Device-Id", "3efe6bbeb55f411")
+                .header("X-Device-Id", "moco-travel-app")
                 .header("User-Agent", "NepalTravelApp/1.0.0 android")
                 .contentType("application/json")
                 .body(jsonBody)
@@ -529,7 +529,7 @@ public class signupOtp {
     @Test
     public void signUpwithValidCredentials() throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
-        String email = "learner.bibekdas@gmail.com";
+        String email = "vivek@moco.com.np";
         String requestTimestamp = signatureCreate.generateTimestamp();
 
 
@@ -548,7 +548,7 @@ public class signupOtp {
         // Send request
         Response response = given()
                 .header("X-GEO-Location", "12,12")
-                .header("X-Device-Id", "moco-dev")
+                .header("X-Device-Id", "moco-travel-app")
                 .header("User-Agent", "NepalTravelApp/1.0.0 android")
                 .contentType("application/json")
                 .body(jsonBody)
@@ -558,6 +558,7 @@ public class signupOtp {
                 .statusCode(200)
                 .log().all()
                 .extract().response();
+        response.prettyPrint();
 
         // Assertions
         String code = response.jsonPath().getString("code");
@@ -583,7 +584,7 @@ public class signupOtp {
     @Test
     public void signUpwithDuplicateDevice() throws Exception{
     	 ObjectMapper objectMapper = new ObjectMapper();
-         String email = "samwek.shakya@moco.com.np";
+         String email = "vivek@moco.com.np";
          String requestTimestamp = signatureCreate.generateTimestamp();
 
          // Prepare payload without signature
@@ -600,7 +601,7 @@ public class signupOtp {
         Response response = given()
                 .baseUri(baseURI)
                 .header("X-GEO-Location", "12,12")
-                .header("X-Device-Id", "3efe6bbeb55f411") //already signed up device
+                .header("X-Device-Id", "moco-travel-appaaa") //already signed up device
                 .header("User-Agent", "NepalTravelApp/1.0.0 android")
                 .contentType("application/json")
                 .body(jsonBody)
@@ -649,7 +650,7 @@ public class signupOtp {
         Response response = given()
                 .baseUri(baseURI)
                 .header("X-GEO-Location", "12,12")
-                .header("X-Device-Id", "3efe6bbeb55f420")
+                .header("X-Device-Id", "moco-travel-appaa")
                 .header("User-Agent", "NepalTravelApp/1.0.0 android")
                 .contentType("application/json")
                 .body(jsonBody)

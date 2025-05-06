@@ -16,7 +16,7 @@ import java.io.FileInputStream;
 
 public class selfie {
 	
-	//String eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJsZWFybmVyLmJpYmVrZGFzQGdtYWlsLmNvbSIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tZGV2IiwiaWF0IjoxNzQ2MTc5MTM5LCJleHAiOjE3NDYxODI3Mzl9.d42Wq5TJHmnjShYerTyNumd_GxTDRH2gddfcxlK38YapXvA4DbqpXkM6Myq2zL4w = "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJsZWFybmVyLmJpYmVrZGFzQGdtYWlsLmNvbSIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tZGV2IiwiaWF0IjoxNzQ2MTc5MTM5LCJleHAiOjE3NDYxODI3Mzl9.d42Wq5TJHmnjShYerTyNumd_GxTDRH2gddfcxlK38YapXvA4DbqpXkM6Myq2zL4w";
+	//String eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ2aXZla0Btb2NvLmNvbS5ucCIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tdHJhdmVsLWFwcCIsImlhdCI6MTc0NjUyMjU0NCwiZXhwIjoxNzQ2NTUyNTQ0fQ.c1CYwaduAWc9ZW83w76LNMcadWW9WKStr6hqT0ItxQPMni9vjl21QxcaR4GkomyV = "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ2aXZla0Btb2NvLmNvbS5ucCIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tdHJhdmVsLWFwcCIsImlhdCI6MTc0NjUyMjU0NCwiZXhwIjoxNzQ2NTUyNTQ0fQ.c1CYwaduAWc9ZW83w76LNMcadWW9WKStr6hqT0ItxQPMni9vjl21QxcaR4GkomyV";
 //	@BeforeClass
 //	public void getToken() throws Exception{
 //		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
@@ -24,7 +24,7 @@ public class selfie {
 //		Response keyResponse = given()
 //				.baseUri(baseURI)
 //				.header("X-GEO-Location", "12,12")
-//				.header("X-Device-Id", "sandesh-thapa-app")
+//				.header("X-Device-Id", "moco-travel-app")
 //				.header("User-Agent", "NepalTravelApp/1.0.0 android")
 //				.when()
 //				.get("/key")
@@ -38,7 +38,7 @@ public class selfie {
 //		//authenticate before for the auth token
 //		ObjectMapper objectMapper = new ObjectMapper();
 //		String email = "vivek@moco.com.np";
-//		String requestDeviceId = "sandesh-thapa-app";
+//		String requestDeviceId = "moco-travel-app";
 //		Map<String, Object> credentials = new HashMap<>();
 //		credentials.put("email", email);
 //		credentials.put("pin", "123426");
@@ -65,58 +65,11 @@ public class selfie {
 //				.statusCode(200)
 //				.log().all()
 //				.extract().response();
-//		eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJsZWFybmVyLmJpYmVrZGFzQGdtYWlsLmNvbSIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tZGV2IiwiaWF0IjoxNzQ2MTc5MTM5LCJleHAiOjE3NDYxODI3Mzl9.d42Wq5TJHmnjShYerTyNumd_GxTDRH2gddfcxlK38YapXvA4DbqpXkM6Myq2zL4w = Authresponse.getHeader("X-AUTH-TOKEN");
+//		eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ2aXZla0Btb2NvLmNvbS5ucCIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tdHJhdmVsLWFwcCIsImlhdCI6MTc0NjUyMjU0NCwiZXhwIjoxNzQ2NTUyNTQ0fQ.c1CYwaduAWc9ZW83w76LNMcadWW9WKStr6hqT0ItxQPMni9vjl21QxcaR4GkomyV = Authresponse.getHeader("X-AUTH-TOKEN");
 //
 //	}
 
-//	@Test
-//	public void uploadSelfiewithvalidCredentails() throws Exception {
-//		    RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
-//
-//		    File selfie = new File("C:/Users/Dell/Downloads/chineses.jpg");
-//
-//		    if (!selfie.exists()) {
-//		        System.out.println("File not found: " + selfie.getAbsolutePath());
-//		        return;
-//		    }
-//
-//		    // Use logging filters to compare with curl if needed
-//		    RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
-//
-//		    // Use InputStream to avoid encoding issues
-//		    try (FileInputStream fis = new FileInputStream(selfie)) {
-//		        Response response = given()
-//		                .header("X-GEO-Location", "12,12")
-//		                .header("X-AUTH-TOKEN", "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJsZWFybmVyLmJpYmVrZGFzQGdtYWlsLmNvbSIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tZGV2IiwiaWF0IjoxNzQ2MTc5MTM5LCJleHAiOjE3NDYxODI3Mzl9.d42Wq5TJHmnjShYerTyNumd_GxTDRH2gddfcxlK38YapXvA4DbqpXkM6Myq2zL4w")
-//		                .header("X-Device-Id", "moco-dev")
-//		                .header("User-Agent", "NepalTravelApp/1.0.0 android")
-//		                .header("Accept", "*/*")  // matches curl default
-//		                .multiPart("selfie", "chineses.jpg", fis, "image/jpeg") // key, filename, stream, type
-//		                .when()
-//		                .post("/selfie")
-//		                .then()
-//		                .statusCode(200)
-//		                .extract().response();
-//
-//		        response.prettyPrint();
-//		        
-//				String code = response.jsonPath().getString("code");
-//				String description = response.jsonPath().getString("description");
-//				String signature = response.jsonPath().getString("signature");
-//		
-//				assertNotNull(description, "Description is missing from the response");
-//				assertNotNull(code, "Code is missing");
-//				assertNotNull(signature,"signature is missing");
-//		
-//				assertFalse(description.isEmpty(), "Description is empty");
-//				assertFalse(code.isEmpty(), "Code is empty");
-//				assertFalse(signature.isEmpty(),"signature is empty");
-//		
-//				assertEquals(code,"GNR_OK");
-//				assertEquals(description,"Successfully verified Portrait/Selfie.");
-//		    }
-//
-//	}
+	
 
 
 
@@ -139,8 +92,8 @@ public class selfie {
 	    try (FileInputStream fis = new FileInputStream(selfie)) {
 	        Response response = given()
 	                .header("X-GEO-Location", "1212")
-	                .header("X-AUTH-TOKEN", "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJsZWFybmVyLmJpYmVrZGFzQGdtYWlsLmNvbSIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tZGV2IiwiaWF0IjoxNzQ2MTc5MTM5LCJleHAiOjE3NDYxODI3Mzl9.d42Wq5TJHmnjShYerTyNumd_GxTDRH2gddfcxlK38YapXvA4DbqpXkM6Myq2zL4w")
-	                .header("X-Device-Id", "sandesh-thapa-app")
+	                .header("X-AUTH-TOKEN", "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ2aXZla0Btb2NvLmNvbS5ucCIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tdHJhdmVsLWFwcCIsImlhdCI6MTc0NjUyMjU0NCwiZXhwIjoxNzQ2NTUyNTQ0fQ.c1CYwaduAWc9ZW83w76LNMcadWW9WKStr6hqT0ItxQPMni9vjl21QxcaR4GkomyV")
+	                .header("X-Device-Id", "moco-travel-app")
 	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
 	                .header("Accept", "*/*")  // matches curl default
 	                .multiPart("selfie", "chineses.jpg", fis, "image/jpeg") // key, filename, stream, type
@@ -188,7 +141,7 @@ public class selfie {
 	    try (FileInputStream fis = new FileInputStream(selfie)) {
 	        Response response = given()
 	                .header("X-GEO-Location", "12,12")
-	                .header("X-AUTH-TOKEN", "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJsZWFybmVyLmJpYmVrZGFzQGdtYWlsLmNvbSIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tZGV2IiwiaWF0IjoxNzQ2MTc5MTM5LCJleHAiOjE3NDYxODI3Mzl9.d42Wq5TJHmnjShYerTyNumd_GxTDRH2gddfcxlK38YapXvA4DbqpXkM6Myq2zL4w")
+	                .header("X-AUTH-TOKEN", "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ2aXZla0Btb2NvLmNvbS5ucCIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tdHJhdmVsLWFwcCIsImlhdCI6MTc0NjUyMjU0NCwiZXhwIjoxNzQ2NTUyNTQ0fQ.c1CYwaduAWc9ZW83w76LNMcadWW9WKStr6hqT0ItxQPMni9vjl21QxcaR4GkomyV")
 	                .header("X-Device-Id", "moco-travel-@app")
 	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
 	                .header("Accept", "*/*")  // matches curl default
@@ -235,8 +188,8 @@ public class selfie {
 	    try (FileInputStream fis = new FileInputStream(selfie)) {
 	        Response response = given()
 	                .header("X-GEO-Location", "12,12")
-	                .header("X-AUTH-TOKEN", "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJsZWFybmVyLmJpYmVrZGFzQGdtYWlsLmNvbSIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tZGV2IiwiaWF0IjoxNzQ2MTc5MTM5LCJleHAiOjE3NDYxODI3Mzl9.d42Wq5TJHmnjShYerTyNumd_GxTDRH2gddfcxlK38YapXvA4DbqpXkM6Myq2zL4w")
-	                .header("X-Device-Id", "sandesh-thapa-app")
+	                .header("X-AUTH-TOKEN", "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ2aXZla0Btb2NvLmNvbS5ucCIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tdHJhdmVsLWFwcCIsImlhdCI6MTc0NjUyMjU0NCwiZXhwIjoxNzQ2NTUyNTQ0fQ.c1CYwaduAWc9ZW83w76LNMcadWW9WKStr6hqT0ItxQPMni9vjl21QxcaR4GkomyV")
+	                .header("X-Device-Id", "moco-travel-app")
 	                .header("User-Agent", "NepalTravelApp.0.0 android")
 	                .header("Accept", "*/*")  // matches curl default
 	                .multiPart("selfie", "chineses.jpg", fis, "image/jpeg") // key, filename, stream, type
@@ -283,7 +236,7 @@ public class selfie {
 	        Response response = given()
 	                .header("X-GEO-Location", "12,12")
 	                .header("X-AUTH-TOKEN", "0((0")
-	                .header("X-Device-Id", "sandesh-thapa-app")
+	                .header("X-Device-Id", "moco-travel-app")
 	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
 	                .header("Accept", "*/*")  // matches curl default
 	                .multiPart("selfie", "chineses.jpg", fis, "image/jpeg") // key, filename, stream, type
@@ -306,8 +259,8 @@ public class selfie {
 	assertFalse(code.isEmpty(), "Code is empty");
 	//assertFalse(signature.isEmpty(),"signature is empty");
 
-	assertEquals(code,"GNR_INVALID_DATA");
-	assertEquals(description,"Successfully verified Portrait/Selfie.");
+	assertEquals(code,"GNR_AUTHENTICATION_FAIL");
+	assertEquals(description,"Authentication Failed.");
     }
 	}
 
@@ -329,7 +282,7 @@ public class selfie {
 	    try (FileInputStream fis = new FileInputStream(selfie)) {
 	        Response response = given()
 	                .header("X-GEO-Location", "12,12")
-	                .header("X-AUTH-TOKEN", "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJsZWFybmVyLmJpYmVrZGFzQGdtYWlsLmNvbSIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tZGV2IiwiaWF0IjoxNzQ2MTc5MTM5LCJleHAiOjE3NDYxODI3Mzl9.d42Wq5TJHmnjShYerTyNumd_GxTDRH2gddfcxlK38YapXvA4DbqpXkM6Myq2zL4w")
+	                .header("X-AUTH-TOKEN", "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ2aXZla0Btb2NvLmNvbS5ucCIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tdHJhdmVsLWFwcCIsImlhdCI6MTc0NjUyMjU0NCwiZXhwIjoxNzQ2NTUyNTQ0fQ.c1CYwaduAWc9ZW83w76LNMcadWW9WKStr6hqT0ItxQPMni9vjl21QxcaR4GkomyV")
 	                .header("X-Device-Id", "")
 	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
 	                .header("Accept", "*/*")  // matches curl default
@@ -376,8 +329,8 @@ public class selfie {
 	    try (FileInputStream fis = new FileInputStream(selfie)) {
 	        Response response = given()
 	                .header("X-GEO-Location", "")
-	                .header("X-AUTH-TOKEN", "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJsZWFybmVyLmJpYmVrZGFzQGdtYWlsLmNvbSIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tZGV2IiwiaWF0IjoxNzQ2MTc5MTM5LCJleHAiOjE3NDYxODI3Mzl9.d42Wq5TJHmnjShYerTyNumd_GxTDRH2gddfcxlK38YapXvA4DbqpXkM6Myq2zL4w")
-	                .header("X-Device-Id", "sandesh-thapa-app")
+	                .header("X-AUTH-TOKEN", "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ2aXZla0Btb2NvLmNvbS5ucCIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tdHJhdmVsLWFwcCIsImlhdCI6MTc0NjUyMjU0NCwiZXhwIjoxNzQ2NTUyNTQ0fQ.c1CYwaduAWc9ZW83w76LNMcadWW9WKStr6hqT0ItxQPMni9vjl21QxcaR4GkomyV")
+	                .header("X-Device-Id", "moco-travel-app")
 	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
 	                .header("Accept", "*/*")  // matches curl default
 	                .multiPart("selfie", "chineses.jpg", fis, "image/jpeg") // key, filename, stream, type
@@ -423,8 +376,8 @@ public class selfie {
 	    try (FileInputStream fis = new FileInputStream(selfie)) {
 	        Response response = given()
 	                .header("X-GEO-Location", "12,12")
-	                .header("X-AUTH-TOKEN", "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJsZWFybmVyLmJpYmVrZGFzQGdtYWlsLmNvbSIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tZGV2IiwiaWF0IjoxNzQ2MTc5MTM5LCJleHAiOjE3NDYxODI3Mzl9.d42Wq5TJHmnjShYerTyNumd_GxTDRH2gddfcxlK38YapXvA4DbqpXkM6Myq2zL4w")
-	                .header("X-Device-Id", "sandesh-thapa-app")
+	                .header("X-AUTH-TOKEN", "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ2aXZla0Btb2NvLmNvbS5ucCIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tdHJhdmVsLWFwcCIsImlhdCI6MTc0NjUyMjU0NCwiZXhwIjoxNzQ2NTUyNTQ0fQ.c1CYwaduAWc9ZW83w76LNMcadWW9WKStr6hqT0ItxQPMni9vjl21QxcaR4GkomyV")
+	                .header("X-Device-Id", "moco-travel-app")
 	                .header("User-Agent", "")
 	                .header("Accept", "*/*")  // matches curl default
 	                .multiPart("selfie", "chineses.jpg", fis, "image/jpeg") // key, filename, stream, type
@@ -470,7 +423,7 @@ public class selfie {
 	        Response response = given()
 	                .header("X-GEO-Location", "12,12")
 	                .header("X-AUTH-TOKEN", "")
-	                .header("X-Device-Id", "sandesh-thapa-app")
+	                .header("X-Device-Id", "moco-travel-app")
 	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
 	                .header("Accept", "*/*")  // matches curl default
 	                .multiPart("selfie", "chineses.jpg", fis, "image/jpeg") // key, filename, stream, type
@@ -502,7 +455,7 @@ public class selfie {
 	public void uploadSelfiewithinvalidImage() throws Exception {
 		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
 
-	    File selfie = new File("C:/Users/Dell/Downloads/chineses.png");
+	    File selfie = new File("C:/Users/Dell/Downloads/MOCO QR Logo.png");
 
 	    if (!selfie.exists()) {
 	        System.out.println("File not found: " + selfie.getAbsolutePath());
@@ -516,11 +469,11 @@ public class selfie {
 	    try (FileInputStream fis = new FileInputStream(selfie)) {
 	        Response response = given()
 	                .header("X-GEO-Location", "12,12")
-	                .header("X-AUTH-TOKEN", "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJsZWFybmVyLmJpYmVrZGFzQGdtYWlsLmNvbSIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tZGV2IiwiaWF0IjoxNzQ2MTc5MTM5LCJleHAiOjE3NDYxODI3Mzl9.d42Wq5TJHmnjShYerTyNumd_GxTDRH2gddfcxlK38YapXvA4DbqpXkM6Myq2zL4w")
-	                .header("X-Device-Id", "sandesh-thapa-app")
+	                .header("X-AUTH-TOKEN", "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ2aXZla0Btb2NvLmNvbS5ucCIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tdHJhdmVsLWFwcCIsImlhdCI6MTc0NjUyMjU0NCwiZXhwIjoxNzQ2NTUyNTQ0fQ.c1CYwaduAWc9ZW83w76LNMcadWW9WKStr6hqT0ItxQPMni9vjl21QxcaR4GkomyV")
+	                .header("X-Device-Id", "moco-travel-app")
 	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
 	                .header("Accept", "*/*")  // matches curl default
-	                .multiPart("selfie", "chineses.jpg", fis, "image/jpeg") // key, filename, stream, type
+	                .multiPart("selfie", "MOCO QR Logo.png", fis, "image/png") // key, filename, stream, type
 	                .when()
 	                .post("/selfie")
 	                .then()
@@ -541,7 +494,7 @@ public class selfie {
 	    	
 
 	    	assertEquals(code,"GNR_INVALID_DATA");
-	    	assertEquals(description,"Uploaded file is not a .jpeg image.");
+	    	assertEquals(description,"Invalid image format found.");
     }
 	}
 
@@ -549,7 +502,7 @@ public class selfie {
 	public void uploadSelfiewithLargefile() throws Exception {
 		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
 
-	    File selfie = new File("C:/Users/Dell/Downloads/chineses.jpg");
+	    File selfie = new File("C:/Users/Dell/Downloads/lareg.jpg");
 
 	    if (!selfie.exists()) {
 	        System.out.println("File not found: " + selfie.getAbsolutePath());
@@ -563,15 +516,15 @@ public class selfie {
 	    try (FileInputStream fis = new FileInputStream(selfie)) {
 	        Response response = given()
 	                .header("X-GEO-Location", "12,12")
-	                .header("X-AUTH-TOKEN", "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJsZWFybmVyLmJpYmVrZGFzQGdtYWlsLmNvbSIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tZGV2IiwiaWF0IjoxNzQ2MTc5MTM5LCJleHAiOjE3NDYxODI3Mzl9.d42Wq5TJHmnjShYerTyNumd_GxTDRH2gddfcxlK38YapXvA4DbqpXkM6Myq2zL4w")
-	                .header("X-Device-Id", "sandesh-thapa-app")
+	                .header("X-AUTH-TOKEN", "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ2aXZla0Btb2NvLmNvbS5ucCIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tdHJhdmVsLWFwcCIsImlhdCI6MTc0NjUyMjU0NCwiZXhwIjoxNzQ2NTUyNTQ0fQ.c1CYwaduAWc9ZW83w76LNMcadWW9WKStr6hqT0ItxQPMni9vjl21QxcaR4GkomyV")
+	                .header("X-Device-Id", "moco-travel-app")
 	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
 	                .header("Accept", "*/*")  // matches curl default
-	                .multiPart("selfie", "chineses.jpg", fis, "image/jpeg") // key, filename, stream, type
+	                .multiPart("selfie", "lareg.jpg", fis, "image/jpg") // key, filename, stream, type
 	                .when()
 	                .post("/selfie")
 	                .then()
-	                .statusCode(200)
+	                .statusCode(422)
 	                .extract().response();
 
 	        response.prettyPrint();
@@ -597,7 +550,7 @@ public class selfie {
 	public void uploadSelfiewithFaceObstructPhoto() throws Exception {
 		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
 
-	    File selfie = new File("C:/Users/Dell/Downloads/chineses.jpg");
+	    File selfie = new File("C:/Users/Dell/Downloads/obstruct.jpg");
 
 	    if (!selfie.exists()) {
 	        System.out.println("File not found: " + selfie.getAbsolutePath());
@@ -611,11 +564,11 @@ public class selfie {
 	    try (FileInputStream fis = new FileInputStream(selfie)) {
 	        Response response = given()
 	                .header("X-GEO-Location", "12,12")
-	                .header("X-AUTH-TOKEN", "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJsZWFybmVyLmJpYmVrZGFzQGdtYWlsLmNvbSIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tZGV2IiwiaWF0IjoxNzQ2MTc5MTM5LCJleHAiOjE3NDYxODI3Mzl9.d42Wq5TJHmnjShYerTyNumd_GxTDRH2gddfcxlK38YapXvA4DbqpXkM6Myq2zL4w")
-	                .header("X-Device-Id", "sandesh-thapa-app")
+	                .header("X-AUTH-TOKEN", "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ2aXZla0Btb2NvLmNvbS5ucCIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tdHJhdmVsLWFwcCIsImlhdCI6MTc0NjUyMjU0NCwiZXhwIjoxNzQ2NTUyNTQ0fQ.c1CYwaduAWc9ZW83w76LNMcadWW9WKStr6hqT0ItxQPMni9vjl21QxcaR4GkomyV")
+	                .header("X-Device-Id", "moco-travel-app")
 	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
 	                .header("Accept", "*/*")  // matches curl default
-	                .multiPart("selfie", "chineses.jpg", fis, "image/jpeg") // key, filename, stream, type
+	                .multiPart("selfie", "obstruct.jpg", fis, "image/jpeg") // key, filename, stream, type
 	                .when()
 	                .post("/selfie")
 	                .then()
@@ -636,7 +589,7 @@ public class selfie {
 	    	
 
 	    	assertEquals(code,"VST_PROFILE_IMG_OBSTRUCTED");
-	    	assertEquals(description,"Successfully verified Portrait/Selfie.");
+	    	assertEquals(description,"Full face selfie not recieved. Obstructed view");
     }
 	    
 
@@ -646,7 +599,7 @@ public class selfie {
 	public void uploadSelfiewithSpoofimage() throws Exception {
 		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
 
-	    File selfie = new File("C:/Users/Dell/Downloads/chineses.jpg");
+	    File selfie = new File("C:/Users/Dell/Downloads/spoof.jpg");
 
 	    if (!selfie.exists()) {
 	        System.out.println("File not found: " + selfie.getAbsolutePath());
@@ -660,11 +613,11 @@ public class selfie {
 	    try (FileInputStream fis = new FileInputStream(selfie)) {
 	        Response response = given()
 	                .header("X-GEO-Location", "12,12")
-	                .header("X-AUTH-TOKEN", "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJsZWFybmVyLmJpYmVrZGFzQGdtYWlsLmNvbSIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tZGV2IiwiaWF0IjoxNzQ2MTc5MTM5LCJleHAiOjE3NDYxODI3Mzl9.d42Wq5TJHmnjShYerTyNumd_GxTDRH2gddfcxlK38YapXvA4DbqpXkM6Myq2zL4w")
-	                .header("X-Device-Id", "sandesh-thapa-app")
+	                .header("X-AUTH-TOKEN", "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ2aXZla0Btb2NvLmNvbS5ucCIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tdHJhdmVsLWFwcCIsImlhdCI6MTc0NjUyMjU0NCwiZXhwIjoxNzQ2NTUyNTQ0fQ.c1CYwaduAWc9ZW83w76LNMcadWW9WKStr6hqT0ItxQPMni9vjl21QxcaR4GkomyV")
+	                .header("X-Device-Id", "moco-travel-app")
 	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
 	                .header("Accept", "*/*")  // matches curl default
-	                .multiPart("selfie", "chineses.jpg", fis, "image/jpeg") // key, filename, stream, type
+	                .multiPart("selfie", "spoof.jpg", fis, "image/jpeg") // key, filename, stream, type
 	                .when()
 	                .post("/selfie")
 	                .then()
@@ -693,7 +646,7 @@ public class selfie {
 	public void uploadSelfiewithDarkImage() throws Exception {
 		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
 
-	    File selfie = new File("C:/Users/Dell/Downloads/dark.jpg");
+	    File selfie = new File("C:/Users/Dell/Downloads/darkface.jpg");
 
 	    if (!selfie.exists()) {
 	        System.out.println("File not found: " + selfie.getAbsolutePath());
@@ -707,63 +660,15 @@ public class selfie {
 	    try (FileInputStream fis = new FileInputStream(selfie)) {
 	        Response response = given()
 	                .header("X-GEO-Location", "12,12")
-	                .header("X-AUTH-TOKEN", "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJsZWFybmVyLmJpYmVrZGFzQGdtYWlsLmNvbSIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tZGV2IiwiaWF0IjoxNzQ2MTc5MTM5LCJleHAiOjE3NDYxODI3Mzl9.d42Wq5TJHmnjShYerTyNumd_GxTDRH2gddfcxlK38YapXvA4DbqpXkM6Myq2zL4w")
-	                .header("X-Device-Id", "sandesh-thapa-app")
+	                .header("X-AUTH-TOKEN", "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ2aXZla0Btb2NvLmNvbS5ucCIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tdHJhdmVsLWFwcCIsImlhdCI6MTc0NjUyMjU0NCwiZXhwIjoxNzQ2NTUyNTQ0fQ.c1CYwaduAWc9ZW83w76LNMcadWW9WKStr6hqT0ItxQPMni9vjl21QxcaR4GkomyV")
+	                .header("X-Device-Id", "moco-travel-app")
 	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
 	                .header("Accept", "*/*")  // matches curl default
-	                .multiPart("selfie", "chineses.jpg", fis, "image/jpeg") // key, filename, stream, type
+	                .multiPart("selfie", "darkface.jpg", fis, "image/jpeg") // key, filename, stream, type
 	                .when()
 	                .post("/selfie")
 	                .then()
 	                .statusCode(422)
-	                .extract().response();
-
-	        response.prettyPrint();
-	        String code = response.jsonPath().getString("code");
-	    	String description = response.jsonPath().getString("description");
-	    	
-
-	    	assertNotNull(description, "Description is missing from the response");
-	    	assertNotNull(code, "Code is missing");
-	    	
-
-	    	assertFalse(description.isEmpty(), "Description is empty");
-	    	assertFalse(code.isEmpty(), "Code is empty");
-	    	
-
-	    	assertEquals(code,"VST_PROFILE_IMG_SPOOF");
-	    	assertEquals(description,"Successfully verified Portrait/Selfie.");
-    }
-
-	}
-
-	@Test
-	public void uploadSelfiewithEyesClosed() throws Exception {
-		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
-
-	    File selfie = new File("C:/Users/Dell/Downloads/chineses.jpg");
-
-	    if (!selfie.exists()) {
-	        System.out.println("File not found: " + selfie.getAbsolutePath());
-	        return;
-	    }
-
-	    // Use logging filters to compare with curl if needed
-	    RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
-
-	    // Use InputStream to avoid encoding issues
-	    try (FileInputStream fis = new FileInputStream(selfie)) {
-	        Response response = given()
-	                .header("X-GEO-Location", "12,12")
-	                .header("X-AUTH-TOKEN", "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJsZWFybmVyLmJpYmVrZGFzQGdtYWlsLmNvbSIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tZGV2IiwiaWF0IjoxNzQ2MTc5MTM5LCJleHAiOjE3NDYxODI3Mzl9.d42Wq5TJHmnjShYerTyNumd_GxTDRH2gddfcxlK38YapXvA4DbqpXkM6Myq2zL4w")
-	                .header("X-Device-Id", "sandesh-thapa-app")
-	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
-	                .header("Accept", "*/*")  // matches curl default
-	                .multiPart("selfie", "chineses.jpg", fis, "image/jpeg") // key, filename, stream, type
-	                .when()
-	                .post("/selfie")
-	                .then()
-	                .statusCode(200)
 	                .extract().response();
 
 	        response.prettyPrint();
@@ -780,15 +685,16 @@ public class selfie {
 	    	
 
 	    	assertEquals(code,"VST_PROFILE_IMG_DARK");
-	    	assertEquals(description,"Successfully verified Portrait/Selfie.");
+	    	assertEquals(description,"Unable to extract features. Selfie is not luminous.");
     }
+
 	}
-	
+
 	@Test
-	public void uploadSelfiewithOpenedMouth() throws Exception {
+	public void uploadSelfiewithEyesClosed() throws Exception {
 		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
 
-	    File selfie = new File("C:/Users/Dell/Downloads/chineses.jpg");
+	    File selfie = new File("C:/Users/Dell/Downloads/eyeclose.jpg");
 
 	    if (!selfie.exists()) {
 	        System.out.println("File not found: " + selfie.getAbsolutePath());
@@ -802,11 +708,11 @@ public class selfie {
 	    try (FileInputStream fis = new FileInputStream(selfie)) {
 	        Response response = given()
 	                .header("X-GEO-Location", "12,12")
-	                .header("X-AUTH-TOKEN", "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJsZWFybmVyLmJpYmVrZGFzQGdtYWlsLmNvbSIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tZGV2IiwiaWF0IjoxNzQ2MTc5MTM5LCJleHAiOjE3NDYxODI3Mzl9.d42Wq5TJHmnjShYerTyNumd_GxTDRH2gddfcxlK38YapXvA4DbqpXkM6Myq2zL4w")
-	                .header("X-Device-Id", "sandesh-thapa-app")
+	                .header("X-AUTH-TOKEN", "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ2aXZla0Btb2NvLmNvbS5ucCIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tdHJhdmVsLWFwcCIsImlhdCI6MTc0NjUyMjU0NCwiZXhwIjoxNzQ2NTUyNTQ0fQ.c1CYwaduAWc9ZW83w76LNMcadWW9WKStr6hqT0ItxQPMni9vjl21QxcaR4GkomyV")
+	                .header("X-Device-Id", "moco-travel-app")
 	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
 	                .header("Accept", "*/*")  // matches curl default
-	                .multiPart("selfie", "chineses.jpg", fis, "image/jpeg") // key, filename, stream, type
+	                .multiPart("selfie", "eyeclose.jpg", fis, "image/jpeg") // key, filename, stream, type
 	                .when()
 	                .post("/selfie")
 	                .then()
@@ -826,8 +732,55 @@ public class selfie {
 	    	assertFalse(code.isEmpty(), "Code is empty");
 	    	
 
-	    	assertEquals(code,"VST_PROFILE_IMG_FACE_FEATURES ");
-	    	assertEquals(description,"Successfully verified Portrait/Selfie.");
+	    	assertEquals(code,"VST_PROFILE_IMG_FACE_FEATURES");
+	    	assertEquals(description,"Invalid facial features action detected. Eyes closed or mouth open.");
+    }
+	}
+	
+	@Test
+	public void uploadSelfiewithOpenedMouth() throws Exception {
+		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
+
+	    File selfie = new File("C:/Users/Dell/Downloads/openmouth.jpg");
+
+	    if (!selfie.exists()) {
+	        System.out.println("File not found: " + selfie.getAbsolutePath());
+	        return;
+	    }
+
+	    // Use logging filters to compare with curl if needed
+	    RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
+
+	    // Use InputStream to avoid encoding issues
+	    try (FileInputStream fis = new FileInputStream(selfie)) {
+	        Response response = given()
+	                .header("X-GEO-Location", "12,12")
+	                .header("X-AUTH-TOKEN", "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ2aXZla0Btb2NvLmNvbS5ucCIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tdHJhdmVsLWFwcCIsImlhdCI6MTc0NjUyMjU0NCwiZXhwIjoxNzQ2NTUyNTQ0fQ.c1CYwaduAWc9ZW83w76LNMcadWW9WKStr6hqT0ItxQPMni9vjl21QxcaR4GkomyV")
+	                .header("X-Device-Id", "moco-travel-app")
+	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+	                .header("Accept", "*/*")  // matches curl default
+	                .multiPart("selfie", "openmouth.jpg", fis, "image/jpeg") // key, filename, stream, type
+	                .when()
+	                .post("/selfie")
+	                .then()
+	                .statusCode(422)
+	                .extract().response();
+
+	        response.prettyPrint();
+	        String code = response.jsonPath().getString("code");
+	    	String description = response.jsonPath().getString("description");
+	    	
+
+	    	assertNotNull(description, "Description is missing from the response");
+	    	assertNotNull(code, "Code is missing");
+	    	
+
+	    	assertFalse(description.isEmpty(), "Description is empty");
+	    	assertFalse(code.isEmpty(), "Code is empty");
+	    	
+
+	    	assertEquals(code,"VST_PROFILE_IMG_FACE_FEATURES");
+	    	assertEquals(description,"Invalid facial features action detected. Eyes closed or mouth open.");
     }
 	}
 	
@@ -849,8 +802,8 @@ public class selfie {
 	    try (FileInputStream fis = new FileInputStream(selfie)) {
 	        Response response = given()
 	                .header("X-GEO-Location", "12,12")
-	                .header("X-AUTH-TOKEN", "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJsZWFybmVyLmJpYmVrZGFzQGdtYWlsLmNvbSIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tZGV2IiwiaWF0IjoxNzQ2MTc5MTM5LCJleHAiOjE3NDYxODI3Mzl9.d42Wq5TJHmnjShYerTyNumd_GxTDRH2gddfcxlK38YapXvA4DbqpXkM6Myq2zL4w")
-	                .header("X-Device-Id", "sandesh-thapa-app")
+	                .header("X-AUTH-TOKEN", "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ2aXZla0Btb2NvLmNvbS5ucCIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tdHJhdmVsLWFwcCIsImlhdCI6MTc0NjUyMjU0NCwiZXhwIjoxNzQ2NTUyNTQ0fQ.c1CYwaduAWc9ZW83w76LNMcadWW9WKStr6hqT0ItxQPMni9vjl21QxcaR4GkomyV")
+	                .header("X-Device-Id", "moco-travel-app")
 	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
 	                .header("Accept", "*/*")  // matches curl default
 	                .multiPart("selfie", "chineses.jpg", fis, "image/jpeg") // key, filename, stream, type
@@ -896,7 +849,7 @@ public class selfie {
 	    try (FileInputStream fis = new FileInputStream(selfie)) {
 	        Response response = given()
 	                .header("X-GEO-Location", "12,12")
-	                .header("X-AUTH-TOKEN", "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJsZWFybmVyLmJpYmVrZGFzQGdtYWlsLmNvbSIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tZGV2IiwiaWF0IjoxNzQ2MTc5MTM5LCJleHAiOjE3NDYxODI3Mzl9.d42Wq5TJHmnjShYerTyNumd_GxTDRH2gddfcxlK38YapXvA4DbqpXkM6Myq2zL4w")
+	                .header("X-AUTH-TOKEN", "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzYW5kZXNodGhhcGFAbW9jby5jb20ubnAiLCJpc3MiOiJWSVNJVE9SLVNFUlZJQ0UiLCJqdGkiOiJzYW5kZXNoLXRoYXBhLWFwcCIsImlhdCI6MTc0NjQzNDYxMCwiZXhwIjoxNzQ2NDY0NjEwfQ.qzN9rDnIhBEGiqTQ4VQQYG6FJCTZ_s_6BWEDAoRC2Fe3JbIdTOHO6Yk4-h2fzKxh")
 	                .header("X-Device-Id", "sandesh-thapa-app")
 	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
 	                .header("Accept", "*/*")  // matches curl default
@@ -924,51 +877,100 @@ public class selfie {
 	assertEquals(description,"Successfully verified Portrait/Selfie.");
     }
 	}
+//	@Test
+//	public void uploadSelfiewithvalidllCredentails() throws Exception {
+//		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
+//
+//	    File selfie = new File("C:/Users/Dell/Downloads/chineses.jpg");
+//
+//	    if (!selfie.exists()) {
+//	        System.out.println("File not found: " + selfie.getAbsolutePath());
+//	        return;
+//	    }
+//
+//	    // Use logging filters to compare with curl if needed
+//	    RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
+//
+//	    // Use InputStream to avoid encoding issues
+//	    try (FileInputStream fis = new FileInputStream(selfie)) {
+//	        Response response = given()
+//	                .header("X-GEO-Location", "12,12")
+//	                .header("X-AUTH-TOKEN", "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ2aXZla0Btb2NvLmNvbS5ucCIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tdHJhdmVsLWFwcCIsImlhdCI6MTc0NjUyMjU0NCwiZXhwIjoxNzQ2NTUyNTQ0fQ.c1CYwaduAWc9ZW83w76LNMcadWW9WKStr6hqT0ItxQPMni9vjl21QxcaR4GkomyV")
+//	                .header("X-Device-Id", "moco-travel-app")
+//	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+//	                .header("Accept", "*/*")  // matches curl default
+//	                .multiPart("selfie", "chineses.jpg", fis, "image/jpeg") // key, filename, stream, type
+//	                .when()
+//	                .post("/selfie")
+//	                .then()
+//	                .statusCode(200)
+//	                .extract().response();
+//
+//	        response.prettyPrint();
+//	String code = response.jsonPath().getString("code");
+//	String description = response.jsonPath().getString("description");
+//	String signature = response.jsonPath().getString("signature");
+//
+//	assertNotNull(description, "Description is missing from the response");
+//	assertNotNull(code, "Code is missing");
+//	assertNotNull(signature,"signature is missing");
+//
+//	assertFalse(description.isEmpty(), "Description is empty");
+//	assertFalse(code.isEmpty(), "Code is empty");
+//	assertFalse(signature.isEmpty(),"signature is empty");
+//
+//	assertEquals(code,"GNR_OK");
+//	assertEquals(description,"Successfully verified Portrait/Selfie.");
+//    }
+//	}
+//	
 	@Test
-	public void uploadSelfiewithvalidllCredentails() throws Exception {
-		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
+	public void uploadSelfiewithvalidCredentails() throws Exception {
+		    RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
 
-	    File selfie = new File("C:/Users/Dell/Downloads/chineses.jpg");
+		    File selfie = new File("C:/Users/Dell/Downloads/Image_20241216_121143_255.jpeg");
 
-	    if (!selfie.exists()) {
-	        System.out.println("File not found: " + selfie.getAbsolutePath());
-	        return;
-	    }
+		    if (!selfie.exists()) {
+		        System.out.println("File not found: " + selfie.getAbsolutePath());
+		        return;
+		    }
 
-	    // Use logging filters to compare with curl if needed
-	    RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
+		    // Use logging filters to compare with curl if needed
+		    RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
 
-	    // Use InputStream to avoid encoding issues
-	    try (FileInputStream fis = new FileInputStream(selfie)) {
-	        Response response = given()
-	                .header("X-GEO-Location", "12,12")
-	                .header("X-AUTH-TOKEN", "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJsZWFybmVyLmJpYmVrZGFzQGdtYWlsLmNvbSIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tZGV2IiwiaWF0IjoxNzQ2MTc5MTM5LCJleHAiOjE3NDYxODI3Mzl9.d42Wq5TJHmnjShYerTyNumd_GxTDRH2gddfcxlK38YapXvA4DbqpXkM6Myq2zL4w")
-	                .header("X-Device-Id", "sandesh-thapa-app")
-	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
-	                .header("Accept", "*/*")  // matches curl default
-	                .multiPart("selfie", "chineses.jpg", fis, "image/jpeg") // key, filename, stream, type
-	                .when()
-	                .post("/selfie")
-	                .then()
-	                .statusCode(200)
-	                .extract().response();
+		    // Use InputStream to avoid encoding issues
+		    try (FileInputStream fis = new FileInputStream(selfie)) {
+		        Response response = given()
+		                .header("X-GEO-Location", "12,12")
+		                .header("X-AUTH-TOKEN", "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ2aXZla0Btb2NvLmNvbS5ucCIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tdHJhdmVsLWFwcCIsImlhdCI6MTc0NjUyMjU0NCwiZXhwIjoxNzQ2NTUyNTQ0fQ.c1CYwaduAWc9ZW83w76LNMcadWW9WKStr6hqT0ItxQPMni9vjl21QxcaR4GkomyV")
+		                .header("X-Device-Id", "moco-travel-app")
+		                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+		                .header("Accept", "*/*")  // matches curl default
+		                .multiPart("selfie", "Image_20241216_121143_255.jpeg", fis, "image/jpeg") // key, filename, stream, type
+		                .when()
+		                .post("/selfie")
+		                .then()
+		                .statusCode(200)
+		                .extract().response();
 
-	        response.prettyPrint();
-	String code = response.jsonPath().getString("code");
-	String description = response.jsonPath().getString("description");
-	String signature = response.jsonPath().getString("signature");
+		        response.prettyPrint();
+		        
+				String code = response.jsonPath().getString("code");
+				String description = response.jsonPath().getString("description");
+				String signature = response.jsonPath().getString("signature");
+		
+				assertNotNull(description, "Description is missing from the response");
+				assertNotNull(code, "Code is missing");
+				assertNotNull(signature,"signature is missing");
+		
+				assertFalse(description.isEmpty(), "Description is empty");
+				assertFalse(code.isEmpty(), "Code is empty");
+				assertFalse(signature.isEmpty(),"signature is empty");
+		
+				assertEquals(code,"GNR_OK");
+				assertEquals(description,"Successfully verified Portrait/Selfie.");
+		    }
 
-	assertNotNull(description, "Description is missing from the response");
-	assertNotNull(code, "Code is missing");
-	assertNotNull(signature,"signature is missing");
-
-	assertFalse(description.isEmpty(), "Description is empty");
-	assertFalse(code.isEmpty(), "Code is empty");
-	assertFalse(signature.isEmpty(),"signature is empty");
-
-	assertEquals(code,"GNR_OK");
-	assertEquals(description,"Successfully verified Portrait/Selfie.");
-    }
 	}
 }
 

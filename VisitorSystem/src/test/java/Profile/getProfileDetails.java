@@ -9,7 +9,7 @@ import static org.testng.Assert.*;
 //import java.util.*;
 
 public class getProfileDetails {
-	String AuthToken = "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ2aXZla0Btb2NvLmNvbS5ucCIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6InRyYXZlbC1hcHAtcGhvbmUiLCJpYXQiOjE3NDU5ODk1NTYsImV4cCI6MTc0NTk5MzE1Nn0.aZRuzTupfxhdInyVcQTvjSjqzZeTV_FFEYTrQ9AnZp8OjrngYHTiKlYUDEIZyLAL";
+	String AuthToken = "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ2aXZla0Btb2NvLmNvbS5ucCIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tdHJhdmVsLWFwcCIsImlhdCI6MTc0NjUyMjU0NCwiZXhwIjoxNzQ2NTUyNTQ0fQ.c1CYwaduAWc9ZW83w76LNMcadWW9WKStr6hqT0ItxQPMni9vjl21QxcaR4GkomyV";
 
 //	@BeforeClass
 //	public void getToken() throws Exception {
@@ -69,7 +69,7 @@ public class getProfileDetails {
 		baseURI = "https://visitor0.moco.com.np/visitor";
 		Response response = given()
 	            .header("X-GEO-Location", "12,12")
-	            .header("X-Device-Id", "travel-app-phone")
+	            .header("X-Device-Id", "moco-travel-app")
 	            .header("X-AUTH-TOKEN",AuthToken)
 	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
 	        .when()
@@ -77,6 +77,7 @@ public class getProfileDetails {
 	        .then()
 	            .statusCode(200)
 	            .extract().response();
+		response.prettyPrint();
 		
 		String signature = response.jsonPath().getString("signature");
 		String fullName = response.jsonPath().getString("fullName");
@@ -120,6 +121,7 @@ public class getProfileDetails {
         assertFalse(loginAttemptCountPin.isEmpty(), "loginAttemptCount is missing");
         assertFalse(loginAttemptCountBiometric.isEmpty(), "isBiometric is missing");
         
+        System.out.println(status);
       //check if the token is in the present in the response
         assertTrue(response.getHeaders().hasHeaderWithName("X-AUTH-TOKEN"), "Missing X-AUTH-TOKEN header");
         System.out.println("Request ID: " + response.getHeaders().hasHeaderWithName("X-AUTH-TOKEN"));

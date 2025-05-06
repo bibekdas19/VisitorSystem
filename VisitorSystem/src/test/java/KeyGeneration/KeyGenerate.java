@@ -259,10 +259,10 @@ public class KeyGenerate {
 	@Test
 	public void GetKey() {
         baseURI = "https://visitor0.moco.com.np/visitor";
-        String requestDeviceId = "3efe6bbeb55f4411";
+        String requestDeviceId = "moco-travel-app";
         Response response = given()
             .header("X-GEO-Location", "12,12")
-            .header("X-Device-Id", "3efe6bbeb55f4411")
+            .header("X-Device-Id", requestDeviceId)
             .header("User-Agent", "NepalTravelApp/1.0.0 android")
         .when()
             .get("/key")

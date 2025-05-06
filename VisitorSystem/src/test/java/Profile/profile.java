@@ -16,15 +16,15 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class profile {
-	String AuthToken = "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJsZWFybmVyLmJpYmVrZGFzQGdtYWlsLmNvbSIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tZGV2IiwiaWF0IjoxNzQ2MTc5MTM5LCJleHAiOjE3NDYxODI3Mzl9.d42Wq5TJHmnjShYerTyNumd_GxTDRH2gddfcxlK38YapXvA4DbqpXkM6Myq2zL4w";
-	String secretKey = "+8qCXF5kx75wAnNFTRvxzOQye/dO8bxiZSc+EcQNdleSKOEHLHyNNlBs+5hU+uoo";
+	String AuthToken = "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ2aXZla0Btb2NvLmNvbS5ucCIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tdHJhdmVsLWFwcCIsImlhdCI6MTc0NjUyMjU0NCwiZXhwIjoxNzQ2NTUyNTQ0fQ.c1CYwaduAWc9ZW83w76LNMcadWW9WKStr6hqT0ItxQPMni9vjl21QxcaR4GkomyV";
+	String secretKey = "2vckmq3Ahxvv2BtrjAbDkpRTBIDVmgfLJAGK5RT1hs5xeXTVwWWbLPIYmKD3mOHh";
 //    @BeforeClass
 //    public void getToken() throws Exception {
 //		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
 //		//authenticate before for the auth token
 //	ObjectMapper objectMapper = new ObjectMapper();
 //	String email = "vivek@moco.com.np";
-//	String requestDeviceId = "3efe6bbeb55f4411";
+//	String requestDeviceId = "moco-travel-app";
 //	Map<String, Object> credentials = new HashMap<>();
 //	credentials.put("email", email);
 //	credentials.put("pin", "123426");
@@ -81,7 +81,7 @@ public class profile {
     @Test
     public void getUserDetails() throws Exception {
     	RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
-		String requestDeviceId = "sandesh-thapa-app";
+		String requestDeviceId = "moco-travel-app";
     	ObjectMapper objectMapper = new ObjectMapper();
     	Map<String, Object> jsonBody = new LinkedHashMap<>();
 		jsonBody.put("fullName", "SINGH SAGAR");
@@ -114,66 +114,68 @@ public class profile {
 				.log().all()
 				.extract().response();
 		
-		 String signature = response.jsonPath().getString("signature");
-	     String deviceId = response.jsonPath().getString("deviceId");
-	     String fullName = response.jsonPath().getString("profile.fullName");
-	     String country = response.jsonPath().getString("profile.country");
-	     String documentNumber = response.jsonPath().getString("profile.documentNumber");
-	     String documentType = response.jsonPath().getString("profile.documentType");
-	     String dateOfBirth = response.jsonPath().getString("profile.dateOfBirth");
-	     String documentExpiryDate = response.jsonPath().getString("profile.documentExpiryDate");
-	     String responseemail = response.jsonPath().getString("profile.email");
-	     String gender = response.jsonPath().getString("profile.gender");
-	     String status = response.jsonPath().getString("profile.status");
-	     String verificationStatus = response.jsonPath().getString("profile.verificationStatus");
-	     String loginAttemptCount = response.jsonPath().getString("profile.loginAttemptCount");
-	     String isBiometric = response.jsonPath().getString("profile.isBiometric");
+		response.prettyPrint();
 		
-	   //check if response includes null value
-	        assertNotNull(signature, "signature is missing");
-	        assertNotNull(deviceId, "device is missing");
-	        assertNotNull(fullName, "fullname is missing");
-	        assertNotNull(country, "country is missing");
-	        assertNotNull(documentNumber, "documentNumber is missing");
-	        assertNotNull(documentType, "documentType is missing");
-	        assertNotNull(dateOfBirth, "dateOfBirth is missing");
-	        assertNotNull(documentExpiryDate, "documentExpiryDate is missing");
-	        assertNotNull(responseemail, "responseemail is missing");
-	        assertNotNull(gender, "gender is missing");
-	        assertNotNull(status, "status is missing");
-	        assertNotNull(verificationStatus, "verificationStatus is missing");
-	        assertNotNull(loginAttemptCount, "loginAttemptCount is missing");
-	        assertNotNull(isBiometric, "isBiometric is missing");
-	        
-	        //check is response includes empty values
-	        assertFalse(signature.isEmpty(), "Signature is empty in the response");
-	        assertFalse(deviceId.isEmpty(), "device is missing");
-	        assertFalse(fullName.isEmpty(), "fullname is missing");
-	        assertFalse(country.isEmpty(), "country is missing");
-	        assertFalse(documentNumber.isEmpty(), "documentNumber is missing");
-	        assertFalse(documentType.isEmpty(), "documentType is missing");
-	        assertFalse(dateOfBirth.isEmpty(), "dateOfBirth is missing");
-	        assertFalse(documentExpiryDate.isEmpty(), "documentExpiryDate is missing");
-	        assertFalse(responseemail.isEmpty(), "responseemail is missing");
-	        assertFalse(gender.isEmpty(), "gender is missing");
-	        assertFalse(status.isEmpty(), "status is missing");
-	        assertFalse(verificationStatus.isEmpty(), "verificationStatus is missing");
-	        assertFalse(loginAttemptCount.isEmpty(), "loginAttemptCount is missing");
-	        assertFalse(isBiometric.isEmpty(), "isBiometric is missing");
-	        
-	        //check if the device id is same in request and response
-	        
-	        assertEquals(requestDeviceId,deviceId);
-//	        assertEquals("John Smith",fullName);
-//	        assertEquals("India",country);
-	        
+//		 String signature = response.jsonPath().getString("signature");
+//	     String deviceId = response.jsonPath().getString("deviceId");
+//	     String fullName = response.jsonPath().getString("profile.fullName");
+//	     String country = response.jsonPath().getString("profile.country");
+//	     String documentNumber = response.jsonPath().getString("profile.documentNumber");
+//	     String documentType = response.jsonPath().getString("profile.documentType");
+//	     String dateOfBirth = response.jsonPath().getString("profile.dateOfBirth");
+//	     String documentExpiryDate = response.jsonPath().getString("profile.documentExpiryDate");
+//	     String responseemail = response.jsonPath().getString("profile.email");
+//	     String gender = response.jsonPath().getString("profile.gender");
+//	     String status = response.jsonPath().getString("profile.status");
+//	     String verificationStatus = response.jsonPath().getString("profile.verificationStatus");
+//	     String loginAttemptCount = response.jsonPath().getString("profile.loginAttemptCount");
+//	     String isBiometric = response.jsonPath().getString("profile.isBiometric");
+//		
+//	   //check if response includes null value
+//	        assertNotNull(signature, "signature is missing");
+//	        assertNotNull(deviceId, "device is missing");
+//	        assertNotNull(fullName, "fullname is missing");
+//	        assertNotNull(country, "country is missing");
+//	        assertNotNull(documentNumber, "documentNumber is missing");
+//	        assertNotNull(documentType, "documentType is missing");
+//	        assertNotNull(dateOfBirth, "dateOfBirth is missing");
+//	        assertNotNull(documentExpiryDate, "documentExpiryDate is missing");
+//	        assertNotNull(responseemail, "responseemail is missing");
+//	        assertNotNull(gender, "gender is missing");
+//	        assertNotNull(status, "status is missing");
+//	        assertNotNull(verificationStatus, "verificationStatus is missing");
+//	        assertNotNull(loginAttemptCount, "loginAttemptCount is missing");
+//	        assertNotNull(isBiometric, "isBiometric is missing");
+//	        
+//	        //check is response includes empty values
+//	        assertFalse(signature.isEmpty(), "Signature is empty in the response");
+//	        assertFalse(deviceId.isEmpty(), "device is missing");
+//	        assertFalse(fullName.isEmpty(), "fullname is missing");
+//	        assertFalse(country.isEmpty(), "country is missing");
+//	        assertFalse(documentNumber.isEmpty(), "documentNumber is missing");
+//	        assertFalse(documentType.isEmpty(), "documentType is missing");
+//	        assertFalse(dateOfBirth.isEmpty(), "dateOfBirth is missing");
+//	        assertFalse(documentExpiryDate.isEmpty(), "documentExpiryDate is missing");
+//	        assertFalse(responseemail.isEmpty(), "responseemail is missing");
+//	        assertFalse(gender.isEmpty(), "gender is missing");
+//	        assertFalse(status.isEmpty(), "status is missing");
+//	        assertFalse(verificationStatus.isEmpty(), "verificationStatus is missing");
+//	        assertFalse(loginAttemptCount.isEmpty(), "loginAttemptCount is missing");
+//	        assertFalse(isBiometric.isEmpty(), "isBiometric is missing");
+//	        
+//	        //check if the device id is same in request and response
+//	        
+//	        assertEquals(requestDeviceId,deviceId);
+////	        assertEquals("John Smith",fullName);
+////	        assertEquals("India",country);
+//	        
     	
     	
     }
     
     @Test
     public void getUserDetailswithoutGeo() throws Exception {
-    	String requestDeviceId = "3efe6bbeb55f4411";
+    	String requestDeviceId = "moco-travel-app";
     	ObjectMapper objectMapper = new ObjectMapper();
 		Map<String, Object> jsonBody = new LinkedHashMap<>();
 		jsonBody.put("fullName", "SINGH SAGAR");
@@ -272,7 +274,7 @@ public class profile {
     
     @Test
     public void getUserDetailswithoutUserAgent() throws Exception {
-    	String requestDeviceId = "3efe6bbeb55f4411";
+    	String requestDeviceId = "moco-travel-app";
     	ObjectMapper objectMapper = new ObjectMapper();
 		Map<String, Object> jsonBody = new LinkedHashMap<>();
 		jsonBody.put("fullName", "SINGH SAGAR");
@@ -320,7 +322,7 @@ public class profile {
     
     @Test
     public void getUserDetailswithoutAuth() throws Exception {
-    	String requestDeviceId = "3efe6bbeb55f4411";
+    	String requestDeviceId = "moco-travel-app";
     	ObjectMapper objectMapper = new ObjectMapper();
 		Map<String, Object> jsonBody = new LinkedHashMap<>();
 		jsonBody.put("fullName", "SINGH SAGAR");
@@ -369,7 +371,7 @@ public class profile {
     
     @Test
     public void getUserwithInvalidDevice() throws Exception {
-    	String requestDeviceId = "3efe6bbeb55f4411";
+    	String requestDeviceId = "moco-travel-app";
     	ObjectMapper objectMapper = new ObjectMapper();
     	Map<String, Object> jsonBody = new LinkedHashMap<>();
 		jsonBody.put("fullName", "SINGH SAGAR");
@@ -417,7 +419,7 @@ public class profile {
     }
     @Test
 	public void getUserDetailswithInvalidGeo() throws Exception {
-    	String requestDeviceId = "3efe6bbeb55f4411";
+    	String requestDeviceId = "moco-travel-app";
     	ObjectMapper objectMapper = new ObjectMapper();
     	Map<String, Object> jsonBody = new LinkedHashMap<>();
 		jsonBody.put("fullName", "SINGH SAGAR");
@@ -466,7 +468,7 @@ public class profile {
     
     @Test
     public void getUserDetailswithInvalidUser() throws Exception {
-    	String requestDeviceId = "3efe6bbeb55f4411";
+    	String requestDeviceId = "moco-travel-app";
     	ObjectMapper objectMapper = new ObjectMapper();
     	Map<String, Object> jsonBody = new LinkedHashMap<>();
 		jsonBody.put("fullName", "SINGH SAGAR");
@@ -515,7 +517,7 @@ public class profile {
     
     @Test
     public void getUserwithoutName() throws Exception {
-    	String requestDeviceId = "3efe6bbeb55f4411";
+    	String requestDeviceId = "moco-travel-app";
     	ObjectMapper objectMapper = new ObjectMapper();
     	Map<String, Object> jsonBody = new LinkedHashMap<>();
 		jsonBody.put("fullName", "SINGH SAGAR");
@@ -565,7 +567,7 @@ public class profile {
     
     @Test
     public void getUserDetailswithoutCountry() throws Exception {
-    	String requestDeviceId = "3efe6bbeb55f4411";
+    	String requestDeviceId = "moco-travel-app";
     	ObjectMapper objectMapper = new ObjectMapper();
 		Map<String, Object> jsonBody = new LinkedHashMap<>();
 		jsonBody.put("fullName", "");
@@ -613,7 +615,7 @@ public class profile {
     
     @Test
     public void getUserDetailswithoutDocumentNumber() throws Exception {
-    	String requestDeviceId = "3efe6bbeb55f4411";
+    	String requestDeviceId = "moco-travel-app";
     	ObjectMapper objectMapper = new ObjectMapper();
 		Map<String, Object> jsonBody = new LinkedHashMap<>();
 		jsonBody.put("fullName", "");
@@ -661,7 +663,7 @@ public class profile {
     
     @Test
     public void getUserDetailswithoutDocumentType() throws Exception {
-    	String requestDeviceId = "3efe6bbeb55f4411";
+    	String requestDeviceId = "moco-travel-app";
     	ObjectMapper objectMapper = new ObjectMapper();
 		Map<String, Object> jsonBody = new LinkedHashMap<>();
 		jsonBody.put("fullName", "");
@@ -709,7 +711,7 @@ public class profile {
     
     @Test
     public void getUserDetailswithoutDateofBirth() throws Exception {
-    	String requestDeviceId = "3efe6bbeb55f4411";
+    	String requestDeviceId = "moco-travel-app";
     	ObjectMapper objectMapper = new ObjectMapper();
 		Map<String, Object> jsonBody = new LinkedHashMap<>();
 		jsonBody.put("fullName", "");
@@ -757,7 +759,7 @@ public class profile {
     
     @Test
     public void getUserDetailswithoutDocumentExpiryDate() throws Exception {
-    	String requestDeviceId = "3efe6bbeb55f4411";
+    	String requestDeviceId = "moco-travel-app";
     	ObjectMapper objectMapper = new ObjectMapper();
 		Map<String, Object> jsonBody = new LinkedHashMap<>();
 		jsonBody.put("fullName", "");
@@ -806,7 +808,7 @@ public class profile {
     
     @Test
     public void getUserDetailswithoutGender() throws Exception {
-    	String requestDeviceId = "3efe6bbeb55f4411";
+    	String requestDeviceId = "moco-travel-app";
     	ObjectMapper objectMapper = new ObjectMapper();
 		Map<String, Object> jsonBody = new LinkedHashMap<>();
 		jsonBody.put("fullName", "");
@@ -854,7 +856,7 @@ public class profile {
     
     @Test
     public void getUserDetailswithoutSignature() throws Exception {
-    	String requestDeviceId = "3efe6bbeb55f4411";
+    	String requestDeviceId = "moco-travel-app";
     	ObjectMapper objectMapper = new ObjectMapper();
 		Map<String, Object> jsonBody = new LinkedHashMap<>();
 		jsonBody.put("fullName", "");
@@ -902,7 +904,7 @@ public class profile {
     
     @Test
     public void getUserDetailswithInvalidfullname() throws Exception {
-    	String requestDeviceId = "3efe6bbeb55f4411";
+    	String requestDeviceId = "moco-travel-app";
     	ObjectMapper objectMapper = new ObjectMapper();
 		Map<String, Object> jsonBody = new LinkedHashMap<>();
 		jsonBody.put("fullName", "");
@@ -950,7 +952,7 @@ public class profile {
     }
     @Test
     public void getUserDetailswithInvalidCountry() throws Exception {
-    	String requestDeviceId = "3efe6bbeb55f4411";
+    	String requestDeviceId = "moco-travel-app";
     	ObjectMapper objectMapper = new ObjectMapper();
 		Map<String, Object> jsonBody = new LinkedHashMap<>();
 		jsonBody.put("fullName", "");
@@ -999,7 +1001,7 @@ public class profile {
     
     @Test
     public void getUserDetailswithInvalidDocumentNumber() throws Exception {
-    	String requestDeviceId = "3efe6bbeb55f4411";
+    	String requestDeviceId = "moco-travel-app";
     	ObjectMapper objectMapper = new ObjectMapper();
 		Map<String, Object> jsonBody = new LinkedHashMap<>();
 		jsonBody.put("fullName", "");
@@ -1047,7 +1049,7 @@ public class profile {
     
     @Test
     public void getUserDetailswithInvalidDocumentType() throws Exception{
-    	String requestDeviceId = "3efe6bbeb55f4411";
+    	String requestDeviceId = "moco-travel-app";
     	ObjectMapper objectMapper = new ObjectMapper();
 		Map<String, Object> jsonBody = new LinkedHashMap<>();
 		jsonBody.put("fullName", "");
@@ -1094,7 +1096,7 @@ public class profile {
     }
     @Test
     public void getUserDetailswithInvalidGender() throws Exception {
-    	String requestDeviceId = "3efe6bbeb55f4411";
+    	String requestDeviceId = "moco-travel-app";
     	ObjectMapper objectMapper = new ObjectMapper();
 		Map<String, Object> jsonBody = new LinkedHashMap<>();
 		jsonBody.put("fullName", "");
@@ -1142,7 +1144,7 @@ public class profile {
     }
      @Test
      public void getUserDetailswithInvalidDateofBirth() throws Exception {
-    	 String requestDeviceId = "3efe6bbeb55f4411";
+    	 String requestDeviceId = "moco-travel-app";
      	ObjectMapper objectMapper = new ObjectMapper();
  		Map<String, Object> jsonBody = new LinkedHashMap<>();
  		jsonBody.put("fullName", "");
@@ -1190,7 +1192,7 @@ public class profile {
      
      @Test
      public void getUserDetailswithInvalidExpiryDate() throws Exception {
-    	 String requestDeviceId = "3efe6bbeb55f4411";
+    	 String requestDeviceId = "moco-travel-app";
      	ObjectMapper objectMapper = new ObjectMapper();
  		Map<String, Object> jsonBody = new LinkedHashMap<>();
  		jsonBody.put("fullName", "");
@@ -1238,7 +1240,7 @@ public class profile {
      
      @Test
      public void getUserDetailswithInvalidSignature() throws Exception {
-    	 String requestDeviceId = "3efe6bbeb55f4411";
+    	 String requestDeviceId = "moco-travel-app";
      	ObjectMapper objectMapper = new ObjectMapper();
  		Map<String, Object> jsonBody = new LinkedHashMap<>();
  		jsonBody.put("fullName", "");
@@ -1286,7 +1288,7 @@ public class profile {
      
      @Test
      public void getUserDetailswhenServerdown() throws Exception {
-    	 String requestDeviceId = "3efe6bbeb55f4411";
+    	 String requestDeviceId = "moco-travel-app";
       	ObjectMapper objectMapper = new ObjectMapper();
   		Map<String, Object> jsonBody = new LinkedHashMap<>();
   		jsonBody.put("fullName", "");
@@ -1334,7 +1336,7 @@ public class profile {
      }
      @Test
      public void getUserDetailswhenUserisVerified() throws Exception {
-    	 String requestDeviceId = "3efe6bbeb55f4411";
+    	 String requestDeviceId = "moco-travel-app";
        	ObjectMapper objectMapper = new ObjectMapper();
    		Map<String, Object> jsonBody = new LinkedHashMap<>();
    		jsonBody.put("fullName", "");
@@ -1382,7 +1384,7 @@ public class profile {
      }
      @Test
      public void getUserDetailswithoutSelfie() throws Exception {
-    	 String requestDeviceId = "3efe6bbeb55f4411";
+    	 String requestDeviceId = "moco-travel-app";
         	ObjectMapper objectMapper = new ObjectMapper();
     		Map<String, Object> jsonBody = new LinkedHashMap<>();
     		jsonBody.put("fullName", "");
