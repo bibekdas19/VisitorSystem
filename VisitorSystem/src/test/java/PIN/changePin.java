@@ -90,7 +90,7 @@ public class changePin {
         Response response = given()
                 .header("X-GEO-Location", "12,12")
                 .header("X-AUTH-TOKEN",AuthToken)
-                .header("X-Device-Id", "moco-travel-app")
+                .header("X-Device-Id", "")
                 .header("User-Agent", "NepalTravelApp/1.0.0 android")
                 .contentType("application/json")
                 .body(jsonBody)
@@ -104,17 +104,17 @@ public class changePin {
         // Extracting and asserting response values
         String code = response.jsonPath().getString("code");
         String description = response.jsonPath().getString("description");
-        String signature = response.jsonPath().getString("signature");
+        //String signature = response.jsonPath().getString("signature");
 
-        assertNotNull(signature, "Signature is missing");
+       // assertNotNull(signature, "Signature is missing");
         assertNotNull(code, "code is missing from the response");
         assertNotNull(description, "description is missing from the response");
 
-        assertFalse(signature.isEmpty(), "Signature is empty");
+        //assertFalse(signature.isEmpty(), "Signature is empty");
         assertFalse(code.isEmpty(), "code is empty");
         assertFalse(description.isEmpty(), "description is empty");
         
-         assertEquals(code,"GNR_OK");
+         assertEquals(code,"GNR_PARAM_MISSING");
 		 assertEquals(description,"PIN changed successfully. Invalidate JWT. Redirect visitor to login.");
 	}
 	@Test
@@ -139,7 +139,7 @@ public class changePin {
      // Send request
         Response response = given()
                 .header("X-GEO-Location", "12,12")
-                .header("X-AUTH-TOKEN",AuthToken)
+                .header("X-AUTH-TOKEN","")
                 .header("X-Device-Id", "moco-travel-app")
                 .header("User-Agent", "NepalTravelApp/1.0.0 android")
                 .contentType("application/json")
@@ -147,20 +147,20 @@ public class changePin {
             .when()
                 .post("/pin")
             .then()
-                .statusCode(200)
+                .statusCode(400)
                 .log().all()
                 .extract().response();
         
         // Extracting and asserting response values
         String code = response.jsonPath().getString("code");
         String description = response.jsonPath().getString("description");
-        String signature = response.jsonPath().getString("signature");
+        //String signature = response.jsonPath().getString("signature");
 
-        assertNotNull(signature, "Signature is missing");
+        //assertNotNull(signature, "Signature is missing");
         assertNotNull(code, "code is missing from the response");
         assertNotNull(description, "description is missing from the response");
 
-        assertFalse(signature.isEmpty(), "Signature is empty");
+        //assertFalse(signature.isEmpty(), "Signature is empty");
         assertFalse(code.isEmpty(), "code is empty");
         assertFalse(description.isEmpty(), "description is empty");
         
@@ -188,7 +188,7 @@ public class changePin {
         
      // Send request
         Response response = given()
-                .header("X-GEO-Location", "12,12")
+                .header("X-GEO-Location", "")
                 .header("X-AUTH-TOKEN",AuthToken)
                 .header("X-Device-Id", "moco-travel-app")
                 .header("User-Agent", "NepalTravelApp/1.0.0 android")
@@ -197,20 +197,20 @@ public class changePin {
             .when()
                 .post("/pin")
             .then()
-                .statusCode(200)
+                .statusCode(400)
                 .log().all()
                 .extract().response();
         
         // Extracting and asserting response values
         String code = response.jsonPath().getString("code");
         String description = response.jsonPath().getString("description");
-        String signature = response.jsonPath().getString("signature");
+        //String signature = response.jsonPath().getString("signature");
 
-        assertNotNull(signature, "Signature is missing");
+        //assertNotNull(signature, "Signature is missing");
         assertNotNull(code, "code is missing from the response");
         assertNotNull(description, "description is missing from the response");
 
-        assertFalse(signature.isEmpty(), "Signature is empty");
+        //assertFalse(signature.isEmpty(), "Signature is empty");
         assertFalse(code.isEmpty(), "code is empty");
         assertFalse(description.isEmpty(), "description is empty");
         
@@ -241,26 +241,26 @@ public class changePin {
                 .header("X-GEO-Location", "12,12")
                 .header("X-AUTH-TOKEN",AuthToken)
                 .header("X-Device-Id", "moco-travel-app")
-                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+                .header("User-Agent", "")
                 .contentType("application/json")
                 .body(jsonBody)
             .when()
                 .post("/pin")
             .then()
-                .statusCode(200)
+                .statusCode(400)
                 .log().all()
                 .extract().response();
         
         // Extracting and asserting response values
         String code = response.jsonPath().getString("code");
         String description = response.jsonPath().getString("description");
-        String signature = response.jsonPath().getString("signature");
+        //String signature = response.jsonPath().getString("signature");
 
-        assertNotNull(signature, "Signature is missing");
+        //assertNotNull(signature, "Signature is missing");
         assertNotNull(code, "code is missing from the response");
         assertNotNull(description, "description is missing from the response");
 
-        assertFalse(signature.isEmpty(), "Signature is empty");
+        //assertFalse(signature.isEmpty(), "Signature is empty");
         assertFalse(code.isEmpty(), "code is empty");
         assertFalse(description.isEmpty(), "description is empty");
         
@@ -290,27 +290,27 @@ public class changePin {
         Response response = given()
                 .header("X-GEO-Location", "12,12")
                 .header("X-AUTH-TOKEN",AuthToken)
-                .header("X-Device-Id", "moco-travel-app")
+                .header("X-Device-Id", "moco-travel-app@")
                 .header("User-Agent", "NepalTravelApp/1.0.0 android")
                 .contentType("application/json")
                 .body(jsonBody)
             .when()
                 .post("/pin")
             .then()
-                .statusCode(200)
+                .statusCode(422)
                 .log().all()
                 .extract().response();
         
         // Extracting and asserting response values
         String code = response.jsonPath().getString("code");
         String description = response.jsonPath().getString("description");
-        String signature = response.jsonPath().getString("signature");
+        //String signature = response.jsonPath().getString("signature");
 
-        assertNotNull(signature, "Signature is missing");
+        //assertNotNull(signature, "Signature is missing");
         assertNotNull(code, "code is missing from the response");
         assertNotNull(description, "description is missing from the response");
 
-        assertFalse(signature.isEmpty(), "Signature is empty");
+        //assertFalse(signature.isEmpty(), "Signature is empty");
         assertFalse(code.isEmpty(), "code is empty");
         assertFalse(description.isEmpty(), "description is empty");
         
@@ -340,7 +340,7 @@ public class changePin {
      // Send request
         Response response = given()
                 .header("X-GEO-Location", "12,12")
-                .header("X-AUTH-TOKEN",AuthToken)
+                .header("X-AUTH-TOKEN","a(8")
                 .header("X-Device-Id", "moco-travel-app")
                 .header("User-Agent", "NepalTravelApp/1.0.0 android")
                 .contentType("application/json")
@@ -348,20 +348,20 @@ public class changePin {
             .when()
                 .post("/pin")
             .then()
-                .statusCode(200)
+                .statusCode(401)
                 .log().all()
                 .extract().response();
         
         // Extracting and asserting response values
         String code = response.jsonPath().getString("code");
         String description = response.jsonPath().getString("description");
-        String signature = response.jsonPath().getString("signature");
+        //String signature = response.jsonPath().getString("signature");
 
-        assertNotNull(signature, "Signature is missing");
+        //assertNotNull(signature, "Signature is missing");
         assertNotNull(code, "code is missing from the response");
         assertNotNull(description, "description is missing from the response");
 
-        assertFalse(signature.isEmpty(), "Signature is empty");
+        //assertFalse(signature.isEmpty(), "Signature is empty");
         assertFalse(code.isEmpty(), "code is empty");
         assertFalse(description.isEmpty(), "description is empty");
         
@@ -393,26 +393,26 @@ public class changePin {
                 .header("X-GEO-Location", "12,12")
                 .header("X-AUTH-TOKEN",AuthToken)
                 .header("X-Device-Id", "moco-travel-app")
-                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+                .header("User-Agent", "NepalTravp/1.0. android")
                 .contentType("application/json")
                 .body(jsonBody)
             .when()
                 .post("/pin")
             .then()
-                .statusCode(200)
+                .statusCode(401)
                 .log().all()
                 .extract().response();
         
         // Extracting and asserting response values
         String code = response.jsonPath().getString("code");
         String description = response.jsonPath().getString("description");
-        String signature = response.jsonPath().getString("signature");
+        //String signature = response.jsonPath().getString("signature");
 
-        assertNotNull(signature, "Signature is missing");
+        //assertNotNull(signature, "Signature is missing");
         assertNotNull(code, "code is missing from the response");
         assertNotNull(description, "description is missing from the response");
 
-        assertFalse(signature.isEmpty(), "Signature is empty");
+        //assertFalse(signature.isEmpty(), "Signature is empty");
         assertFalse(code.isEmpty(), "code is empty");
         assertFalse(description.isEmpty(), "description is empty");
         
@@ -429,7 +429,7 @@ public class changePin {
         //construct json
         Map<String, Object> jsonBody = new LinkedHashMap<>();
         jsonBody.put("oldPin",oldPin);
-        jsonBody.put("newPin",newPin);
+        jsonBody.put("newPin","");
         
         //construct signature
      // Generate signature
@@ -450,20 +450,20 @@ public class changePin {
             .when()
                 .post("/pin")
             .then()
-                .statusCode(200)
+                .statusCode(400)
                 .log().all()
                 .extract().response();
         
         // Extracting and asserting response values
         String code = response.jsonPath().getString("code");
         String description = response.jsonPath().getString("description");
-        String signature = response.jsonPath().getString("signature");
+        //String signature = response.jsonPath().getString("signature");
 
-        assertNotNull(signature, "Signature is missing");
+        //assertNotNull(signature, "Signature is missing");
         assertNotNull(code, "code is missing from the response");
         assertNotNull(description, "description is missing from the response");
 
-        assertFalse(signature.isEmpty(), "Signature is empty");
+        //assertFalse(signature.isEmpty(), "Signature is empty");
         assertFalse(code.isEmpty(), "code is empty");
         assertFalse(description.isEmpty(), "description is empty");
         
@@ -476,11 +476,11 @@ public class changePin {
 		baseURI = "https://visitor0.moco.com.np/visitor";
 		ObjectMapper objectMapper = new ObjectMapper();
         String oldPin = signatureCreate.encryptAES256(plain_old_pin, secretKey);
-        String newPin = signatureCreate.encryptAES256(plain_new_pin, secretKey);
+        //String newPin = signatureCreate.encryptAES256(plain_new_pin, secretKey);
         //construct json
         Map<String, Object> jsonBody = new LinkedHashMap<>();
         jsonBody.put("oldPin",oldPin);
-        jsonBody.put("newPin",newPin);
+        jsonBody.put("newPin",plain_new_pin);
         
         //construct signature
      // Generate signature
@@ -501,7 +501,7 @@ public class changePin {
             .when()
                 .post("/pin")
             .then()
-                .statusCode(200)
+                .statusCode(422)
                 .log().all()
                 .extract().response();
         
@@ -525,11 +525,11 @@ public class changePin {
 	public void changePinwhenOldPinEmpty() throws Exception {
 		baseURI = "https://visitor0.moco.com.np/visitor";
 		ObjectMapper objectMapper = new ObjectMapper();
-        String oldPin = signatureCreate.encryptAES256(plain_old_pin, secretKey);
+     //   String oldPin = signatureCreate.encryptAES256(plain_old_pin, secretKey);
         String newPin = signatureCreate.encryptAES256(plain_new_pin, secretKey);
         //construct json
         Map<String, Object> jsonBody = new LinkedHashMap<>();
-        jsonBody.put("oldPin",oldPin);
+        jsonBody.put("oldPin","");
         jsonBody.put("newPin",newPin);
         
         //construct signature
@@ -551,20 +551,20 @@ public class changePin {
             .when()
                 .post("/pin")
             .then()
-                .statusCode(200)
+                .statusCode(400)
                 .log().all()
                 .extract().response();
         
         // Extracting and asserting response values
         String code = response.jsonPath().getString("code");
         String description = response.jsonPath().getString("description");
-        String signature = response.jsonPath().getString("signature");
+        //String signature = response.jsonPath().getString("signature");
 
-        assertNotNull(signature, "Signature is missing");
+        //assertNotNull(signature, "Signature is missing");
         assertNotNull(code, "code is missing from the response");
         assertNotNull(description, "description is missing from the response");
 
-        assertFalse(signature.isEmpty(), "Signature is empty");
+        //assertFalse(signature.isEmpty(), "Signature is empty");
         assertFalse(code.isEmpty(), "code is empty");
         assertFalse(description.isEmpty(), "description is empty");
         
@@ -576,11 +576,11 @@ public class changePin {
 	public void changePinwhenOldPinPlain() throws Exception {
 		baseURI = "https://visitor0.moco.com.np/visitor";
 		ObjectMapper objectMapper = new ObjectMapper();
-        String oldPin = signatureCreate.encryptAES256(plain_old_pin, secretKey);
+        //String oldPin = signatureCreate.encryptAES256(plain_old_pin, secretKey);
         String newPin = signatureCreate.encryptAES256(plain_new_pin, secretKey);
         //construct json
         Map<String, Object> jsonBody = new LinkedHashMap<>();
-        jsonBody.put("oldPin",oldPin);
+        jsonBody.put("oldPin",plain_old_pin);
         jsonBody.put("newPin",newPin);
         
         //construct signature
@@ -602,20 +602,20 @@ public class changePin {
             .when()
                 .post("/pin")
             .then()
-                .statusCode(200)
+                .statusCode(422)
                 .log().all()
                 .extract().response();
         
         // Extracting and asserting response values
         String code = response.jsonPath().getString("code");
         String description = response.jsonPath().getString("description");
-        String signature = response.jsonPath().getString("signature");
+       // String signature = response.jsonPath().getString("signature");
 
-        assertNotNull(signature, "Signature is missing");
+        //assertNotNull(signature, "Signature is missing");
         assertNotNull(code, "code is missing from the response");
         assertNotNull(description, "description is missing from the response");
 
-        assertFalse(signature.isEmpty(), "Signature is empty");
+        //assertFalse(signature.isEmpty(), "Signature is empty");
         assertFalse(code.isEmpty(), "code is empty");
         assertFalse(description.isEmpty(), "description is empty");
         
@@ -636,11 +636,11 @@ public class changePin {
         
         //construct signature
      // Generate signature
-        String data = objectMapper.writeValueAsString(jsonBody);
-        String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
+        //String data = objectMapper.writeValueAsString(jsonBody);
+        //String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
         
      // Add signature
-        jsonBody.put("signature", requestSignature);
+        jsonBody.put("signature", "");
         
      // Send request
         Response response = given()
@@ -653,20 +653,20 @@ public class changePin {
             .when()
                 .post("/pin")
             .then()
-                .statusCode(200)
+                .statusCode(400)
                 .log().all()
                 .extract().response();
         
         // Extracting and asserting response values
         String code = response.jsonPath().getString("code");
         String description = response.jsonPath().getString("description");
-        String signature = response.jsonPath().getString("signature");
+       // String signature = response.jsonPath().getString("signature");
 
-        assertNotNull(signature, "Signature is missing");
+        //assertNotNull(signature, "Signature is missing");
         assertNotNull(code, "code is missing from the response");
         assertNotNull(description, "description is missing from the response");
 
-        assertFalse(signature.isEmpty(), "Signature is empty");
+        //assertFalse(signature.isEmpty(), "Signature is empty");
         assertFalse(code.isEmpty(), "code is empty");
         assertFalse(description.isEmpty(), "description is empty");
         
@@ -688,7 +688,7 @@ public class changePin {
         //construct signature
      // Generate signature
         String data = objectMapper.writeValueAsString(jsonBody);
-        String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
+        String requestSignature = signatureCreate.encryptAES256(data,secretKey);
         
      // Add signature
         jsonBody.put("signature", requestSignature);
@@ -704,20 +704,20 @@ public class changePin {
             .when()
                 .post("/pin")
             .then()
-                .statusCode(200)
+                .statusCode(401)
                 .log().all()
                 .extract().response();
         
         // Extracting and asserting response values
         String code = response.jsonPath().getString("code");
         String description = response.jsonPath().getString("description");
-        String signature = response.jsonPath().getString("signature");
+        //String signature = response.jsonPath().getString("signature");
 
-        assertNotNull(signature, "Signature is missing");
+        //assertNotNull(signature, "Signature is missing");
         assertNotNull(code, "code is missing from the response");
         assertNotNull(description, "description is missing from the response");
 
-        assertFalse(signature.isEmpty(), "Signature is empty");
+        //assertFalse(signature.isEmpty(), "Signature is empty");
         assertFalse(code.isEmpty(), "code is empty");
         assertFalse(description.isEmpty(), "description is empty");
         
@@ -730,7 +730,7 @@ public class changePin {
 		baseURI = "https://visitor0.moco.com.np/visitor";
 		ObjectMapper objectMapper = new ObjectMapper();
         String oldPin = signatureCreate.encryptAES256(plain_old_pin, secretKey);
-        String newPin = signatureCreate.encryptAES256(plain_new_pin, secretKey);
+        String newPin = signatureCreate.encryptAES256(plain_old_pin, secretKey);
         //construct json
         Map<String, Object> jsonBody = new LinkedHashMap<>();
         jsonBody.put("oldPin",oldPin);
@@ -755,7 +755,7 @@ public class changePin {
             .when()
                 .post("/pin")
             .then()
-                .statusCode(200)
+                .statusCode(409)
                 .log().all()
                 .extract().response();
         
@@ -782,7 +782,7 @@ public class changePin {
 		baseURI = "https://visitor0.moco.com.np/visitor";
 		ObjectMapper objectMapper = new ObjectMapper();
         String oldPin = signatureCreate.encryptAES256(plain_old_pin, secretKey);
-        String newPin = signatureCreate.encryptAES256(plain_new_pin, secretKey);
+        String newPin = signatureCreate.encryptAES256("111111", secretKey);
         //construct json
         Map<String, Object> jsonBody = new LinkedHashMap<>();
         jsonBody.put("oldPin",oldPin);
@@ -807,7 +807,7 @@ public class changePin {
             .when()
                 .post("/pin")
             .then()
-                .statusCode(200)
+                .statusCode(422)
                 .log().all()
                 .extract().response();
         
@@ -831,7 +831,7 @@ public class changePin {
 	public void changePinwhenOldPinIncorrect() throws Exception {
 		baseURI = "https://visitor0.moco.com.np/visitor";
 		ObjectMapper objectMapper = new ObjectMapper();
-        String oldPin = signatureCreate.encryptAES256(plain_old_pin, secretKey);
+        String oldPin = signatureCreate.encryptAES256("582688", secretKey);
         String newPin = signatureCreate.encryptAES256(plain_new_pin, secretKey);
         //construct json
         Map<String, Object> jsonBody = new LinkedHashMap<>();
@@ -857,7 +857,7 @@ public class changePin {
             .when()
                 .post("/pin")
             .then()
-                .statusCode(200)
+                .statusCode(422)
                 .log().all()
                 .extract().response();
         
@@ -881,7 +881,7 @@ public class changePin {
 	public void changePinwhenDifferentkeysEncryption() throws Exception {
 		baseURI = "https://visitor0.moco.com.np/visitor";
 		ObjectMapper objectMapper = new ObjectMapper();
-        String oldPin = signatureCreate.encryptAES256(plain_old_pin, secretKey);
+        String oldPin = signatureCreate.generateHMACSHA256(plain_old_pin, secretKey);
         String newPin = signatureCreate.encryptAES256(plain_new_pin, secretKey);
         //construct json
         Map<String, Object> jsonBody = new LinkedHashMap<>();
@@ -907,7 +907,7 @@ public class changePin {
             .when()
                 .post("/pin")
             .then()
-                .statusCode(200)
+                .statusCode(422)
                 .log().all()
                 .extract().response();
         
