@@ -293,7 +293,6 @@ public class selfie {
 	                .statusCode(400)
 	                .extract().response();
 
-	        response.prettyPrint();
 	String code = response.jsonPath().getString("code");
 	String description = response.jsonPath().getString("description");
 	
@@ -942,7 +941,7 @@ public class selfie {
 		    try (FileInputStream fis = new FileInputStream(selfie)) {
 		        Response response = given()
 		                .header("X-GEO-Location", "12,12")
-		                .header("X-AUTH-TOKEN", "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ2aXZla0Btb2NvLmNvbS5ucCIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tdHJhdmVsLWFwcCIsImlhdCI6MTc0NjUyMjU0NCwiZXhwIjoxNzQ2NTUyNTQ0fQ.c1CYwaduAWc9ZW83w76LNMcadWW9WKStr6hqT0ItxQPMni9vjl21QxcaR4GkomyV")
+		                .header("X-AUTH-TOKEN", "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ2aXZla0Btb2NvLmNvbS5ucCIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tdHJhdmVsLWFwcCIsImlhdCI6MTc0Njc3OTcyOSwiZXhwIjoxNzQ2ODA5NzI5fQ.2uU_D-VcyiXuQMSRja8cLwK4K-KilgsZWdLi9asSuaYAz4nGXu6WLnT89kobkocN")
 		                .header("X-Device-Id", "moco-travel-app")
 		                .header("User-Agent", "NepalTravelApp/1.0.0 android")
 		                .header("Accept", "*/*")  // matches curl default

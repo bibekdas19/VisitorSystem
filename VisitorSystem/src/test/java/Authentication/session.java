@@ -9,12 +9,12 @@ import static org.testng.Assert.*;
 public class session {
 	String requestDeviceId = "moco-travel-app";
 	String secretKey = "ABC123XYZ";
-	String AuthToken = "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ2aXZla0Btb2NvLmNvbS5ucCIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tdHJhdmVsLWFwcCIsImlhdCI6MTc0NjUyMjU0NCwiZXhwIjoxNzQ2NTUyNTQ0fQ.c1CYwaduAWc9ZW83w76LNMcadWW9WKStr6hqT0ItxQPMni9vjl21QxcaR4GkomyV";
+	String AuthToken = "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ2aXZla0Btb2NvLmNvbS5ucCIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tdHJhdmVsLWFwcCIsImlhdCI6MTc0Njc3OTcyOSwiZXhwIjoxNzQ2ODA5NzI5fQ.2uU_D-VcyiXuQMSRja8cLwK4K-KilgsZWdLi9asSuaYAz4nGXu6WLnT89kobkocN";
 	@Test
 	public void GetSessionInformation() throws Exception {
 		baseURI = "https://visitor0.moco.com.np/visitor";
 		
-		String data = "12,12"+AuthToken+requestDeviceId+"NepalTravelApp/1.0.0 android"+"transaction"+""+"2025-05-05 14:38:00";
+		String data = "12,12"+AuthToken+requestDeviceId+"NepalTravelApp/1.0.0 android"+"transaction"+""+"2025-05-09 14:38:00";
 //		: X-GEO-LOCATION+ X-AUTH-TOKEN + X-DEVICE-ID+ User-Agent + X-SYSTEM-ID+ X-CREDENTIAL(Optional) + Request-Timestamp
 		String Signature = signatureCreate.generateHMACSHA256(data, secretKey);
 		System.out.println(Signature);
@@ -26,7 +26,7 @@ public class session {
             .header("X-AUTH-TOKEN",AuthToken)
             .header("X-SYSTEM-ID","transaction")
             .header("X-SYSTEM-SIGNATURE",Signature) 
-            .header("Request-Timestamp","2025-05-05 14:38:00")
+            .header("Request-Timestamp","2025-05-09 14:38:00")
             .when()
             .get("/session")
         .then()
@@ -88,6 +88,7 @@ public class session {
         assertFalse(loginAttemptCountBiometric.isEmpty(), "isBiometric is missing");
         
         System.out.println("Request ID: " + response.getHeaders().hasHeaderWithName("X-AUTH-TOKEN"));
+        assertFalse(response.getHeaders().hasHeaderWithName("X-AUTH-TOKEN"));
 	}
 	
 	@Test

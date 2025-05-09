@@ -3,12 +3,21 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="KeyGeneration.KeyGenerate">
+      <class name="PIN.changePin">
         <methods>
-          <include name="SystemError"/>
-          <include name="MissingUserAgent"/>
+          <include name="changePinwithValidCredentials"/>
+          <include name="changePinwhenOldPinEmpty"/>
+          <include name="changePinwhenOldPinIncorrect"/>
+          <include name="changePinwhenOldPinPlain"/>
+          <include name="changePinwhenDifferentkeysEncryption"/>
+          <include name="changePinwhenSignatureInvalid"/>
+          <include name="changePinwhenNewPinPlain"/>
+          <include name="changePinwhenOldpinSameNewPin"/>
+          <include name="changePinwhenNewPinCriteria"/>
+          <include name="changePinwhenNewPinEmpty"/>
+          <include name="changePinwhenSignatureEmpty"/>
         </methods>
-      </class> <!-- KeyGeneration.KeyGenerate -->
+      </class> <!-- PIN.changePin -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

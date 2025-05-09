@@ -33,40 +33,166 @@ public class deleteBiometric {
 	
 	@Test
 	public void deleteBiometricwithoutDevice() {
-		
+		baseURI = "https://visitor0.moco.com.np/visitor";
+        Response response = given()
+            .header("X-GEO-Location", "12,12")
+            .header("X-AUTH-TOKEN","sdsd")
+            .header("X-Device-Id", "3efe6bbeb55f4411")
+            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+        .when()
+            .delete("/biometric")
+        .then()
+            .statusCode(200)
+            .extract().response();
+        
+        String code = response.jsonPath().getString("code");
+        String description = response.jsonPath().getString("description");
+        String signature = response.jsonPath().getString("signature");
 	}
 	@Test
 	public void deleteBiometricwithoutAuth() {
-		
+		baseURI = "https://visitor0.moco.com.np/visitor";
+        Response response = given()
+            .header("X-GEO-Location", "12,12")
+            .header("X-AUTH-TOKEN","sdsd")
+            .header("X-Device-Id", "3efe6bbeb55f4411")
+            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+        .when()
+            .delete("/biometric")
+        .then()
+            .statusCode(200)
+            .extract().response();
+        
+        String code = response.jsonPath().getString("code");
+        String description = response.jsonPath().getString("description");
+        String signature = response.jsonPath().getString("signature");
 	}
 	@Test
 	public void deleteBiometricwithoutLocation() {
-		
+		baseURI = "https://visitor0.moco.com.np/visitor";
+        Response response = given()
+            .header("X-GEO-Location", "12,12")
+            .header("X-AUTH-TOKEN","sdsd")
+            .header("X-Device-Id", "3efe6bbeb55f4411")
+            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+        .when()
+            .delete("/biometric")
+        .then()
+            .statusCode(200)
+            .extract().response();
+        
+        String code = response.jsonPath().getString("code");
+        String description = response.jsonPath().getString("description");
+        String signature = response.jsonPath().getString("signature");
 	}
 	@Test
 	public void deleteBiometricwithoutUserAgent() {
-		
+		baseURI = "https://visitor0.moco.com.np/visitor";
+        Response response = given()
+            .header("X-GEO-Location", "12,12")
+            .header("X-AUTH-TOKEN","sdsd")
+            .header("X-Device-Id", "3efe6bbeb55f4411")
+            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+        .when()
+            .delete("/biometric")
+        .then()
+            .statusCode(200)
+            .extract().response();
+        
+        String code = response.jsonPath().getString("code");
+        String description = response.jsonPath().getString("description");
+        String signature = response.jsonPath().getString("signature");
 	}
 	@Test
 	public void deleteBiometricwithInvalidDevice() {
-		
+		baseURI = "https://visitor0.moco.com.np/visitor";
+        Response response = given()
+            .header("X-GEO-Location", "12,12")
+            .header("X-AUTH-TOKEN","sdsd")
+            .header("X-Device-Id", "3efe6bbeb55f4411")
+            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+        .when()
+            .delete("/biometric")
+        .then()
+            .statusCode(200)
+            .extract().response();
+        
+        String code = response.jsonPath().getString("code");
+        String description = response.jsonPath().getString("description");
+        String signature = response.jsonPath().getString("signature");
 	}
 	
 	@Test
 	public void deleteBiometricwithInvalidLocation() {
-		
+		baseURI = "https://visitor0.moco.com.np/visitor";
+        Response response = given()
+            .header("X-GEO-Location", "12,12")
+            .header("X-AUTH-TOKEN","sdsd")
+            .header("X-Device-Id", "3efe6bbeb55f4411")
+            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+        .when()
+            .delete("/biometric")
+        .then()
+            .statusCode(200)
+            .extract().response();
+        
+        String code = response.jsonPath().getString("code");
+        String description = response.jsonPath().getString("description");
+        String signature = response.jsonPath().getString("signature");
 	}
 	@Test
 	public void deleteBiometricwithInvalidUserAgent() {
-		
+		baseURI = "https://visitor0.moco.com.np/visitor";
+        Response response = given()
+            .header("X-GEO-Location", "12,12")
+            .header("X-AUTH-TOKEN","sdsd")
+            .header("X-Device-Id", "3efe6bbeb55f4411")
+            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+        .when()
+            .delete("/biometric")
+        .then()
+            .statusCode(200)
+            .extract().response();
+        
+        String code = response.jsonPath().getString("code");
+        String description = response.jsonPath().getString("description");
+        String signature = response.jsonPath().getString("signature");
 	}
 	@Test
 	public void deleteBiometricwithInvalidAuth() {
-		
+		baseURI = "https://visitor0.moco.com.np/visitor";
+        Response response = given()
+            .header("X-GEO-Location", "12,12")
+            .header("X-AUTH-TOKEN","sdsd")
+            .header("X-Device-Id", "3efe6bbeb55f4411")
+            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+        .when()
+            .delete("/biometric")
+        .then()
+            .statusCode(200)
+            .extract().response();
+        
+        String code = response.jsonPath().getString("code");
+        String description = response.jsonPath().getString("description");
+        String signature = response.jsonPath().getString("signature");
 	}
 	@Test
 	public void deleteBiometricwithoutsetting() {
-		
+		baseURI = "https://visitor0.moco.com.np/visitor";
+        Response response = given()
+            .header("X-GEO-Location", "12,12")
+            .header("X-AUTH-TOKEN","sdsd")
+            .header("X-Device-Id", "3efe6bbeb55f4411")
+            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+        .when()
+            .delete("/biometric")
+        .then()
+            .statusCode(200)
+            .extract().response();
+        
+        String code = response.jsonPath().getString("code");
+        String description = response.jsonPath().getString("description");
+        String signature = response.jsonPath().getString("signature");
 	}
 	
 

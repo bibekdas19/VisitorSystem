@@ -11,11 +11,12 @@ import static org.testng.Assert.*;
 import java.util.*;
 
 public class changePin {
-	String plain_old_pin = "152986";
-    String plain_new_pin = "443062";
-    String secretKey = "raZpD/w+h8CmFyfBQ1N+zBD4oLFuNqESOC6Ui3l3OMA=";
-    String AuthToken = "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ2aXZla0Btb2NvLmNvbS5ucCIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tdHJhdmVsLWFwcCIsImlhdCI6MTc0NjUyMjU0NCwiZXhwIjoxNzQ2NTUyNTQ0fQ.c1CYwaduAWc9ZW83w76LNMcadWW9WKStr6hqT0ItxQPMni9vjl21QxcaR4GkomyV";
-	@Test
+	String plain_old_pin = "443062";
+    String plain_new_pin = "152369";
+    String secretKey = "qP9rjBMsyjY1QuIkLf0NuWkxtVqlp+belhQpU7GMyro=";
+    String AuthToken = "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ2aXZla0Btb2NvLmNvbS5ucCIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tdHJhdmVsLWFwcCIsImlhdCI6MTc0Njc3OTcyOSwiZXhwIjoxNzQ2ODA5NzI5fQ.2uU_D-VcyiXuQMSRja8cLwK4K-KilgsZWdLi9asSuaYAz4nGXu6WLnT89kobkocN";
+	
+    @Test
 	public void changePinwithValidCredentials() throws Exception {
 		baseURI = "https://visitor0.moco.com.np/visitor";
     	ObjectMapper objectMapper = new ObjectMapper();
@@ -33,7 +34,7 @@ public class changePin {
         
      // Add signature
         jsonBody.put("signature", requestSignature);
-        
+        System.out.println(jsonBody);
      // Send request
         Response response = given()
                 .header("X-GEO-Location", "12,12")
@@ -43,11 +44,13 @@ public class changePin {
                 .contentType("application/json")
                 .body(jsonBody)
             .when()
-                .post("/pin")
+                .put("/pin")
             .then()
                 .statusCode(200)
                 .log().all()
                 .extract().response();
+        System.out.println(jsonBody);
+        
         
         // Extracting and asserting response values
         String code = response.jsonPath().getString("code");
@@ -95,9 +98,9 @@ public class changePin {
                 .contentType("application/json")
                 .body(jsonBody)
             .when()
-                .post("/pin")
+                .put("/pin")
             .then()
-                .statusCode(200)
+                .statusCode(400)
                 .log().all()
                 .extract().response();
         
@@ -115,7 +118,7 @@ public class changePin {
         assertFalse(description.isEmpty(), "description is empty");
         
          assertEquals(code,"GNR_PARAM_MISSING");
-		 assertEquals(description,"PIN changed successfully. Invalidate JWT. Redirect visitor to login.");
+		 assertEquals(description,"Bad Request.");
 	}
 	@Test
 	public void changePinwithoutAuthToken() throws Exception {
@@ -145,7 +148,7 @@ public class changePin {
                 .contentType("application/json")
                 .body(jsonBody)
             .when()
-                .post("/pin")
+                .put("/pin")
             .then()
                 .statusCode(400)
                 .log().all()
@@ -164,8 +167,8 @@ public class changePin {
         assertFalse(code.isEmpty(), "code is empty");
         assertFalse(description.isEmpty(), "description is empty");
         
-         assertEquals(code,"GNR_OK");
-		 assertEquals(description,"PIN changed successfully. Invalidate JWT. Redirect visitor to login.");
+         assertEquals(code,"GNR_PARAM_MISSING");
+		 assertEquals(description,"Bad Request.");
 	}
 	@Test
 	public void changePinwithoutLocation() throws Exception {
@@ -195,7 +198,7 @@ public class changePin {
                 .contentType("application/json")
                 .body(jsonBody)
             .when()
-                .post("/pin")
+                .put("/pin")
             .then()
                 .statusCode(400)
                 .log().all()
@@ -214,8 +217,8 @@ public class changePin {
         assertFalse(code.isEmpty(), "code is empty");
         assertFalse(description.isEmpty(), "description is empty");
         
-         assertEquals(code,"GNR_OK");
-		 assertEquals(description,"PIN changed successfully. Invalidate JWT. Redirect visitor to login.");
+         assertEquals(code,"GNR_PARAM_MISSING");
+		 assertEquals(description,"Bad Request.");
 	}
 	@Test
 	public void changePinwithoutUserAgent() throws Exception {
@@ -245,7 +248,7 @@ public class changePin {
                 .contentType("application/json")
                 .body(jsonBody)
             .when()
-                .post("/pin")
+                .put("/pin")
             .then()
                 .statusCode(400)
                 .log().all()
@@ -264,8 +267,8 @@ public class changePin {
         assertFalse(code.isEmpty(), "code is empty");
         assertFalse(description.isEmpty(), "description is empty");
         
-         assertEquals(code,"GNR_OK");
-		 assertEquals(description,"PIN changed successfully. Invalidate JWT. Redirect visitor to login.");
+         assertEquals(code,"GNR_PARAM_MISSING");
+		 assertEquals(description,"Bad Request.");
 	}
 	@Test
 	public void changePinwithInvalidDevice() throws Exception {
@@ -295,7 +298,7 @@ public class changePin {
                 .contentType("application/json")
                 .body(jsonBody)
             .when()
-                .post("/pin")
+                .put("/pin")
             .then()
                 .statusCode(422)
                 .log().all()
@@ -314,8 +317,8 @@ public class changePin {
         assertFalse(code.isEmpty(), "code is empty");
         assertFalse(description.isEmpty(), "description is empty");
         
-         assertEquals(code,"GNR_OK");
-		 assertEquals(description,"PIN changed successfully. Invalidate JWT. Redirect visitor to login.");
+        assertEquals(code,"GNR_INVALID_DATA");
+		 assertEquals(description,"Invalid device Id found.");
 	}
 	
 	@Test
@@ -346,7 +349,7 @@ public class changePin {
                 .contentType("application/json")
                 .body(jsonBody)
             .when()
-                .post("/pin")
+                .put("/pin")
             .then()
                 .statusCode(401)
                 .log().all()
@@ -365,8 +368,8 @@ public class changePin {
         assertFalse(code.isEmpty(), "code is empty");
         assertFalse(description.isEmpty(), "description is empty");
         
-         assertEquals(code,"GNR_OK");
-		 assertEquals(description,"PIN changed successfully. Invalidate JWT. Redirect visitor to login.");
+         assertEquals(code,"GNR_AUTHENTICATION_FAIL");
+		 assertEquals(description,"Authentication Failed.");
 	}
 	
 	@Test
@@ -397,9 +400,9 @@ public class changePin {
                 .contentType("application/json")
                 .body(jsonBody)
             .when()
-                .post("/pin")
+                .put("/pin")
             .then()
-                .statusCode(401)
+                .statusCode(422)
                 .log().all()
                 .extract().response();
         
@@ -416,8 +419,8 @@ public class changePin {
         assertFalse(code.isEmpty(), "code is empty");
         assertFalse(description.isEmpty(), "description is empty");
         
-         assertEquals(code,"GNR_OK");
-		 assertEquals(description,"PIN changed successfully. Invalidate JWT. Redirect visitor to login.");
+         assertEquals(code,"GNR_INVALID_DATA");
+		 assertEquals(description,"Invalid user agent found.");
 	}
 	
 	@Test
@@ -425,7 +428,7 @@ public class changePin {
 		baseURI = "https://visitor0.moco.com.np/visitor";
 		ObjectMapper objectMapper = new ObjectMapper();
         String oldPin = signatureCreate.encryptAES256(plain_old_pin, secretKey);
-        String newPin = signatureCreate.encryptAES256(plain_new_pin, secretKey);
+      //  String newPin = signatureCreate.encryptAES256(plain_new_pin, secretKey);
         //construct json
         Map<String, Object> jsonBody = new LinkedHashMap<>();
         jsonBody.put("oldPin",oldPin);
@@ -448,7 +451,7 @@ public class changePin {
                 .contentType("application/json")
                 .body(jsonBody)
             .when()
-                .post("/pin")
+                .put("/pin")
             .then()
                 .statusCode(400)
                 .log().all()
@@ -499,7 +502,7 @@ public class changePin {
                 .contentType("application/json")
                 .body(jsonBody)
             .when()
-                .post("/pin")
+                .put("/pin")
             .then()
                 .statusCode(422)
                 .log().all()
@@ -549,7 +552,7 @@ public class changePin {
                 .contentType("application/json")
                 .body(jsonBody)
             .when()
-                .post("/pin")
+                .put("/pin")
             .then()
                 .statusCode(400)
                 .log().all()
@@ -600,7 +603,7 @@ public class changePin {
                 .contentType("application/json")
                 .body(jsonBody)
             .when()
-                .post("/pin")
+                .put("/pin")
             .then()
                 .statusCode(422)
                 .log().all()
@@ -626,7 +629,6 @@ public class changePin {
 	@Test
 	public void changePinwhenSignatureEmpty() throws Exception {
 		baseURI = "https://visitor0.moco.com.np/visitor";
-		ObjectMapper objectMapper = new ObjectMapper();
         String oldPin = signatureCreate.encryptAES256(plain_old_pin, secretKey);
         String newPin = signatureCreate.encryptAES256(plain_new_pin, secretKey);
         //construct json
@@ -651,7 +653,7 @@ public class changePin {
                 .contentType("application/json")
                 .body(jsonBody)
             .when()
-                .post("/pin")
+                .put("/pin")
             .then()
                 .statusCode(400)
                 .log().all()
@@ -702,7 +704,7 @@ public class changePin {
                 .contentType("application/json")
                 .body(jsonBody)
             .when()
-                .post("/pin")
+                .put("/pin")
             .then()
                 .statusCode(401)
                 .log().all()
@@ -753,7 +755,7 @@ public class changePin {
                 .contentType("application/json")
                 .body(jsonBody)
             .when()
-                .post("/pin")
+                .put("/pin")
             .then()
                 .statusCode(409)
                 .log().all()
@@ -805,7 +807,7 @@ public class changePin {
                 .contentType("application/json")
                 .body(jsonBody)
             .when()
-                .post("/pin")
+                .put("/pin")
             .then()
                 .statusCode(422)
                 .log().all()
@@ -855,7 +857,7 @@ public class changePin {
                 .contentType("application/json")
                 .body(jsonBody)
             .when()
-                .post("/pin")
+                .put("/pin")
             .then()
                 .statusCode(422)
                 .log().all()
@@ -905,7 +907,7 @@ public class changePin {
                 .contentType("application/json")
                 .body(jsonBody)
             .when()
-                .post("/pin")
+                .put("/pin")
             .then()
                 .statusCode(422)
                 .log().all()
