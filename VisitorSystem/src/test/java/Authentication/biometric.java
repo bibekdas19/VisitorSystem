@@ -1,23 +1,88 @@
 package Authentication;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import OTP.signatureCreate;
+import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import static io.restassured.RestAssured.*;
 import static org.testng.Assert.*;
 
 import java.util.*;
 public class biometric {
+	String secretKey;
+	String AuthToken;
+	@BeforeClass
+	public void setup() throws Exception {
+        RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
+        
+        Response response = given()
+                .header("X-GEO-Location", "12,12")
+                .header("X-Device-Id", "moco-travel-app")
+                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+            .when()
+                .get("/key")
+            .then()
+                .statusCode(200)
+                .extract().response();
+
+        secretKey = response.jsonPath().getString("signOnKey");
+        assertNotNull(secretKey, "Secret key is null!");
+        
+        ObjectMapper objectMapper = new ObjectMapper();
+        String email = "vivek@moco.com.np";
+        String requestDeviceId = "moco-travel-app";
+        String plain_pin = "152986";
+        Map<String, Object> credentials = new LinkedHashMap<>();
+        credentials.put("email", email);
+        String Pin = signatureCreate.encryptAES256(plain_pin, secretKey);
+        credentials.put("pin", Pin);
+
+        Map<String, Object> jsonBody = new LinkedHashMap<>();
+        jsonBody.put("credentials", credentials);
+        
+     // Generate signature
+        String data = objectMapper.writeValueAsString(jsonBody);
+        String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+        
+        jsonBody.put("signature", requestSignature);
+        
+        System.out.println(jsonBody);
+     // Send request
+        Response response1 = given()
+                .header("X-GEO-Location", "12,12")
+                .header("X-Device-Id", requestDeviceId)
+                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+                .contentType("application/json")
+                .body(jsonBody)
+            .when()
+                .post("/authenticate")
+            .then()
+                .statusCode(200)
+                .log().all()
+                .extract().response();
+        AuthToken = response1.getHeader("X-AUTH-TOKEN");
+        
+	}
+	
 	@Test
-	public void biometricWithValid() {
+	public void biometricWithValid() throws Exception {
 		baseURI = "https://visitor0.moco.com.np/visitor";
-		Map<String, String> jsonMap = new HashMap<>();
-		jsonMap.put("hash", "string");
-		jsonMap.put("signature", "string");
+		ObjectMapper objectMapper = new ObjectMapper();
+		Map<String, Object> jsonMap = new LinkedHashMap<>();
+		jsonMap.put("hash","tzLhMbbV+G/oQrgXvBg34su8wk1rztNBiR3");
+		String data = objectMapper.writeValueAsString(jsonMap);
+        
+		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+		jsonMap.put("signature", requestSignature);
 		
 		Response response = (Response) given()
 	            .header("X-GEO-Location", "12,12")
-	            .header("X-Device-Id", "3efe6bbeb55f4411")
+	            .header("X-Device-Id", "moco-travel-app")
 	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
-	            .header("X-AUTH-TOKEN","")
+	            .header("X-AUTH-TOKEN",AuthToken)
 	            .body(jsonMap)
 	        .when()
 	            .post("/biometric")
@@ -34,165 +99,199 @@ public class biometric {
         assertFalse(description.isEmpty(), "description is empty in the response");
         assertNotNull(signature, "description is missing from the response");
         assertFalse(signature.isEmpty(), "description is empty in the response");
+        
+        assertEquals(code,"GNR_OK");
+        assertEquals(description,"Biometric set up successfully.");
 	}
 	@Test
-	public void setBiometericwithoutDevice() {
+	public void setBiometericwithoutDevice() throws Exception {
 		baseURI = "https://visitor0.moco.com.np/visitor";
-		Map<String, String> jsonMap = new HashMap<>();
-		jsonMap.put("hash", "string");
-		jsonMap.put("signature", "string");
+		ObjectMapper objectMapper = new ObjectMapper();
+		Map<String, Object> jsonMap = new LinkedHashMap<>();
+		jsonMap.put("hash","tzLhMbbV+G/oQrgXvBg34su8wk1rztNBiR3");
+		String data = objectMapper.writeValueAsString(jsonMap);
+        
+		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+		jsonMap.put("signature", requestSignature);
 		
 		Response response = (Response) given()
 	            .header("X-GEO-Location", "12,12")
-	            .header("X-Device-Id", "3efe6bbeb55f4411")
+	            .header("X-Device-Id", "")
 	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
-	            .header("X-AUTH-TOKEN","")
+	            .header("X-AUTH-TOKEN",AuthToken)
 	            .body(jsonMap)
 	        .when()
 	            .post("/biometric")
 	        .then()
-	            .statusCode(200);
+	            .statusCode(400);
 		
 		String code = response.jsonPath().getString("code");
         String description = response.jsonPath().getString("description");
-        String signature = response.jsonPath().getString("signature");
+        //String signature = response.jsonPath().getString("signature");
         
         assertNotNull(code, "code is missing from the response");
         assertFalse(code.isEmpty(), "code is empty in the response");
         assertNotNull(description, "description is missing from the response");
         assertFalse(description.isEmpty(), "description is empty in the response");
-        assertNotNull(signature, "description is missing from the response");
-        assertFalse(signature.isEmpty(), "description is empty in the response");
+       
+        
+        assertEquals(code,"GNR_PARAM_MISSING");
+        assertEquals(description,"Bad Request.");
 		
 	}
 	@Test
-	public void setBiometricwithoutLocation() {
+	public void setBiometricwithoutLocation() throws Exception {
 		baseURI = "https://visitor0.moco.com.np/visitor";
-		Map<String, String> jsonMap = new HashMap<>();
-		jsonMap.put("hash", "string");
-		jsonMap.put("signature", "string");
+		ObjectMapper objectMapper = new ObjectMapper();
+		Map<String, Object> jsonMap = new LinkedHashMap<>();
+		jsonMap.put("hash","tzLhMbbV+G/oQrgXvBg34su8wk1rztNBiR3");
+		String data = objectMapper.writeValueAsString(jsonMap);
+        
+		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+		jsonMap.put("signature", requestSignature);
 		
 		Response response = (Response) given()
-	            .header("X-GEO-Location", "12,12")
-	            .header("X-Device-Id", "3efe6bbeb55f4411")
+	            .header("X-GEO-Location", "")
+	            .header("X-Device-Id", "moco-travel-app")
 	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
-	            .header("X-AUTH-TOKEN","")
+	            .header("X-AUTH-TOKEN",AuthToken)
 	            .body(jsonMap)
 	        .when()
 	            .post("/biometric")
 	        .then()
-	            .statusCode(200);
+	            .statusCode(400);
 		
 		String code = response.jsonPath().getString("code");
         String description = response.jsonPath().getString("description");
-        String signature = response.jsonPath().getString("signature");
+        //String signature = response.jsonPath().getString("signature");
         
         assertNotNull(code, "code is missing from the response");
         assertFalse(code.isEmpty(), "code is empty in the response");
         assertNotNull(description, "description is missing from the response");
         assertFalse(description.isEmpty(), "description is empty in the response");
-        assertNotNull(signature, "description is missing from the response");
-        assertFalse(signature.isEmpty(), "description is empty in the response");
+       
+        
+        assertEquals(code,"GNR_PARAM_MISSING");
+        assertEquals(description,"Bad Request.");
+        
 	}
     @Test
-    public void setBiometricwithoutUserAgent() {
+    public void setBiometricwithoutUserAgent() throws Exception {
     	baseURI = "https://visitor0.moco.com.np/visitor";
-		Map<String, String> jsonMap = new HashMap<>();
-		jsonMap.put("hash", "string");
-		jsonMap.put("signature", "string");
+		ObjectMapper objectMapper = new ObjectMapper();
+		Map<String, Object> jsonMap = new LinkedHashMap<>();
+		jsonMap.put("hash","tzLhMbbV+G/oQrgXvBg34su8wk1rztNBiR3");
+		String data = objectMapper.writeValueAsString(jsonMap);
+        
+		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+		jsonMap.put("signature", requestSignature);
 		
 		Response response = (Response) given()
 	            .header("X-GEO-Location", "12,12")
-	            .header("X-Device-Id", "3efe6bbeb55f4411")
-	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
-	            .header("X-AUTH-TOKEN","")
+	            .header("X-Device-Id", "moco-travel-app")
+	            .header("User-Agent", "")
+	            .header("X-AUTH-TOKEN",AuthToken)
 	            .body(jsonMap)
 	        .when()
 	            .post("/biometric")
 	        .then()
-	            .statusCode(200);
+	            .statusCode(400);
 		
 		String code = response.jsonPath().getString("code");
         String description = response.jsonPath().getString("description");
-        String signature = response.jsonPath().getString("signature");
+        //String signature = response.jsonPath().getString("signature");
         
         assertNotNull(code, "code is missing from the response");
         assertFalse(code.isEmpty(), "code is empty in the response");
         assertNotNull(description, "description is missing from the response");
         assertFalse(description.isEmpty(), "description is empty in the response");
-        assertNotNull(signature, "description is missing from the response");
-        assertFalse(signature.isEmpty(), "description is empty in the response");
+       
+        
+        assertEquals(code,"GNR_PARAM_MISSING");
+        assertEquals(description,"Bad Request.");
     }
     @Test
-    public void setBiometricwithoutAuth() {
+    public void setBiometricwithoutAuth() throws Exception{
     	baseURI = "https://visitor0.moco.com.np/visitor";
-		Map<String, String> jsonMap = new HashMap<>();
-		jsonMap.put("hash", "string");
-		jsonMap.put("signature", "string");
+		ObjectMapper objectMapper = new ObjectMapper();
+		Map<String, Object> jsonMap = new LinkedHashMap<>();
+		jsonMap.put("hash","tzLhMbbV+G/oQrgXvBg34su8wk1rztNBiR3");
+		String data = objectMapper.writeValueAsString(jsonMap);
+        
+		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+		jsonMap.put("signature", requestSignature);
 		
 		Response response = (Response) given()
 	            .header("X-GEO-Location", "12,12")
-	            .header("X-Device-Id", "3efe6bbeb55f4411")
+	            .header("X-Device-Id", "moco-travel-app")
 	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
 	            .header("X-AUTH-TOKEN","")
 	            .body(jsonMap)
 	        .when()
 	            .post("/biometric")
 	        .then()
-	            .statusCode(200);
+	            .statusCode(400);
 		
 		String code = response.jsonPath().getString("code");
         String description = response.jsonPath().getString("description");
-        String signature = response.jsonPath().getString("signature");
+        //String signature = response.jsonPath().getString("signature");
         
         assertNotNull(code, "code is missing from the response");
         assertFalse(code.isEmpty(), "code is empty in the response");
         assertNotNull(description, "description is missing from the response");
         assertFalse(description.isEmpty(), "description is empty in the response");
-        assertNotNull(signature, "description is missing from the response");
-        assertFalse(signature.isEmpty(), "description is empty in the response");
+       
+        
+        assertEquals(code,"GNR_PARAM_MISSING");
+        assertEquals(description,"Bad Request.");
     }
     @Test
-    public void setBiometricwithInvalidDevice() {
+    public void setBiometricwithInvalidDevice() throws Exception {
     	baseURI = "https://visitor0.moco.com.np/visitor";
-		Map<String, String> jsonMap = new HashMap<>();
-		jsonMap.put("hash", "string");
-		jsonMap.put("signature", "string");
+		ObjectMapper objectMapper = new ObjectMapper();
+		Map<String, Object> jsonMap = new LinkedHashMap<>();
+		jsonMap.put("hash","tzLhMbbV+G/oQrgXvBg34su8wk1rztNBiR3");
+		String data = objectMapper.writeValueAsString(jsonMap);
+        
+		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+		jsonMap.put("signature", requestSignature);
 		
 		Response response = (Response) given()
 	            .header("X-GEO-Location", "12,12")
-	            .header("X-Device-Id", "3efe6bbeb55f4411")
+	            .header("X-Device-Id", "mo@@co-travel-app")
 	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
 	            .header("X-AUTH-TOKEN","")
 	            .body(jsonMap)
 	        .when()
 	            .post("/biometric")
 	        .then()
-	            .statusCode(200);
+	            .statusCode(400);
 		
 		String code = response.jsonPath().getString("code");
         String description = response.jsonPath().getString("description");
-        String signature = response.jsonPath().getString("signature");
+        //String signature = response.jsonPath().getString("signature");
         
         assertNotNull(code, "code is missing from the response");
         assertFalse(code.isEmpty(), "code is empty in the response");
         assertNotNull(description, "description is missing from the response");
         assertFalse(description.isEmpty(), "description is empty in the response");
-        assertNotNull(signature, "description is missing from the response");
-        assertFalse(signature.isEmpty(), "description is empty in the response");
+       
+        
+        assertEquals(code,"GNR_PARAM_MISSING");
+        assertEquals(description,"Bad Request.");
     }
     @Test
     public void setBiometricwithInvalidUserAgent() {
     	baseURI = "https://visitor0.moco.com.np/visitor";
 		Map<String, String> jsonMap = new HashMap<>();
-		jsonMap.put("hash", "string");
+		jsonMap.put("hash","tzLhMbbV+G/oQrgXvBg34su8wk1rztNBiR3");
 		jsonMap.put("signature", "string");
 		
 		Response response = (Response) given()
 	            .header("X-GEO-Location", "12,12")
-	            .header("X-Device-Id", "3efe6bbeb55f4411")
+	            .header("X-Device-Id", "moco-travel-app")
 	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
-	            .header("X-AUTH-TOKEN","")
+	            .header("X-AUTH-TOKEN",AuthToken)
 	            .body(jsonMap)
 	        .when()
 	            .post("/biometric")
@@ -214,14 +313,14 @@ public class biometric {
     public void setBiometricwithInvalidLocation() {
     	baseURI = "https://visitor0.moco.com.np/visitor";
 		Map<String, String> jsonMap = new HashMap<>();
-		jsonMap.put("hash", "string");
+		jsonMap.put("hash","tzLhMbbV+G/oQrgXvBg34su8wk1rztNBiR3");
 		jsonMap.put("signature", "string");
 		
 		Response response = (Response) given()
 	            .header("X-GEO-Location", "12,12")
-	            .header("X-Device-Id", "3efe6bbeb55f4411")
+	            .header("X-Device-Id", "moco-travel-app")
 	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
-	            .header("X-AUTH-TOKEN","")
+	            .header("X-AUTH-TOKEN",AuthToken)
 	            .body(jsonMap)
 	        .when()
 	            .post("/biometric")
@@ -243,14 +342,14 @@ public class biometric {
     public void setBiometricwithInvalidAuth() {
     	baseURI = "https://visitor0.moco.com.np/visitor";
 		Map<String, String> jsonMap = new HashMap<>();
-		jsonMap.put("hash", "string");
+		jsonMap.put("hash","tzLhMbbV+G/oQrgXvBg34su8wk1rztNBiR3");
 		jsonMap.put("signature", "string");
 		
 		Response response = (Response) given()
 	            .header("X-GEO-Location", "12,12")
-	            .header("X-Device-Id", "3efe6bbeb55f4411")
+	            .header("X-Device-Id", "moco-travel-app")
 	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
-	            .header("X-AUTH-TOKEN","")
+	            .header("X-AUTH-TOKEN",AuthToken)
 	            .body(jsonMap)
 	        .when()
 	            .post("/biometric")
@@ -272,43 +371,43 @@ public class biometric {
     public void setBiometricwithoutrequest() {
     	baseURI = "https://visitor0.moco.com.np/visitor";
 		Map<String, String> jsonMap = new HashMap<>();
-		jsonMap.put("hash", "string");
-		jsonMap.put("signature", "string");
+		//jsonMap.put("hash","tzLhMbbV+G/oQrgXvBg34su8wk1rztNBiR3");
+		//jsonMap.put("signature", "string");
 		
 		Response response = (Response) given()
 	            .header("X-GEO-Location", "12,12")
-	            .header("X-Device-Id", "3efe6bbeb55f4411")
+	            .header("X-Device-Id", "moco-travel-app")
 	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
-	            .header("X-AUTH-TOKEN","")
+	            .header("X-AUTH-TOKEN",AuthToken)
 	            .body(jsonMap)
 	        .when()
 	            .post("/biometric")
 	        .then()
-	            .statusCode(200);
+	            .statusCode(400);
 		
 		String code = response.jsonPath().getString("code");
         String description = response.jsonPath().getString("description");
-        String signature = response.jsonPath().getString("signature");
+        //String signature = response.jsonPath().getString("signature");
         
         assertNotNull(code, "code is missing from the response");
         assertFalse(code.isEmpty(), "code is empty in the response");
         assertNotNull(description, "description is missing from the response");
         assertFalse(description.isEmpty(), "description is empty in the response");
-        assertNotNull(signature, "description is missing from the response");
-        assertFalse(signature.isEmpty(), "description is empty in the response");
+        //assertNotNull(signature, "description is missing from the response");
+        //assertFalse(signature.isEmpty(), "description is empty in the response");
     }
     @Test
     public void setBiometricwithoutHash() {
     	baseURI = "https://visitor0.moco.com.np/visitor";
 		Map<String, String> jsonMap = new HashMap<>();
-		jsonMap.put("hash", "string");
+		jsonMap.put("hash","tzLhMbbV+G/oQrgXvBg34su8wk1rztNBiR3");
 		jsonMap.put("signature", "string");
 		
 		Response response = (Response) given()
 	            .header("X-GEO-Location", "12,12")
-	            .header("X-Device-Id", "3efe6bbeb55f4411")
+	            .header("X-Device-Id", "moco-travel-app")
 	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
-	            .header("X-AUTH-TOKEN","")
+	            .header("X-AUTH-TOKEN",AuthToken)
 	            .body(jsonMap)
 	        .when()
 	            .post("/biometric")
@@ -330,14 +429,14 @@ public class biometric {
     public void setBiometricwithoutSignature() {
     	baseURI = "https://visitor0.moco.com.np/visitor";
 		Map<String, String> jsonMap = new HashMap<>();
-		jsonMap.put("hash", "string");
+		jsonMap.put("hash","tzLhMbbV+G/oQrgXvBg34su8wk1rztNBiR3");
 		jsonMap.put("signature", "string");
 		
 		Response response = (Response) given()
 	            .header("X-GEO-Location", "12,12")
-	            .header("X-Device-Id", "3efe6bbeb55f4411")
+	            .header("X-Device-Id", "moco-travel-app")
 	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
-	            .header("X-AUTH-TOKEN","")
+	            .header("X-AUTH-TOKEN",AuthToken)
 	            .body(jsonMap)
 	        .when()
 	            .post("/biometric")
@@ -359,14 +458,14 @@ public class biometric {
     public void setBiometricwithInvalidHash() {
     	baseURI = "https://visitor0.moco.com.np/visitor";
 		Map<String, String> jsonMap = new HashMap<>();
-		jsonMap.put("hash", "string");
+		jsonMap.put("hash","tzLhMbbV+G/oQrgXvBg34su8wk1rztNBiR3");
 		jsonMap.put("signature", "string");
 		
 		Response response = (Response) given()
 	            .header("X-GEO-Location", "12,12")
-	            .header("X-Device-Id", "3efe6bbeb55f4411")
+	            .header("X-Device-Id", "moco-travel-app")
 	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
-	            .header("X-AUTH-TOKEN","")
+	            .header("X-AUTH-TOKEN",AuthToken)
 	            .body(jsonMap)
 	        .when()
 	            .post("/biometric")
@@ -388,14 +487,14 @@ public class biometric {
     public void setBiometricwithInvalidSignature() {
     	baseURI = "https://visitor0.moco.com.np/visitor";
 		Map<String, String> jsonMap = new HashMap<>();
-		jsonMap.put("hash", "string");
+		jsonMap.put("hash","tzLhMbbV+G/oQrgXvBg34su8wk1rztNBiR3");
 		jsonMap.put("signature", "string");
 		
 		Response response = (Response) given()
 	            .header("X-GEO-Location", "12,12")
-	            .header("X-Device-Id", "3efe6bbeb55f4411")
+	            .header("X-Device-Id", "moco-travel-app")
 	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
-	            .header("X-AUTH-TOKEN","")
+	            .header("X-AUTH-TOKEN",AuthToken)
 	            .body(jsonMap)
 	        .when()
 	            .post("/biometric")

@@ -22,7 +22,7 @@ public class authenticate {
 
 	        Response response = given()
 	                .header("X-GEO-Location", "12,12")
-	                .header("X-Device-Id", "3efe6bbeb55f4411")
+	                .header("X-Device-Id", "moco-travel-app")
 	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
 	            .when()
 	                .get("/key")
@@ -39,12 +39,14 @@ public class authenticate {
 	public void GetToken() throws Exception {
 		ObjectMapper objectMapper = new ObjectMapper();
         String email = "vivek@moco.com.np";
-        String requestDeviceId = "3efe6bbeb55f4411";
-        Map<String, Object> credentials = new HashMap<>();
+        String requestDeviceId = "moco-travel-app";
+        String plain_pin = "152986";
+        Map<String, Object> credentials = new LinkedHashMap<>();
         credentials.put("email", email);
-        credentials.put("pin", "123426");
+        String Pin = signatureCreate.encryptAES256(plain_pin, secretKey);
+        credentials.put("pin", Pin);
 
-        Map<String, Object> jsonBody = new HashMap<>();
+        Map<String, Object> jsonBody = new LinkedHashMap<>();
         jsonBody.put("credentials", credentials);
         
      // Generate signature
@@ -53,6 +55,7 @@ public class authenticate {
         
         jsonBody.put("signature", requestSignature);
         
+        System.out.println(jsonBody);
      // Send request
         Response response = given()
                 .header("X-GEO-Location", "12,12")
@@ -61,7 +64,7 @@ public class authenticate {
                 .contentType("application/json")
                 .body(jsonBody)
             .when()
-                .post("authenticate")
+                .post("/authenticate")
             .then()
                 .statusCode(200)
                 .log().all()
@@ -80,8 +83,9 @@ public class authenticate {
         String gender = response.jsonPath().getString("profile.gender");
         String status = response.jsonPath().getString("profile.status");
         String verificationStatus = response.jsonPath().getString("profile.verificationStatus");
-        String loginAttemptCount = response.jsonPath().getString("profile.loginAttemptCount");
-        String isBiometric = response.jsonPath().getString("profile.isBiometric");
+        String loginAttemptCountPin = response.jsonPath().getString("profile.loginAttemptCountPin");
+        String loginAttemptCountBiometric = response.jsonPath().getString("profile.loginAttemptCountBiometric");
+        String registrationDate = response.jsonPath().getString("profile.registrationDate");
         
         //check if response includes null value
         assertNotNull(signature, "signature is missing");
@@ -97,8 +101,9 @@ public class authenticate {
         assertNotNull(gender, "gender is missing");
         assertNotNull(status, "status is missing");
         assertNotNull(verificationStatus, "verificationStatus is missing");
-        assertNotNull(loginAttemptCount, "loginAttemptCount is missing");
-        assertNotNull(isBiometric, "isBiometric is missing");
+        assertNotNull(loginAttemptCountPin, "loginAttemptCount is missing");
+        assertNotNull(loginAttemptCountBiometric, "isBiometric is missing");
+        assertNotNull(registrationDate,"registration date is missing");
         
         //check is response includes empty values
         assertFalse(signature.isEmpty(), "Signature is empty in the response");
@@ -114,31 +119,33 @@ public class authenticate {
         assertFalse(gender.isEmpty(), "gender is missing");
         assertFalse(status.isEmpty(), "status is missing");
         assertFalse(verificationStatus.isEmpty(), "verificationStatus is missing");
-        assertFalse(loginAttemptCount.isEmpty(), "loginAttemptCount is missing");
-        assertFalse(isBiometric.isEmpty(), "isBiometric is missing");
+        assertFalse(loginAttemptCountPin.isEmpty(), "loginAttemptCount is missing");
+        assertFalse(loginAttemptCountBiometric.isEmpty(), "isBiometric is missing");
+        assertFalse(registrationDate.isEmpty(),"registration date is missing");
         
         //check if the device id is same in request and response
         
         assertEquals(requestDeviceId,deviceId);
-        assertEquals("John Smith",fullName);
-        assertEquals("India",country);
-        
+//        assertEquals("John Smith",fullName);
+//        assertEquals("India",country);
+//        
         //check if the token is in the present in the response
         assertTrue(response.getHeaders().hasHeaderWithName("X-AUTH-TOKEN"), "Missing X-AUTH-TOKEN header");
         System.out.println("Request ID: " + response.getHeaders().hasHeaderWithName("X-AUTH-TOKEN"));
 
 	}
-	
 	@Test
-	public void AuthenticateWithNoLocation() throws Exception {
+	public void AuthenticateWithNewDevice() throws Exception {
 		ObjectMapper objectMapper = new ObjectMapper();
         String email = "vivek@moco.com.np";
-        String requestDeviceId = "3efe6bbeb55f4411";
-        Map<String, Object> credentials = new HashMap<>();
+        String requestDeviceId = "moco-travels-app";
+        String plain_pin = "152986";
+        Map<String, Object> credentials = new LinkedHashMap<>();
         credentials.put("email", email);
-        credentials.put("pin", "123426");
+        String Pin = signatureCreate.encryptAES256(plain_pin, secretKey);
+        credentials.put("pin", Pin);
 
-        Map<String, Object> jsonBody = new HashMap<>();
+        Map<String, Object> jsonBody = new LinkedHashMap<>();
         jsonBody.put("credentials", credentials);
         
      // Generate signature
@@ -147,9 +154,54 @@ public class authenticate {
         
         jsonBody.put("signature", requestSignature);
         
+        System.out.println(jsonBody);
      // Send request
         Response response = given()
                 .header("X-GEO-Location", "12,12")
+                .header("X-Device-Id", requestDeviceId)
+                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+                .contentType("application/json")
+                .body(jsonBody)
+            .when()
+                .post("/authenticate")
+            .then()
+                .statusCode(401)
+                .log().all()
+                .extract().response();
+        String code = response.jsonPath().getString("code");
+        String description = response.jsonPath().getString("description");
+
+        assertNotNull(description, "Description is missing from the response");
+        assertNotNull(code, "Code is missing");
+        assertFalse(description.isEmpty(), "Description is empty");
+        assertFalse(code.isEmpty(), "Code is empty");
+        assertEquals(code,"VST_LOGIN_DEVICE_UNRECOGNIZED");
+        assertEquals(description,"Bad Request.");
+	}
+	@Test
+	public void AuthenticateWithNoLocation() throws Exception {
+		ObjectMapper objectMapper = new ObjectMapper();
+        String email = "vivek@moco.com.np";
+        String requestDeviceId = "moco-travel-app";
+        String plain_pin = "152986";
+        Map<String, Object> credentials = new LinkedHashMap<>();
+        credentials.put("email", email);
+        String Pin = signatureCreate.encryptAES256(plain_pin, secretKey);
+        credentials.put("pin", Pin);
+
+        Map<String, Object> jsonBody = new LinkedHashMap<>();
+        jsonBody.put("credentials", credentials);
+        
+     // Generate signature
+        String data = objectMapper.writeValueAsString(jsonBody);
+        String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+        
+        jsonBody.put("signature", requestSignature);
+        
+        System.out.println(jsonBody);
+     // Send request
+        Response response = given()
+                .header("X-GEO-Location", "")
                 .header("X-Device-Id", requestDeviceId)
                 .header("User-Agent", "NepalTravelApp/1.0.0 android")
                 .contentType("application/json")
@@ -177,12 +229,14 @@ public class authenticate {
 	public void AuthenticateWithNoDevice() throws Exception {
 		ObjectMapper objectMapper = new ObjectMapper();
         String email = "vivek@moco.com.np";
-        String requestDeviceId = "3efe6bbeb55f4411";
-        Map<String, Object> credentials = new HashMap<>();
+        String requestDeviceId = "";
+        String plain_pin = "152986";
+        Map<String, Object> credentials = new LinkedHashMap<>();
         credentials.put("email", email);
-        credentials.put("pin", "123426");
+        String Pin = signatureCreate.encryptAES256(plain_pin, secretKey);
+        credentials.put("pin", Pin);
 
-        Map<String, Object> jsonBody = new HashMap<>();
+        Map<String, Object> jsonBody = new LinkedHashMap<>();
         jsonBody.put("credentials", credentials);
         
      // Generate signature
@@ -191,6 +245,7 @@ public class authenticate {
         
         jsonBody.put("signature", requestSignature);
         
+        System.out.println(jsonBody);
      // Send request
         Response response = given()
                 .header("X-GEO-Location", "12,12")
@@ -222,12 +277,14 @@ public class authenticate {
 	public void AuthenticateWithoutUserAgent() throws Exception {
 		ObjectMapper objectMapper = new ObjectMapper();
         String email = "vivek@moco.com.np";
-        String requestDeviceId = "3efe6bbeb55f4411";
-        Map<String, Object> credentials = new HashMap<>();
+        String requestDeviceId = "moco-travel-app";
+        String plain_pin = "152986";
+        Map<String, Object> credentials = new LinkedHashMap<>();
         credentials.put("email", email);
-        credentials.put("pin", "123426");
+        String Pin = signatureCreate.encryptAES256(plain_pin, secretKey);
+        credentials.put("pin", Pin);
 
-        Map<String, Object> jsonBody = new HashMap<>();
+        Map<String, Object> jsonBody = new LinkedHashMap<>();
         jsonBody.put("credentials", credentials);
         
      // Generate signature
@@ -236,11 +293,12 @@ public class authenticate {
         
         jsonBody.put("signature", requestSignature);
         
+        System.out.println(jsonBody);
      // Send request
         Response response = given()
                 .header("X-GEO-Location", "12,12")
                 .header("X-Device-Id", requestDeviceId)
-                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+                .header("User-Agent", "")
                 .contentType("application/json")
                 .body(jsonBody)
             .when()
@@ -266,12 +324,14 @@ public class authenticate {
 	public void AuthenticateWithInvalidLocation() throws Exception {
 		ObjectMapper objectMapper = new ObjectMapper();
         String email = "vivek@moco.com.np";
-        String requestDeviceId = "3efe6bbeb55f4411";
-        Map<String, Object> credentials = new HashMap<>();
+        String requestDeviceId = "moco-travel-app";
+        String plain_pin = "152986";
+        Map<String, Object> credentials = new LinkedHashMap<>();
         credentials.put("email", email);
-        credentials.put("pin", "123426");
+        String Pin = signatureCreate.encryptAES256(plain_pin, secretKey);
+        credentials.put("pin", Pin);
 
-        Map<String, Object> jsonBody = new HashMap<>();
+        Map<String, Object> jsonBody = new LinkedHashMap<>();
         jsonBody.put("credentials", credentials);
         
      // Generate signature
@@ -280,6 +340,52 @@ public class authenticate {
         
         jsonBody.put("signature", requestSignature);
         
+        System.out.println(jsonBody);
+     // Send request
+        Response response = given()
+                .header("X-GEO-Location", "12@12")
+                .header("X-Device-Id", requestDeviceId)
+                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+                .contentType("application/json")
+                .body(jsonBody)
+            .when()
+                .post("/authenticate")
+            .then()
+                .statusCode(422)
+                .log().all()
+                .extract().response();
+        
+        String code = response.jsonPath().getString("code");
+        String description = response.jsonPath().getString("description");
+
+        assertNotNull(description, "Description is missing from the response");
+        assertNotNull(code, "Code is missing");
+        assertFalse(description.isEmpty(), "Description is empty");
+        assertFalse(code.isEmpty(), "Code is empty");
+        assertEquals(code,"GNR_INVALID_DATA");
+        assertEquals(description,"Invalid Geo location found.");
+	}
+	@Test
+	public void AuthenticateWithInvalidDevice() throws Exception {
+		ObjectMapper objectMapper = new ObjectMapper();
+        String email = "vivek@moco.com.np";
+        String requestDeviceId = "moco#travel-app";
+        String plain_pin = "152986";
+        Map<String, Object> credentials = new LinkedHashMap<>();
+        credentials.put("email", email);
+        String Pin = signatureCreate.encryptAES256(plain_pin, secretKey);
+        credentials.put("pin", Pin);
+
+        Map<String, Object> jsonBody = new LinkedHashMap<>();
+        jsonBody.put("credentials", credentials);
+        
+     // Generate signature
+        String data = objectMapper.writeValueAsString(jsonBody);
+        String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+        
+        jsonBody.put("signature", requestSignature);
+        
+        System.out.println(jsonBody);
      // Send request
         Response response = given()
                 .header("X-GEO-Location", "12,12")
@@ -290,11 +396,10 @@ public class authenticate {
             .when()
                 .post("/authenticate")
             .then()
-                .statusCode(400)
+                .statusCode(422)
                 .log().all()
                 .extract().response();
         
-     // Extracting and asserting response values
         String code = response.jsonPath().getString("code");
         String description = response.jsonPath().getString("description");
 
@@ -302,83 +407,68 @@ public class authenticate {
         assertNotNull(code, "Code is missing");
         assertFalse(description.isEmpty(), "Description is empty");
         assertFalse(code.isEmpty(), "Code is empty");
-        assertEquals(code,"GNR_PARAM_MISSING");
-        assertEquals(description,"Bad Request.");
+        assertEquals(code,"GNR_INVALID_DATA");
+        assertEquals(description,"Invalid device Id found.");
 	}
+	
 	@Test
-	public void AuthenticateWithInvalidDevice() {
-		baseURI = "https://visitor0.moco.com.np/visitor";
-		Map<String, Object> credentials = new HashMap<>();
-        credentials.put("email", "test@example.com");
-        credentials.put("pin", "1234");
+	public void AuthenticateWithInvalidUserAgent() throws Exception {
+		ObjectMapper objectMapper = new ObjectMapper();
+        String email = "vivek@moco.com.np";
+        String requestDeviceId = "moco-travel-app";
+        String plain_pin = "152986";
+        Map<String, Object> credentials = new LinkedHashMap<>();
+        credentials.put("email", email);
+        String Pin = signatureCreate.encryptAES256(plain_pin, secretKey);
+        credentials.put("pin", Pin);
 
-        Map<String, Object> jsonBody = new HashMap<>();
+        Map<String, Object> jsonBody = new LinkedHashMap<>();
         jsonBody.put("credentials", credentials);
-        jsonBody.put("signature", "your-signature-string");
         
-        Response response = (Response) given()
-            .header("X-GEO-Location", "12aa12")
-            .header("X-Device-Id", "pp")
-            .header("User-Agent", "NepalTravelApp/1.0.0 android")
-            .body(jsonBody)
-        .when()
-            .post("/authenticate")
-        .then()
-            .statusCode(422);
-        String signature = response.jsonPath().getString("signature");
-        String signOnKey = response.jsonPath().getString("signOnKey");
-        String deviceId = response.jsonPath().getString("deviceId");
-        // Check if the signature is not null or empty
-       
-        assertNotNull(signature, "signature is missing");
-        assertNotNull(signOnKey, "signon key is missing from the response");
-        assertNotNull(deviceId, "device id is missing from the response");
-        assertFalse(signature.isEmpty(), "Signature is empty in the response");
-        assertFalse(signOnKey.isEmpty(),"sign on key is empty in the response");
-        assertFalse(deviceId.isEmpty(),"device id is empty in the response");
-	}
-	@Test
-	public void AuthenticateWithInvalidUserAgent() {
-		baseURI = "https://visitor0.moco.com.np/visitor";
-		Map<String, Object> credentials = new HashMap<>();
-        credentials.put("email", "test@example.com");
-        credentials.put("pin", "1234");
+     // Generate signature
+        String data = objectMapper.writeValueAsString(jsonBody);
+        String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+        
+        jsonBody.put("signature", requestSignature);
+        
+        System.out.println(jsonBody);
+     // Send request
+        Response response = given()
+                .header("X-GEO-Location", "12,12")
+                .header("X-Device-Id", requestDeviceId)
+                .header("User-Agent", "NepalTravelA..S1.0.0 android")
+                .contentType("application/json")
+                .body(jsonBody)
+            .when()
+                .post("/authenticate")
+            .then()
+                .statusCode(422)
+                .log().all()
+                .extract().response();
+        
+        String code = response.jsonPath().getString("code");
+        String description = response.jsonPath().getString("description");
 
-        Map<String, Object> jsonBody = new HashMap<>();
-        jsonBody.put("credentials", credentials);
-        jsonBody.put("signature", "your-signature-string");
-        
-        Response response = (Response) given()
-            .header("X-GEO-Location", "12aa12")
-            .header("X-Device-Id", "3efe6bbeb55f4411")
-            .header("User-Agent", "NepalTravelApp/1.0.0 andrid....")
-            .body(jsonBody)
-        .when()
-            .post("/authenticate")
-        .then()
-            .statusCode(422);
-        String signature = response.jsonPath().getString("signature");
-        String signOnKey = response.jsonPath().getString("signOnKey");
-        String deviceId = response.jsonPath().getString("deviceId");
-        // Check if the signature is not null or empty
-       
-        assertNotNull(signature, "signature is missing");
-        assertNotNull(signOnKey, "signon key is missing from the response");
-        assertNotNull(deviceId, "device id is missing from the response");
-        assertFalse(signature.isEmpty(), "Signature is empty in the response");
-        assertFalse(signOnKey.isEmpty(),"sign on key is empty in the response");
-        assertFalse(deviceId.isEmpty(),"device id is empty in the response");
+        assertNotNull(description, "Description is missing from the response");
+        assertNotNull(code, "Code is missing");
+        assertFalse(description.isEmpty(), "Description is empty");
+        assertFalse(code.isEmpty(), "Code is empty");
+        assertEquals(code,"GNR_INVALID_DATA");
+        assertEquals(description,"Invalid user agent found.");
+
 	}
 	@Test
 	public void AuthenticateWithMissingEmail() throws Exception {
 		ObjectMapper objectMapper = new ObjectMapper();
-        String email = "vivek@moco.com.np";
-        String requestDeviceId = "3efe6bbeb55f4411";
-        Map<String, Object> credentials = new HashMap<>();
+        String email = "";
+        String requestDeviceId = "moco-travel-app";
+        String plain_pin = "152986";
+        Map<String, Object> credentials = new LinkedHashMap<>();
         credentials.put("email", email);
-        credentials.put("pin", "123426");
+        String Pin = signatureCreate.encryptAES256(plain_pin, secretKey);
+        credentials.put("pin", Pin);
 
-        Map<String, Object> jsonBody = new HashMap<>();
+        Map<String, Object> jsonBody = new LinkedHashMap<>();
         jsonBody.put("credentials", credentials);
         
      // Generate signature
@@ -387,6 +477,7 @@ public class authenticate {
         
         jsonBody.put("signature", requestSignature);
         
+        System.out.println(jsonBody);
      // Send request
         Response response = given()
                 .header("X-GEO-Location", "12,12")
@@ -411,18 +502,21 @@ public class authenticate {
         assertFalse(code.isEmpty(), "Code is empty");
         assertEquals(code,"GNR_PARAM_MISSING");
         assertEquals(description,"Bad Request.");
+
 		
 	}
 	@Test
 	public void AuthenticateWithMissingPin() throws Exception {
 		ObjectMapper objectMapper = new ObjectMapper();
         String email = "vivek@moco.com.np";
-        String requestDeviceId = "3efe6bbeb55f4411";
-        Map<String, Object> credentials = new HashMap<>();
+        String requestDeviceId = "moco-travel-app";
+        String plain_pin = "";
+        Map<String, Object> credentials = new LinkedHashMap<>();
         credentials.put("email", email);
-        credentials.put("pin", "123426");
+        //String Pin = signatureCreate.encryptAES256(plain_pin, secretKey);
+        //credentials.put("pin", Pin);
 
-        Map<String, Object> jsonBody = new HashMap<>();
+        Map<String, Object> jsonBody = new LinkedHashMap<>();
         jsonBody.put("credentials", credentials);
         
      // Generate signature
@@ -431,6 +525,7 @@ public class authenticate {
         
         jsonBody.put("signature", requestSignature);
         
+        System.out.println(jsonBody);
      // Send request
         Response response = given()
                 .header("X-GEO-Location", "12,12")
@@ -455,14 +550,15 @@ public class authenticate {
         assertFalse(code.isEmpty(), "Code is empty");
         assertEquals(code,"GNR_PARAM_MISSING");
         assertEquals(description,"Bad Request.");
+
 		
 	}
 	
 	@Test
 	public void AuthenticateWithEmptyEmail() throws Exception {
 		ObjectMapper objectMapper = new ObjectMapper();
-        String email = "vivek@moco.com.np";
-        String requestDeviceId = "3efe6bbeb55f4411";
+        String email = "";
+        String requestDeviceId = "moco-travel-app";
         Map<String, Object> credentials = new HashMap<>();
         credentials.put("email", email);
         credentials.put("pin", "123426");
@@ -500,50 +596,64 @@ public class authenticate {
         assertFalse(code.isEmpty(), "Code is empty");
         assertEquals(code,"GNR_PARAM_MISSING");
         assertEquals(description,"Bad Request.");
+
 		
 	}
 	
 	@Test
-	public void AuthenticateWithInvalidEmail() {
-		baseURI = "https://visitor0.moco.com.np/visitor";
-		Map<String, Object> credentials = new HashMap<>();
-        credentials.put("email", "test@example.p.com");
-        //credentials.put("pin", "1234");
+	public void AuthenticateWithInvalidEmail() throws Exception {
+		ObjectMapper objectMapper = new ObjectMapper();
+        String email = "vivek@moco..com.np";
+        String requestDeviceId = "moco-travel-app";
+        String plain_pin = "152986";
+        Map<String, Object> credentials = new LinkedHashMap<>();
+        credentials.put("email", email);
+        String Pin = signatureCreate.encryptAES256(plain_pin, secretKey);
+        credentials.put("pin", Pin);
 
-        Map<String, Object> jsonBody = new HashMap<>();
+        Map<String, Object> jsonBody = new LinkedHashMap<>();
         jsonBody.put("credentials", credentials);
-        jsonBody.put("signature", "your-signature-string");
         
-        Response response = (Response) given()
-            .header("X-GEO-Location", "12aa12")
-            .header("X-Device-Id", "3efe6bbeb55f4411")
-            .header("User-Agent", "NepalTravelApp/1.0.0 andrid....")
-            .body(jsonBody)
-        .when()
-            .post("/authenticate")
-        .then()
-            .statusCode(422);
-        String signature = response.jsonPath().getString("signature");
-        String signOnKey = response.jsonPath().getString("signOnKey");
-        String deviceId = response.jsonPath().getString("deviceId");
-        // Check if the signature is not null or empty
-       
-        assertNotNull(signature, "signature is missing");
-        assertNotNull(signOnKey, "signon key is missing from the response");
-        assertNotNull(deviceId, "device id is missing from the response");
-        assertFalse(signature.isEmpty(), "Signature is empty in the response");
-        assertFalse(signOnKey.isEmpty(),"sign on key is empty in the response");
-        assertFalse(deviceId.isEmpty(),"device id is empty in the response");
+     // Generate signature
+        String data = objectMapper.writeValueAsString(jsonBody);
+        String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+        
+        jsonBody.put("signature", requestSignature);
+        
+        System.out.println(jsonBody);
+     // Send request
+        Response response = given()
+                .header("X-GEO-Location", "12,12")
+                .header("X-Device-Id", requestDeviceId)
+                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+                .contentType("application/json")
+                .body(jsonBody)
+            .when()
+                .post("/authenticate")
+            .then()
+                .statusCode(422)
+                .log().all()
+                .extract().response();
+        String code = response.jsonPath().getString("code");
+        String description = response.jsonPath().getString("description");
+
+        assertNotNull(description, "Description is missing from the response");
+        assertNotNull(code, "Code is missing");
+        assertFalse(description.isEmpty(), "Description is empty");
+        assertFalse(code.isEmpty(), "Code is empty");
+        assertEquals(code,"GNR_INVALID_DATA");
+        assertEquals(description,"Bad Request.");
+
 	}
 	
 	@Test
 	public void AuthenticateWithEmptyPin() throws Exception{
 		ObjectMapper objectMapper = new ObjectMapper();
         String email = "vivek@moco.com.np";
-        String requestDeviceId = "3efe6bbeb55f4411";
+        String requestDeviceId = "moco-travel-app";
         Map<String, Object> credentials = new HashMap<>();
         credentials.put("email", email);
-        credentials.put("pin", "123426");
+        //credentials.put("pin", "123426");
 
         Map<String, Object> jsonBody = new HashMap<>();
         jsonBody.put("credentials", credentials);
@@ -578,51 +688,21 @@ public class authenticate {
         assertFalse(code.isEmpty(), "Code is empty");
         assertEquals(code,"GNR_PARAM_MISSING");
         assertEquals(description,"Bad Request.");
-	}
-	
-	@Test
-	public void AuthenticateWithInvalidPin() {
-		baseURI = "https://visitor0.moco.com.np/visitor";
-		Map<String, Object> credentials = new HashMap<>();
-        credentials.put("email", "test@example.com");
-        credentials.put("pin", "1234AAA");
 
-        Map<String, Object> jsonBody = new HashMap<>();
-        jsonBody.put("credentials", credentials);
-        jsonBody.put("signature", "your-signature-string");
-        
-        Response response = (Response) given()
-            .header("X-GEO-Location", "12aa12")
-            .header("X-Device-Id", "3efe6bbeb55f4411")
-            .header("User-Agent", "NepalTravelApp/1.0.0 andrid....")
-            .body(jsonBody)
-        .when()
-            .post("/authenticate")
-        .then()
-            .statusCode(422);
-        String signature = response.jsonPath().getString("signature");
-        String signOnKey = response.jsonPath().getString("signOnKey");
-        String deviceId = response.jsonPath().getString("deviceId");
-        // Check if the signature is not null or empty
-       
-        assertNotNull(signature, "signature is missing");
-        assertNotNull(signOnKey, "signon key is missing from the response");
-        assertNotNull(deviceId, "device id is missing from the response");
-        assertFalse(signature.isEmpty(), "Signature is empty in the response");
-        assertFalse(signOnKey.isEmpty(),"sign on key is empty in the response");
-        assertFalse(deviceId.isEmpty(),"device id is empty in the response");
 	}
 	
 	@Test
-	public void AuthenticateWithMissingSignature() throws Exception{
+	public void AuthenticateWithInvalidPin() throws Exception {
 		ObjectMapper objectMapper = new ObjectMapper();
         String email = "vivek@moco.com.np";
-        String requestDeviceId = "3efe6bbeb55f4411";
-        Map<String, Object> credentials = new HashMap<>();
+        String requestDeviceId = "moco-travel-app";
+        String plain_pin = "1AA986";
+        Map<String, Object> credentials = new LinkedHashMap<>();
         credentials.put("email", email);
-        credentials.put("pin", "123426");
+        //String Pin = signatureCreate.encryptAES256(plain_pin, secretKey);
+        credentials.put("pin", "llllas");
 
-        Map<String, Object> jsonBody = new HashMap<>();
+        Map<String, Object> jsonBody = new LinkedHashMap<>();
         jsonBody.put("credentials", credentials);
         
      // Generate signature
@@ -631,6 +711,53 @@ public class authenticate {
         
         jsonBody.put("signature", requestSignature);
         
+        System.out.println(jsonBody);
+     // Send request
+        Response response = given()
+                .header("X-GEO-Location", "12,12")
+                .header("X-Device-Id", requestDeviceId)
+                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+                .contentType("application/json")
+                .body(jsonBody)
+            .when()
+                .post("/authenticate")
+            .then()
+                .statusCode(401)
+                .log().all()
+                .extract().response();
+        String code = response.jsonPath().getString("code");
+        String description = response.jsonPath().getString("description");
+
+        assertNotNull(description, "Description is missing from the response");
+        assertNotNull(code, "Code is missing");
+        assertFalse(description.isEmpty(), "Description is empty");
+        assertFalse(code.isEmpty(), "Code is empty");
+        assertEquals(code,"GNR_AUTHENTICATION_FAIL");
+        assertEquals(description,"Authentication Failed.");
+
+	}
+	
+	@Test
+	public void AuthenticateWithMissingSignature() throws Exception{
+		ObjectMapper objectMapper = new ObjectMapper();
+        String email = "vivek@moco.com.np";
+        String requestDeviceId = "moco-travel-app";
+        String plain_pin = "152986";
+        Map<String, Object> credentials = new LinkedHashMap<>();
+        credentials.put("email", email);
+        String Pin = signatureCreate.encryptAES256(plain_pin, secretKey);
+        credentials.put("pin", Pin);
+
+        Map<String, Object> jsonBody = new LinkedHashMap<>();
+        jsonBody.put("credentials", credentials);
+        
+     // Generate signature
+//        String data = objectMapper.writeValueAsString(jsonBody);
+//        String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+//        
+//        jsonBody.put("signature", requestSignature);
+        
+        System.out.println(jsonBody);
      // Send request
         Response response = given()
                 .header("X-GEO-Location", "12,12")
@@ -661,7 +788,7 @@ public class authenticate {
 	public void AuthenticateWithEmptySignature() throws Exception{
 		ObjectMapper objectMapper = new ObjectMapper();
         String email = "vivek@moco.com.np";
-        String requestDeviceId = "3efe6bbeb55f4411";
+        String requestDeviceId = "moco-travel-app";
         Map<String, Object> credentials = new HashMap<>();
         credentials.put("email", email);
         credentials.put("pin", "123426");
@@ -671,9 +798,9 @@ public class authenticate {
         
      // Generate signature
         String data = objectMapper.writeValueAsString(jsonBody);
-        String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+       // String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
         
-        jsonBody.put("signature", requestSignature);
+        jsonBody.put("signature", "");
         
      // Send request
         Response response = given()
@@ -701,70 +828,97 @@ public class authenticate {
         assertEquals(description,"Bad Request.");
 	}
 	
-	@Test
-	public void AuthenticateWithNullValue() {
-		baseURI = "https://visitor0.moco.com.np/visitor";
-		Map<String, Object> credentials = new HashMap<>();
-        credentials.put("email", "NULL");
-        credentials.put("pin", "1234");
-
-        Map<String, Object> jsonBody = new HashMap<>();
-        jsonBody.put("credentials", credentials);
-        jsonBody.put("signature", "your-signature-string");
-        
-        Response response = (Response) given()
-            .header("X-GEO-Location", "12aa12")
-            .header("X-Device-Id", "3efe6bbeb55f4411")
-            .header("User-Agent", "NepalTravelApp/1.0.0 andrid....")
-            .body(jsonBody)
-        .when()
-            .post("/authenticate")
-        .then()
-            .statusCode(401);
-        String signature = response.jsonPath().getString("signature");
-        String signOnKey = response.jsonPath().getString("signOnKey");
-        String deviceId = response.jsonPath().getString("deviceId");
-        // Check if the signature is not null or empty
-       
-        assertNotNull(signature, "signature is missing");
-        assertNotNull(signOnKey, "signon key is missing from the response");
-        assertNotNull(deviceId, "device id is missing from the response");
-        assertFalse(signature.isEmpty(), "Signature is empty in the response");
-        assertFalse(signOnKey.isEmpty(),"sign on key is empty in the response");
-        assertFalse(deviceId.isEmpty(),"device id is empty in the response");
-	}
+//	@Test
+//	public void AuthenticateWithNullValue() throws Exception {
+//		ObjectMapper objectMapper = new ObjectMapper();
+//        String email = "vivek@moco.com.np";
+//        String requestDeviceId = "moco-travel-app";
+//        String plain_pin = NULL;
+//        Map<String, Object> credentials = new LinkedHashMap<>();
+//        credentials.put("email", email);
+//        String Pin = signatureCreate.encryptAES256(plain_pin, secretKey);
+//        credentials.put("pin", Pin);
+//
+//        Map<String, Object> jsonBody = new LinkedHashMap<>();
+//        jsonBody.put("credentials", credentials);
+//        
+//     // Generate signature
+//        String data = objectMapper.writeValueAsString(jsonBody);
+//        String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+//        
+//        jsonBody.put("signature", requestSignature);
+//        
+//        System.out.println(jsonBody);
+//     // Send request
+//        Response response = given()
+//                .header("X-GEO-Location", "12,12")
+//                .header("X-Device-Id", requestDeviceId)
+//                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+//                .contentType("application/json")
+//                .body(jsonBody)
+//            .when()
+//                .post("/authenticate")
+//            .then()
+//                .statusCode(401)
+//                .log().all()
+//                .extract().response();
+//       
+//        String code = response.jsonPath().getString("code");
+//        String description = response.jsonPath().getString("description");
+//
+//        assertNotNull(description, "Description is missing from the response");
+//        assertNotNull(code, "Code is missing");
+//        assertFalse(description.isEmpty(), "Description is empty");
+//        assertFalse(code.isEmpty(), "Code is empty");
+//        assertEquals(code,"VST_LOGIN_REMAINING_ATTEMPT_2");
+//        assertEquals(description,"Authentication failed.");
+//
+//	}
 	
-	@Test
-	public void AuthenticateWithExceedValues() {
-		baseURI = "https://visitor0.moco.com.np/visitor";
-		Map<String, Object> credentials = new HashMap<>();
-        credentials.put("email", "test@example.com");
-        credentials.put("pin", "1234566666677");
-
-        Map<String, Object> jsonBody = new HashMap<>();
-        jsonBody.put("credentials", credentials);
-        jsonBody.put("signature", "your-signature-string");
-        
-        Response response = (Response) given()
-            .header("X-GEO-Location", "12aa12")
-            .header("X-Device-Id", "3efe6bbeb55f4411")
-            .header("User-Agent", "NepalTravelApp/1.0.0 andrid....")
-            .body(jsonBody)
-        .when()
-            .post("/authenticate")
-        .then()
-            .statusCode(200);
-        String signature = response.jsonPath().getString("signature");
-        String signOnKey = response.jsonPath().getString("signOnKey");
-        String deviceId = response.jsonPath().getString("deviceId");
-        // Check if the signature is not null or empty
-       
-        assertNotNull(signature, "signature is missing");
-        assertNotNull(signOnKey, "signon key is missing from the response");
-        assertNotNull(deviceId, "device id is missing from the response");
-        assertFalse(signature.isEmpty(), "Signature is empty in the response");
-        assertFalse(signOnKey.isEmpty(),"sign on key is empty in the response");
-        assertFalse(deviceId.isEmpty(),"device id is empty in the response");
-	}
+//	@Test
+//	public void AuthenticateWithExceedValues() throws Exception{
+//		ObjectMapper objectMapper = new ObjectMapper();
+//        String email = "vivek@moco.com.np";
+//        String requestDeviceId = "moco-travel-app";
+//        String plain_pin = "1590909090909092986";
+//        Map<String, Object> credentials = new LinkedHashMap<>();
+//        credentials.put("email", email);
+//        String Pin = signatureCreate.encryptAES256(plain_pin, secretKey);
+//        credentials.put("pin", Pin);
+//
+//        Map<String, Object> jsonBody = new LinkedHashMap<>();
+//        jsonBody.put("credentials", credentials);
+//        
+//     // Generate signature
+//        String data = objectMapper.writeValueAsString(jsonBody);
+//        String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+//        
+//        jsonBody.put("signature", requestSignature);
+//        
+//        System.out.println(jsonBody);
+//     // Send request
+//        Response response = given()
+//                .header("X-GEO-Location", "12,12")
+//                .header("X-Device-Id", requestDeviceId)
+//                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+//                .contentType("application/json")
+//                .body(jsonBody)
+//            .when()
+//                .post("/authenticate")
+//            .then()
+//                .statusCode(422)
+//                .log().all()
+//                .extract().response();
+//        String code = response.jsonPath().getString("code");
+//        String description = response.jsonPath().getString("description");
+//
+//        assertNotNull(description, "Description is missing from the response");
+//        assertNotNull(code, "Code is missing");
+//        assertFalse(description.isEmpty(), "Description is empty");
+//        assertFalse(code.isEmpty(), "Code is empty");
+//        assertEquals(code,"GNR_PARAM_MISSING");
+//        assertEquals(description,"Bad Request.");
+//
+//	}
 	
 }

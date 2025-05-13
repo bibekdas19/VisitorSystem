@@ -8,7 +8,7 @@ import static io.restassured.RestAssured.*;
 import static org.testng.Assert.*;
 
 public class profileImage {
-	String AuthToken = "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ2aXZla0Btb2NvLmNvbS5ucCIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tdHJhdmVsLWFwcCIsImlhdCI6MTc0NjUyMjU0NCwiZXhwIjoxNzQ2NTUyNTQ0fQ.c1CYwaduAWc9ZW83w76LNMcadWW9WKStr6hqT0ItxQPMni9vjl21QxcaR4GkomyV";
+	String AuthToken = "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ2aXZla0Btb2NvLmNvbS5ucCIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tdHJhdmVsLWFwcCIsImlhdCI6MTc0NzExMjAwNSwiZXhwIjoxNzQ3MTQyMDA1fQ.XxlXO-cniFD7sy6A841T84w8rLtJi-vebQjQ7qqkfOmeI7yCdW3iypLQlsTr_3ke";
 //	@BeforeClass
 //	public void getToken() throws Exception {
 //		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";

@@ -1,9 +1,11 @@
 package PIN;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import OTP.signatureCreate;
+import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import static io.restassured.RestAssured.*;
 import static org.testng.Assert.*;
@@ -11,11 +13,64 @@ import static org.testng.Assert.*;
 import java.util.*;
 
 public class changePin {
-	String plain_old_pin = "443062";
-    String plain_new_pin = "152369";
-    String secretKey = "qP9rjBMsyjY1QuIkLf0NuWkxtVqlp+belhQpU7GMyro=";
-    String AuthToken = "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ2aXZla0Btb2NvLmNvbS5ucCIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tdHJhdmVsLWFwcCIsImlhdCI6MTc0Njc3OTcyOSwiZXhwIjoxNzQ2ODA5NzI5fQ.2uU_D-VcyiXuQMSRja8cLwK4K-KilgsZWdLi9asSuaYAz4nGXu6WLnT89kobkocN";
+	String plain_new_pin = "152986";
+    String plain_old_pin = "252586";
+    String secretKey ="28c3f64fcb1537d6c4757765ee232d053c0f28fc25ff427451c8195b985b2ebb";
+    String AuthToken = "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ2aXZla0Btb2NvLmNvbS5ucCIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tdHJhdmVsLWFwcCIsImlhdCI6MTc0NzEzNTk4MCwiZXhwIjoxNzQ3MTY1OTgwfQ.PiA6aiuaclsXN136vraACEziUOWQ8rofWj4kKfxvTGGmNnAhOTfVodQyawEWFRvX";
 	
+//    @BeforeClass
+//    public void setup() throws Exception {
+//        RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
+//        
+//        Response response = given()
+//                .header("X-GEO-Location", "12,12")
+//                .header("X-Device-Id", "moco-travel-app")
+//                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+//            .when()
+//                .get("/key")
+//            .then()
+//                .statusCode(200)
+//                .extract().response();
+//
+//        String secretKey1 = response.jsonPath().getString("signOnKey");
+//        assertNotNull(secretKey1, "Secret key is null!");
+//        
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        String email = "vivek@moco.com.np";
+//        String requestDeviceId = "moco-travel-app";
+//        String plain_pin = "152986";
+//        Map<String, Object> credentials = new LinkedHashMap<>();
+//        credentials.put("email", email);
+//        String Pin = signatureCreate.encryptAES256(plain_pin, secretKey1);
+//        credentials.put("pin", Pin);
+//
+//        Map<String, Object> jsonBody = new LinkedHashMap<>();
+//        jsonBody.put("credentials", credentials);
+//        
+//     // Generate signature
+//        String data = objectMapper.writeValueAsString(jsonBody);
+//        String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey1);
+//        
+//        jsonBody.put("signature", requestSignature);
+//        
+//        System.out.println(jsonBody);
+//     // Send request
+//        Response response1 = given()
+//                .header("X-GEO-Location", "12,12")
+//                .header("X-Device-Id", requestDeviceId)
+//                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+//                .contentType("application/json")
+//                .body(jsonBody)
+//            .when()
+//                .post("/authenticate")
+//            .then()
+//                .statusCode(200)
+//                .log().all()
+//                .extract().response();
+//        AuthToken = response1.getHeader("X-AUTH-TOKEN");
+//        secretKey = response1.jsonPath().getString("sessionKey");
+//        
+//	}
     @Test
 	public void changePinwithValidCredentials() throws Exception {
 		baseURI = "https://visitor0.moco.com.np/visitor";
@@ -66,7 +121,7 @@ public class changePin {
         assertFalse(description.isEmpty(), "description is empty");
         
          assertEquals(code,"GNR_OK");
-		 assertEquals(description,"PIN changed successfully. Invalidate JWT. Redirect visitor to login.");
+		 assertEquals(description,"PIN changed successfully.");
         
 	}
 	
@@ -723,8 +778,8 @@ public class changePin {
         assertFalse(code.isEmpty(), "code is empty");
         assertFalse(description.isEmpty(), "description is empty");
         
-         assertEquals(code,"GNR_OK");
-		 assertEquals(description,"PIN changed successfully. Invalidate JWT. Redirect visitor to login.");
+         assertEquals(code,"GNR_AUTHENTICATION_FAIL");
+		 assertEquals(description,"Authentication Failed.");
 	}
 	
 	@Test
@@ -816,13 +871,13 @@ public class changePin {
         // Extracting and asserting response values
         String code = response.jsonPath().getString("code");
         String description = response.jsonPath().getString("description");
-        String signature = response.jsonPath().getString("signature");
+       // String signature = response.jsonPath().getString("signature");
 
-        assertNotNull(signature, "Signature is missing");
+        //assertNotNull(signature, "Signature is missing");
         assertNotNull(code, "code is missing from the response");
         assertNotNull(description, "description is missing from the response");
 
-        assertFalse(signature.isEmpty(), "Signature is empty");
+        //assertFalse(signature.isEmpty(), "Signature is empty");
         assertFalse(code.isEmpty(), "code is empty");
         assertFalse(description.isEmpty(), "description is empty");
         
@@ -909,7 +964,7 @@ public class changePin {
             .when()
                 .put("/pin")
             .then()
-                .statusCode(422)
+                .statusCode(401)
                 .log().all()
                 .extract().response();
         

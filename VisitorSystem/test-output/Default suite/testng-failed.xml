@@ -10,7 +10,6 @@
           <include name="changePinwhenOldPinIncorrect"/>
           <include name="changePinwhenOldPinPlain"/>
           <include name="changePinwhenDifferentkeysEncryption"/>
-          <include name="changePinwhenSignatureInvalid"/>
           <include name="changePinwhenNewPinPlain"/>
           <include name="changePinwhenOldpinSameNewPin"/>
           <include name="changePinwhenNewPinCriteria"/>

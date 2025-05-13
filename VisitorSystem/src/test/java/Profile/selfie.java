@@ -941,7 +941,7 @@ public class selfie {
 		    try (FileInputStream fis = new FileInputStream(selfie)) {
 		        Response response = given()
 		                .header("X-GEO-Location", "12,12")
-		                .header("X-AUTH-TOKEN", "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ2aXZla0Btb2NvLmNvbS5ucCIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tdHJhdmVsLWFwcCIsImlhdCI6MTc0Njc3OTcyOSwiZXhwIjoxNzQ2ODA5NzI5fQ.2uU_D-VcyiXuQMSRja8cLwK4K-KilgsZWdLi9asSuaYAz4nGXu6WLnT89kobkocN")
+		                .header("X-AUTH-TOKEN", "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ2aXZla0Btb2NvLmNvbS5ucCIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tdHJhdmVsLWFwcCIsImlhdCI6MTc0NzExMjAwNSwiZXhwIjoxNzQ3MTQyMDA1fQ.XxlXO-cniFD7sy6A841T84w8rLtJi-vebQjQ7qqkfOmeI7yCdW3iypLQlsTr_3ke")
 		                .header("X-Device-Id", "moco-travel-app")
 		                .header("User-Agent", "NepalTravelApp/1.0.0 android")
 		                .header("Accept", "*/*")  // matches curl default

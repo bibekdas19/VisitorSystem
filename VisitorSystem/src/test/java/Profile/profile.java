@@ -16,8 +16,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class profile {
-	String AuthToken = "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ2aXZla0Btb2NvLmNvbS5ucCIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tdHJhdmVsLWFwcCIsImlhdCI6MTc0Njc3OTcyOSwiZXhwIjoxNzQ2ODA5NzI5fQ.2uU_D-VcyiXuQMSRja8cLwK4K-KilgsZWdLi9asSuaYAz4nGXu6WLnT89kobkocN";
-	String secretKey = "qP9rjBMsyjY1QuIkLf0NuWkxtVqlp+belhQpU7GMyro=";
+	String AuthToken = "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ2aXZla0Btb2NvLmNvbS5ucCIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tdHJhdmVsLWFwcCIsImlhdCI6MTc0NzExMjAwNSwiZXhwIjoxNzQ3MTQyMDA1fQ.XxlXO-cniFD7sy6A841T84w8rLtJi-vebQjQ7qqkfOmeI7yCdW3iypLQlsTr_3kes";
+	String secretKey = "2f7254fdfdb729ee9322413fb7a36b5ef1ac7daa5c6c10be201e210241cd49fe";
 //    @BeforeClass
 //    public void getToken() throws Exception {
 //		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";

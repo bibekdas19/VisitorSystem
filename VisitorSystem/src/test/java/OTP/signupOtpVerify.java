@@ -15,8 +15,8 @@ import java.util.*;
 
 public class signupOtpVerify {
 	String baseURI = "https://visitor0.moco.com.np/visitor";
-    String secretKey = "aeeqL/IDDz2D+lrMqQ7eZo9ap9T4+9m9U1zu63cAY6A=";
-    String token = "6xyinItQGzwSA6zmDfXXStTaiDYbUzYoRwkcBH0OK3c";
+    String secretKey = "e33f51bbfcff3b033b3c210c13bd987de96cb04088c53aafb1fe0878b917c32e";
+    String token = "IPvv6QWx8-XDD25nENKaAu3c7VPPXD06JLIq36-JEwE";
 
 //    @BeforeClass
 //    public void getSecretKeyAndSignup() throws Exception {
@@ -1000,7 +1000,7 @@ public class signupOtpVerify {
  	 String email = "vivek@moco.com.np";
      String requestTimestamp = signatureCreate.generateTimestamp();
      String plain_pin = "152986";
-     String plain_otp = "900469";
+     String plain_otp = "707121";
      String requestdevice = "moco-travel-app";
      
      Map<String, Object> jsonBody = new LinkedHashMap<>();
