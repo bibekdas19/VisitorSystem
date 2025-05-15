@@ -3,20 +3,11 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="PIN.changePin">
+      <class name="OTP.verifyresetOtp">
         <methods>
-          <include name="changePinwithValidCredentials"/>
-          <include name="changePinwhenOldPinEmpty"/>
-          <include name="changePinwhenOldPinIncorrect"/>
-          <include name="changePinwhenOldPinPlain"/>
-          <include name="changePinwhenDifferentkeysEncryption"/>
-          <include name="changePinwhenNewPinPlain"/>
-          <include name="changePinwhenOldpinSameNewPin"/>
-          <include name="changePinwhenNewPinCriteria"/>
-          <include name="changePinwhenNewPinEmpty"/>
-          <include name="changePinwhenSignatureEmpty"/>
+          <include name="VerifyOtpwithValidCredentials"/>
         </methods>
-      </class> <!-- PIN.changePin -->
+      </class> <!-- OTP.verifyresetOtp -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

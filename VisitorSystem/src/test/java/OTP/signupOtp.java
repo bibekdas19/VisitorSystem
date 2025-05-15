@@ -14,6 +14,9 @@ import java.util.*;
 public class signupOtp {
 
     String secretKey;
+    String requestDeviceId = "visitor-app-device";
+    String email = "learner.bibekdas@gmail.com";
+    String requestTimestamp = signatureCreate.generateTimestamp();
 
     @BeforeClass
     public void setup() {
@@ -21,7 +24,7 @@ public class signupOtp {
 
         Response response = given()
                 .header("X-GEO-Location", "12,12")
-                .header("X-Device-Id", "moco-travel-app")
+                .header("X-Device-Id", requestDeviceId)
                 .header("User-Agent", "NepalTravelApp/1.0.0 android")
             .when()
                 .get("/key")
@@ -40,8 +43,6 @@ public class signupOtp {
     @Test
     public void signUpwithoutDevice() throws Exception {
     	 ObjectMapper objectMapper = new ObjectMapper();
-         String email = "vivek@moco.com.np";
-         String requestTimestamp = signatureCreate.generateTimestamp();
 
          // Prepare request without signature
          Map<String, Object> jsonBody = new HashMap<>();
@@ -85,8 +86,8 @@ public class signupOtp {
     @Test
     public void signUpwithoutUserAgent() throws Exception {
     	 ObjectMapper objectMapper = new ObjectMapper();
-         String email = "vivek@moco.com.np";
-         String requestTimestamp = signatureCreate.generateTimestamp();
+         
+
 
          // Prepare payload without signature
          Map<String, Object> jsonBody = new HashMap<>();
@@ -130,8 +131,6 @@ public class signupOtp {
     @Test
     public void signUpWithEmptyLocation() throws Exception {
     	 ObjectMapper objectMapper = new ObjectMapper();
-         String email = "vivek@moco.com.np";
-         String requestTimestamp = signatureCreate.generateTimestamp();
 
          // Prepare payload without signature
          Map<String, Object> jsonBody = new HashMap<>();
@@ -175,8 +174,6 @@ public class signupOtp {
     @Test
     public void signUpwithInvalidDevice() throws Exception {
     	 ObjectMapper objectMapper = new ObjectMapper();
-         String email = "vivek@moco.com.np";
-         String requestTimestamp = signatureCreate.generateTimestamp();
 
          // Prepare payload without signature
          Map<String, Object> jsonBody = new HashMap<>();
@@ -219,8 +216,6 @@ public class signupOtp {
     @Test
     public void signUpwithInvalidLocation() throws Exception {
     	 ObjectMapper objectMapper = new ObjectMapper();
-         String email = "vivek@moco.com.np";
-         String requestTimestamp = signatureCreate.generateTimestamp();
 
          // Prepare payload without signature
          Map<String, Object> jsonBody = new HashMap<>();
@@ -237,7 +232,7 @@ public class signupOtp {
         Response response = given()
                 .baseUri(baseURI)
                 .header("X-GEO-Location", "12,12aa")
-                .header("X-Device-Id", "moco-travel-app")
+                .header("X-Device-Id", requestDeviceId)
                 .header("User-Agent", "NepalTravelApp/1.0.0 android")
                 .contentType("application/json")
                 .body(jsonBody)
@@ -263,8 +258,8 @@ public class signupOtp {
     @Test
     public void signUpwithInvalidUserAgent() throws Exception {
     	 ObjectMapper objectMapper = new ObjectMapper();
-         String email = "vivek@moco.com.np";
-         String requestTimestamp = signatureCreate.generateTimestamp();
+         
+         
 
          // Prepare payload without signature
          Map<String, Object> jsonBody = new HashMap<>();
@@ -281,7 +276,7 @@ public class signupOtp {
             Response response = given()
                     .baseUri(baseURI)
                     .header("X-GEO-Location", "12,12")
-                    .header("X-Device-Id", "moco-travel-app")
+                    .header("X-Device-Id", requestDeviceId)
                     .header("User-Agent", "NepalTravelApp/1.0.0 androidqqqq")
                     .contentType("application/json")
                     .body(jsonBody)
@@ -325,7 +320,7 @@ public class signupOtp {
         Response response = given()
                 .baseUri(baseURI)
                 .header("X-GEO-Location", "12,12")
-                .header("X-Device-Id", "moco-travel-app")
+                .header("X-Device-Id", requestDeviceId)
                 .header("User-Agent", "NepalTravelApp/1.0.0 android")
                 .contentType("application/json")
                 .body(jsonBody)
@@ -352,7 +347,7 @@ public class signupOtp {
     @Test
     public void signUpwithEmptyTimestamp() throws Exception {
     	 ObjectMapper objectMapper = new ObjectMapper();
-         String email = "vivek@moco.com.np";
+         
          //String requestTimestamp = signatureCreate.generateTimestamp();
 
          // Prepare payload without signature
@@ -370,7 +365,7 @@ public class signupOtp {
         Response response = given()
                 .baseUri(baseURI)
                 .header("X-GEO-Location", "12,12")
-                .header("X-Device-Id", "moco-travel-app")
+                .header("X-Device-Id", requestDeviceId)
                 .header("User-Agent", "NepalTravelApp/1.0.0 android")
                 .contentType("application/json")
                 .body(jsonBody)
@@ -397,7 +392,7 @@ public class signupOtp {
     @Test
     public void signUpwithNoSignature() throws Exception {
     	// ObjectMapper objectMapper = new ObjectMapper();
-         String email = "vivek@moco.com.np";
+         
          String requestTimestamp = signatureCreate.generateTimestamp();
 
          // Prepare payload without signature
@@ -415,7 +410,7 @@ public class signupOtp {
         Response response = given()
                 .baseUri(baseURI)
                 .header("X-GEO-Location", "12,12")
-                .header("X-Device-Id", "moco-travel-app")
+                .header("X-Device-Id", requestDeviceId)
                 .header("User-Agent", "NepalTravelApp/1.0.0 android")
                 .contentType("application/json")
                 .body(jsonBody)
@@ -441,7 +436,7 @@ public class signupOtp {
     @Test
     public void signUpwithInvalidTime() throws Exception{
     	 ObjectMapper objectMapper = new ObjectMapper();
-         String email = "vivek@moco.com.np";
+         
         // String requestTimestamp = signatureCreate.generateTimestamp();
 
          // Prepare payload without signature
@@ -459,7 +454,7 @@ public class signupOtp {
         Response response = given()
                 .baseUri(baseURI)
                 .header("X-GEO-Location", "12,12")
-                .header("X-Device-Id", "moco-travel-app")
+                .header("X-Device-Id", requestDeviceId)
                 .header("User-Agent", "NepalTravelApp/1.0.0 android")
                 .contentType("application/json")
                 .body(jsonBody)
@@ -503,7 +498,7 @@ public class signupOtp {
         Response response = given()
                 .baseUri(baseURI)
                 .header("X-GEO-Location", "12,12")
-                .header("X-Device-Id", "moco-travel-app")
+                .header("X-Device-Id", requestDeviceId)
                 .header("User-Agent", "NepalTravelApp/1.0.0 android")
                 .contentType("application/json")
                 .body(jsonBody)
@@ -529,7 +524,7 @@ public class signupOtp {
     @Test
     public void signUpwithValidCredentials() throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
-        String email = "vivek@moco.com.np";
+        
         String requestTimestamp = signatureCreate.generateTimestamp();
 
 
@@ -548,7 +543,7 @@ public class signupOtp {
         // Send request
         Response response = given()
                 .header("X-GEO-Location", "12,12")
-                .header("X-Device-Id", "moco-travel-app")
+                .header("X-Device-Id", requestDeviceId)
                 .header("User-Agent", "NepalTravelApp/1.0.0 android")
                 .contentType("application/json")
                 .body(jsonBody)
@@ -584,7 +579,7 @@ public class signupOtp {
     @Test
     public void signUpwithDuplicateDevice() throws Exception{
     	 ObjectMapper objectMapper = new ObjectMapper();
-         String email = "vivek@moco.com.np";
+         
          String requestTimestamp = signatureCreate.generateTimestamp();
 
          // Prepare payload without signature
@@ -601,15 +596,11 @@ public class signupOtp {
         Response response = given()
                 .baseUri(baseURI)
                 .header("X-GEO-Location", "12,12")
-                .header("X-Device-Id", "moco-travel-appaaa") //already signed up device
+                .header("X-Device-Id", "moco-travels-app") //already signed up device
                 .header("User-Agent", "NepalTravelApp/1.0.0 android")
                 .contentType("application/json")
                 .body(jsonBody)
             .when()
-            
-            
-            
-            
                 .post("/signup/otp")
             .then()
                 .statusCode(409)
@@ -632,12 +623,12 @@ public class signupOtp {
     @Test
     public void signUpwithDuplicateEmail() throws Exception {
     	 ObjectMapper objectMapper = new ObjectMapper();
-         String email = "vivek@moco.com.np";
+         
          String requestTimestamp = signatureCreate.generateTimestamp();
 
          // Prepare payload without signature
          Map<String, Object> jsonBody = new HashMap<>();
-         jsonBody.put("email", email);
+         jsonBody.put("email", "vivek@moco.com.np");
          jsonBody.put("requestTimestamp", requestTimestamp);
 
          // Generate signature
@@ -650,7 +641,7 @@ public class signupOtp {
         Response response = given()
                 .baseUri(baseURI)
                 .header("X-GEO-Location", "12,12")
-                .header("X-Device-Id", "moco-travel-appaa")
+                .header("X-Device-Id", requestDeviceId)
                 .header("User-Agent", "NepalTravelApp/1.0.0 android")
                 .contentType("application/json")
                 .body(jsonBody)

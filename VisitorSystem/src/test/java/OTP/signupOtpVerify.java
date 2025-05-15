@@ -15,994 +15,927 @@ import java.util.*;
 
 public class signupOtpVerify {
 	String baseURI = "https://visitor0.moco.com.np/visitor";
-    String secretKey = "e33f51bbfcff3b033b3c210c13bd987de96cb04088c53aafb1fe0878b917c32e";
-    String token = "IPvv6QWx8-XDD25nENKaAu3c7VPPXD06JLIq36-JEwE";
+    String secretKey = "fa78a2ccdf67480e94674a1c635d3836c15e16821b893a57d0b49eafd7e9281a";
+    String token = "GuhrwSEnukbvH-DKtu6V5BRcaiv3MCSAiuGwOuBvasg";
+    String email = "learner.bibekdas@gmail.com";
+    String requestTimestamp = signatureCreate.generateTimestamp();
+    String plain_pin = "123654";
+    String plain_otp = "355847";
+    String requestdevice = "visitor-app-device";
 
-//    @BeforeClass
-//    public void getSecretKeyAndSignup() throws Exception {
-//    	 // Get secret key
-//        Response keyResponse = given()
-//                .baseUri(baseURI)
-//                .header("X-GEO-Location", "12,12")
-//                .header("X-Device-Id","3efe6bbeb55f4411")
-//                .header("User-Agent", "NepalTravelApp/1.0.0 android")
-//            .when()
-//                .get("/key")
-//            .then()
-//                .statusCode(200)
-//                .extract().response();
-//
-//        secretKey = keyResponse.jsonPath().getString("signOnKey");
-//        assertNotNull(secretKey, "Secret key is null!");
-//
-//        // Signup to get OTP and token
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        String email = "vivek@moco.com.np";
-//        String requestTimestamp = signatureCreate.generateTimestamp();
-//   
-//     // Prepare payload without signature
-//        Map<String, Object> jsonBody = new HashMap<>();
-//        jsonBody.put("email", email);
-//        jsonBody.put("requestTimestamp", requestTimestamp);
-//
-//        // Generate signature
-//        String data = objectMapper.writeValueAsString(jsonBody);
-//        String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
-//
-//        // Add signature
-//        jsonBody.put("signature", requestSignature);
-//        
-//        Response signupResponse = given()
-//                .baseUri(baseURI)
-//                .header("X-GEO-Location", "12,12")
-//                .header("X-Device-Id","3efe6bbeb55f4411")
-//                .header("User-Agent", "NepalTravelApp/1.0.0 android")
-//                .contentType("application/json")
-//                .body(jsonBody)
-//            .when()
-//                .post("/signup/otp")
-//            .then()
-//                .statusCode(200)
-//                .log().all()
-//                .extract().response();
-//        token = signupResponse.jsonPath().getString("token");
-//    }
+    @Test
+    public void verifySignUpOtpwithoutDeviceId() throws Exception {
+    	ObjectMapper objectMapper = new ObjectMapper();
+        //String requestdevice = "3efe6bbeb55f4411";
+        
+        Map<String, Object> jsonBody = new HashMap<>();
+        jsonBody.put("email", email);
+        jsonBody.put("requestTimestamp", requestTimestamp);
+       
+        //encryption with AES256 algorithm0
+        String otp = signatureCreate.encryptAES256(plain_otp, secretKey);
+        jsonBody.put("otp", otp);
+        String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
+        jsonBody.put("pin", pin);
+        
+        //placing token from signup API
+        jsonBody.put("token", token);
+        
+
+     // Generate signature
+        String data = objectMapper.writeValueAsString(jsonBody);
+        String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
+
+     // Add signature
+        jsonBody.put("signature", requestSignature);
+
+        Response response = given()
+                .baseUri(baseURI)
+                .header("X-GEO-Location", "12,12")
+                .header("X-Device-Id", "")
+                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+                .contentType("application/json")
+                .body(jsonBody)
+            .when()
+                .post("/signup/otp/verify")
+            .then()
+                .statusCode(400)
+                .log().all()
+                .extract().response();
+        
+
+        // Extracting and asserting response values
+        String code = response.jsonPath().getString("code");
+        String description = response.jsonPath().getString("description");
+        // check if it is null
+        assertNotNull(code, "code is missing");
+        assertNotNull(description, "description is missing from the response");
+        
+        //check if it is empty
+        assertFalse(code.isEmpty(), "code is empty");
+        assertFalse(description.isEmpty(), "description is empty");
+        
+        //assert code and description
+        assertEquals(code,"GNR_PARAM_MISSING");
+        assertEquals(description,"Bad Request.");
+    	
+    }
+    
+    @Test
+    public void verifySignUpOtpwithoutLocation() throws Exception{
+    	ObjectMapper objectMapper = new ObjectMapper();
+        
+        Map<String, Object> jsonBody = new HashMap<>();
+        jsonBody.put("email", email);
+        jsonBody.put("requestTimestamp", requestTimestamp);
+       
+        //encryption with AES256 algorithm0
+        String otp = signatureCreate.encryptAES256(plain_otp, secretKey);
+        jsonBody.put("otp", otp);
+        String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
+        jsonBody.put("pin", pin);
+        
+        //placing token from signup API
+        jsonBody.put("token", token);
+        
+
+     // Generate signature
+        String data = objectMapper.writeValueAsString(jsonBody);
+        String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
+
+     // Add signature
+        jsonBody.put("signature", requestSignature);
+
+        Response response = given()
+                .baseUri(baseURI)
+                .header("X-GEO-Location", "")
+                .header("X-Device-Id",requestdevice)
+                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+                .contentType("application/json")
+                .body(jsonBody)
+            .when()
+                .post("/signup/otp/verify")
+            .then()
+                .statusCode(400)
+                .log().all()
+                .extract().response();
+        
+
+        // Extracting and asserting response values
+        String code = response.jsonPath().getString("code");
+        String description = response.jsonPath().getString("description");
+        // check if it is null
+        assertNotNull(code, "code is missing");
+        assertNotNull(description, "description is missing from the response");
+        
+        //check if it is empty
+        assertFalse(code.isEmpty(), "code is empty");
+        assertFalse(description.isEmpty(), "description is empty");
+        
+        //assert code and description
+        assertEquals(code,"GNR_PARAM_MISSING");
+        assertEquals(description,"Bad Request.");
+
+    }
+    
+    @Test
+    public void verifySignUpwithoutUserAgent() throws Exception {
+    	ObjectMapper objectMapper = new ObjectMapper();
+    	
+        Map<String, Object> jsonBody = new HashMap<>();
+        jsonBody.put("email", email);
+        jsonBody.put("requestTimestamp", requestTimestamp);
+       
+        //encryption with AES256 algorithm0
+        String otp = signatureCreate.encryptAES256(plain_otp, secretKey);
+        jsonBody.put("otp", otp);
+        String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
+        jsonBody.put("pin", pin);
+        
+        //placing token from signup API
+        jsonBody.put("token", token);
+        
+
+     // Generate signature
+        String data = objectMapper.writeValueAsString(jsonBody);
+        String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
+
+     // Add signature
+        jsonBody.put("signature", requestSignature);
+
+        Response response = given()
+                .baseUri(baseURI)
+                .header("X-GEO-Location", "12,12")
+                .header("X-Device-Id",requestdevice)
+                .header("User-Agent", "")
+                .contentType("application/json")
+                .body(jsonBody)
+            .when()
+                .post("/signup/otp/verify")
+            .then()
+                .statusCode(400)
+                .log().all()
+                .extract().response();
+        
+
+        // Extracting and asserting response values
+        String code = response.jsonPath().getString("code");
+        String description = response.jsonPath().getString("description");
+        // check if it is null
+        assertNotNull(code, "code is missing");
+        assertNotNull(description, "description is missing from the response");
+        
+        //check if it is empty
+        assertFalse(code.isEmpty(), "code is empty");
+        assertFalse(description.isEmpty(), "description is empty");
+        
+        //assert code and description
+        assertEquals(code,"GNR_PARAM_MISSING");
+        assertEquals(description,"Bad Request.");
+        
+
+    }
+    
+    @Test
+    public void VerifySignupOtpwithoutemail() throws Exception{
+    	ObjectMapper objectMapper = new ObjectMapper();
+    	String email = "";
+        
+        
+        String plain_otp = "443062";
+        String requestdevice = "3efe6bbeb55f4411";
+        
+        Map<String, Object> jsonBody = new HashMap<>();
+        jsonBody.put("email", email);
+        jsonBody.put("requestTimestamp", requestTimestamp);
+       
+        //encryption with AES256 algorithm0
+        String otp = signatureCreate.encryptAES256(plain_otp, secretKey);
+        jsonBody.put("otp", otp);
+        String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
+        jsonBody.put("pin", pin);
+        
+        //placing token from signup API
+        jsonBody.put("token", token);
+        
+
+     // Generate signature
+        String data = objectMapper.writeValueAsString(jsonBody);
+        String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
+
+     // Add signature
+        jsonBody.put("signature", requestSignature);
+
+        Response response = given()
+                .baseUri(baseURI)
+                .header("X-GEO-Location", "12,12")
+                .header("X-Device-Id",requestdevice)
+                .header("User-Agent", "")
+                .contentType("application/json")
+                .body(jsonBody)
+            .when()
+                .post("/signup/otp/verify")
+            .then()
+                .statusCode(400)
+                .log().all()
+                .extract().response();
+        
+
+        // Extracting and asserting response values
+        String code = response.jsonPath().getString("code");
+        String description = response.jsonPath().getString("description");
+        // check if it is null
+        assertNotNull(code, "code is missing");
+        assertNotNull(description, "description is missing from the response");
+        
+        //check if it is empty
+        assertFalse(code.isEmpty(), "code is empty");
+        assertFalse(description.isEmpty(), "description is empty");
+        
+        //assert code and description
+        assertEquals(code,"GNR_PARAM_MISSING");
+        assertEquals(description,"Bad Request.");
+    }
 //    
-//    @Test
-//    public void verifySignUpOtpwithoutDeviceId() throws Exception {
-//    	ObjectMapper objectMapper = new ObjectMapper();
-//    	String email = "vivek@moco.com.np";
-//        String requestTimestamp = signatureCreate.generateTimestamp();
-//        String plain_pin = "152986";
-//        String plain_otp = "443062";
-//        //String requestdevice = "3efe6bbeb55f4411";
-//        
-//        Map<String, Object> jsonBody = new HashMap<>();
-//        jsonBody.put("email", email);
-//        jsonBody.put("requestTimestamp", requestTimestamp);
-//       
-//        //encryption with AES256 algorithm0
-//        String otp = signatureCreate.encryptAES256(plain_otp, secretKey);
-//        jsonBody.put("otp", otp);
-//        String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
-//        jsonBody.put("pin", pin);
-//        
-//        //placing token from signup API
-//        jsonBody.put("token", token);
-//        
-//
-//     // Generate signature
-//        String data = objectMapper.writeValueAsString(jsonBody);
-//        String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
-//
-//     // Add signature
-//        jsonBody.put("signature", requestSignature);
-//
-//        Response response = given()
-//                .baseUri(baseURI)
-//                .header("X-GEO-Location", "12,12")
-//                .header("X-Device-Id", "")
-//                .header("User-Agent", "NepalTravelApp/1.0.0 android")
-//                .contentType("application/json")
-//                .body(jsonBody)
-//            .when()
-//                .post("/signup/otp/verify")
-//            .then()
-//                .statusCode(400)
-//                .log().all()
-//                .extract().response();
-//        
-//
-//        // Extracting and asserting response values
-//        String code = response.jsonPath().getString("code");
-//        String description = response.jsonPath().getString("description");
-//        // check if it is null
-//        assertNotNull(code, "code is missing");
-//        assertNotNull(description, "description is missing from the response");
-//        
-//        //check if it is empty
-//        assertFalse(code.isEmpty(), "code is empty");
-//        assertFalse(description.isEmpty(), "description is empty");
-//        
-//        //assert code and description
-//        assertEquals(code,"GNR_PARAM_MISSING");
-//        assertEquals(description,"Bad Request.");
-//    	
-//    }
-//    
-//    @Test
-//    public void verifySignUpOtpwithoutLocation() throws Exception{
-//    	ObjectMapper objectMapper = new ObjectMapper();
-//    	String email = "vivek@moco.com.np";
-//        String requestTimestamp = signatureCreate.generateTimestamp();
-//        String plain_pin = "152986";
-//        String plain_otp = "443062";
-//        String requestdevice = "3efe6bbeb55f4411";
-//        
-//        Map<String, Object> jsonBody = new HashMap<>();
-//        jsonBody.put("email", email);
-//        jsonBody.put("requestTimestamp", requestTimestamp);
-//       
-//        //encryption with AES256 algorithm0
-//        String otp = signatureCreate.encryptAES256(plain_otp, secretKey);
-//        jsonBody.put("otp", otp);
-//        String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
-//        jsonBody.put("pin", pin);
-//        
-//        //placing token from signup API
-//        jsonBody.put("token", token);
-//        
-//
-//     // Generate signature
-//        String data = objectMapper.writeValueAsString(jsonBody);
-//        String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
-//
-//     // Add signature
-//        jsonBody.put("signature", requestSignature);
-//
-//        Response response = given()
-//                .baseUri(baseURI)
-//                .header("X-GEO-Location", "")
-//                .header("X-Device-Id",requestdevice)
-//                .header("User-Agent", "NepalTravelApp/1.0.0 android")
-//                .contentType("application/json")
-//                .body(jsonBody)
-//            .when()
-//                .post("/signup/otp/verify")
-//            .then()
-//                .statusCode(400)
-//                .log().all()
-//                .extract().response();
-//        
-//
-//        // Extracting and asserting response values
-//        String code = response.jsonPath().getString("code");
-//        String description = response.jsonPath().getString("description");
-//        // check if it is null
-//        assertNotNull(code, "code is missing");
-//        assertNotNull(description, "description is missing from the response");
-//        
-//        //check if it is empty
-//        assertFalse(code.isEmpty(), "code is empty");
-//        assertFalse(description.isEmpty(), "description is empty");
-//        
-//        //assert code and description
-//        assertEquals(code,"GNR_PARAM_MISSING");
-//        assertEquals(description,"Bad Request.");
-//
-//    }
-//    
-//    @Test
-//    public void verifySignUpwithoutUserAgent() throws Exception {
-//    	ObjectMapper objectMapper = new ObjectMapper();
-//    	String email = "vivek@moco.com.np";
-//        String requestTimestamp = signatureCreate.generateTimestamp();
-//        String plain_pin = "152986";
-//        String plain_otp = "443062";
-//        String requestdevice = "3efe6bbeb55f4411";
-//        
-//        Map<String, Object> jsonBody = new HashMap<>();
-//        jsonBody.put("email", email);
-//        jsonBody.put("requestTimestamp", requestTimestamp);
-//       
-//        //encryption with AES256 algorithm0
-//        String otp = signatureCreate.encryptAES256(plain_otp, secretKey);
-//        jsonBody.put("otp", otp);
-//        String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
-//        jsonBody.put("pin", pin);
-//        
-//        //placing token from signup API
-//        jsonBody.put("token", token);
-//        
-//
-//     // Generate signature
-//        String data = objectMapper.writeValueAsString(jsonBody);
-//        String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
-//
-//     // Add signature
-//        jsonBody.put("signature", requestSignature);
-//
-//        Response response = given()
-//                .baseUri(baseURI)
-//                .header("X-GEO-Location", "12,12")
-//                .header("X-Device-Id",requestdevice)
-//                .header("User-Agent", "")
-//                .contentType("application/json")
-//                .body(jsonBody)
-//            .when()
-//                .post("/signup/otp/verify")
-//            .then()
-//                .statusCode(400)
-//                .log().all()
-//                .extract().response();
-//        
-//
-//        // Extracting and asserting response values
-//        String code = response.jsonPath().getString("code");
-//        String description = response.jsonPath().getString("description");
-//        // check if it is null
-//        assertNotNull(code, "code is missing");
-//        assertNotNull(description, "description is missing from the response");
-//        
-//        //check if it is empty
-//        assertFalse(code.isEmpty(), "code is empty");
-//        assertFalse(description.isEmpty(), "description is empty");
-//        
-//        //assert code and description
-//        assertEquals(code,"GNR_PARAM_MISSING");
-//        assertEquals(description,"Bad Request.");
-//        
-//
-//    }
-//    
-//    @Test
-//    public void VerifySignupOtpwithoutemail() throws Exception{
-//    	ObjectMapper objectMapper = new ObjectMapper();
-//    	String email = "";
-//        String requestTimestamp = signatureCreate.generateTimestamp();
-//        String plain_pin = "152986";
-//        String plain_otp = "443062";
-//        String requestdevice = "3efe6bbeb55f4411";
-//        
-//        Map<String, Object> jsonBody = new HashMap<>();
-//        jsonBody.put("email", email);
-//        jsonBody.put("requestTimestamp", requestTimestamp);
-//       
-//        //encryption with AES256 algorithm0
-//        String otp = signatureCreate.encryptAES256(plain_otp, secretKey);
-//        jsonBody.put("otp", otp);
-//        String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
-//        jsonBody.put("pin", pin);
-//        
-//        //placing token from signup API
-//        jsonBody.put("token", token);
-//        
-//
-//     // Generate signature
-//        String data = objectMapper.writeValueAsString(jsonBody);
-//        String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
-//
-//     // Add signature
-//        jsonBody.put("signature", requestSignature);
-//
-//        Response response = given()
-//                .baseUri(baseURI)
-//                .header("X-GEO-Location", "12,12")
-//                .header("X-Device-Id",requestdevice)
-//                .header("User-Agent", "")
-//                .contentType("application/json")
-//                .body(jsonBody)
-//            .when()
-//                .post("/signup/otp/verify")
-//            .then()
-//                .statusCode(400)
-//                .log().all()
-//                .extract().response();
-//        
-//
-//        // Extracting and asserting response values
-//        String code = response.jsonPath().getString("code");
-//        String description = response.jsonPath().getString("description");
-//        // check if it is null
-//        assertNotNull(code, "code is missing");
-//        assertNotNull(description, "description is missing from the response");
-//        
-//        //check if it is empty
-//        assertFalse(code.isEmpty(), "code is empty");
-//        assertFalse(description.isEmpty(), "description is empty");
-//        
-//        //assert code and description
-//        assertEquals(code,"GNR_PARAM_MISSING");
-//        assertEquals(description,"Bad Request.");
-//    }
-////    
-//  @Test
-//  public void VerifySignUpOtpwithoutTimestamp() throws Exception{
-//	  ObjectMapper objectMapper = new ObjectMapper();
-//  	String email = "vivek@moco.com.np";
-//      String requestTimestamp = "";
-//      String plain_pin = "152986";
-//      String plain_otp = "443062";
-//      String requestdevice = "3efe6bbeb55f4411";
-//      
-//      Map<String, Object> jsonBody = new HashMap<>();
-//      jsonBody.put("email", email);
-//      jsonBody.put("requestTimestamp", requestTimestamp);
-//     
-//      //encryption with AES256 algorithm0
-//      String otp = signatureCreate.encryptAES256(plain_otp, secretKey);
-//      jsonBody.put("otp", otp);
-//      String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
-//      jsonBody.put("pin", pin);
-//      
-//      //placing token from signup API
-//      jsonBody.put("token", token);
-//      
-//
-//   // Generate signature
-//      String data = objectMapper.writeValueAsString(jsonBody);
-//      String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
-//
-//   // Add signature
-//      jsonBody.put("signature", requestSignature);
-//
-//    Response response = given()
-//            .baseUri(baseURI)
-//            .header("X-GEO-Location", "12,12")
-//            .header("X-Device-Id",requestdevice)
-//            .header("User-Agent", "")
-//            .contentType("application/json")
-//            .body(jsonBody)
-//        .when()
-//            .post("/signup/otp/verify")
-//        .then()
-//            .statusCode(400)
-//            .log().all()
-//            .extract().response();
-//    
-//
-//    // Extracting and asserting response values
-//    String code = response.jsonPath().getString("code");
-//    String description = response.jsonPath().getString("description");
-//    // check if it is null
-//    assertNotNull(code, "code is missing");
-//    assertNotNull(description, "description is missing from the response");
-//    
-//    //check if it is empty
-//    assertFalse(code.isEmpty(), "code is empty");
-//    assertFalse(description.isEmpty(), "description is empty");
-//    
-//    //assert code and description
-//    assertEquals(code,"GNR_PARAM_MISSING");
-//    assertEquals(description,"Bad Request.");
-//  }
-////  
-// @Test
-// public void VerifySignUpOtpwithoutOtp() throws Exception {
-//	 ObjectMapper objectMapper = new ObjectMapper();
-// 	String email = "vivek@moco.com.np";
-//     String requestTimestamp = signatureCreate.generateTimestamp();
-//     String plain_pin = "152986";
-//     String plain_otp = "";
-//     String requestdevice = "3efe6bbeb55f4411";
-//     
-//     Map<String, Object> jsonBody = new HashMap<>();
-//     jsonBody.put("email", email);
-//     jsonBody.put("requestTimestamp", requestTimestamp);
-//    
-//     //encryption with AES256 algorithm0
-//     String otp = signatureCreate.encryptAES256(plain_otp, secretKey);
-//     jsonBody.put("otp", otp);
-//     String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
-//     jsonBody.put("pin", pin);
-//     
-//     //placing token from signup API
-//     jsonBody.put("token", token);
-//     
-//
-//  // Generate signature
-//     String data = objectMapper.writeValueAsString(jsonBody);
-//     String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
-//
-//  // Add signature
-//     jsonBody.put("signature", requestSignature);
-//
-//     Response response = given()
-//             .baseUri(baseURI)
-//             .header("X-GEO-Location", "12,12")
-//             .header("X-Device-Id",requestdevice)
-//             .header("User-Agent", "")
-//             .contentType("application/json")
-//             .body(jsonBody)
-//         .when()
-//             .post("/signup/otp/verify")
-//         .then()
-//             .statusCode(400)
-//             .log().all()
-//             .extract().response();
-//     
-//
-//     // Extracting and asserting response values
-//     String code = response.jsonPath().getString("code");
-//     String description = response.jsonPath().getString("description");
-//     // check if it is null
-//     assertNotNull(code, "code is missing");
-//     assertNotNull(description, "description is missing from the response");
-//     
-//     //check if it is empty
-//     assertFalse(code.isEmpty(), "code is empty");
-//     assertFalse(description.isEmpty(), "description is empty");
-//     
-//     //assert code and description
-//     assertEquals(code,"GNR_PARAM_MISSING");
-//     assertEquals(description,"Bad Request.");
-// }
-//// 
-// @Test
-// public void VerifySignUpOtpwithoutpin() throws Exception {
-//	ObjectMapper objectMapper = new ObjectMapper();
-// 	String email = "vivek@moco.com.np";
-//    String requestTimestamp = signatureCreate.generateTimestamp();
-//    String plain_pin = "152986";
-//    String plain_otp = "";
-//    String requestdevice = "3efe6bbeb55f4411";
-//    
-//    Map<String, Object> jsonBody = new HashMap<>();
-//    jsonBody.put("email", email);
-//    jsonBody.put("requestTimestamp", requestTimestamp);
-//   
-//    //encryption with AES256 algorithm0
-//    String otp = signatureCreate.encryptAES256(plain_otp, secretKey);
-//    jsonBody.put("otp", otp);
-//    String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
-//    jsonBody.put("pin", pin);
-//    
-//    //placing token from signup API
-//    jsonBody.put("token", token);
-//    
-//
-// // Generate signature
-//    String data = objectMapper.writeValueAsString(jsonBody);
-//    String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
-//
-// // Add signature
-//    jsonBody.put("signature", requestSignature);
-//
-//     Response response = given()
-//             .baseUri(baseURI)
-//             .header("X-GEO-Location", "12,12")
-//             .header("X-Device-Id",requestdevice)
-//             .header("User-Agent", "")
-//             .contentType("application/json")
-//             .body(jsonBody)
-//         .when()
-//             .post("/signup/otp/verify")
-//         .then()
-//             .statusCode(400)
-//             .log().all()
-//             .extract().response();
-//     
-//
-//     // Extracting and asserting response values
-//     String code = response.jsonPath().getString("code");
-//     String description = response.jsonPath().getString("description");
-//     // check if it is null
-//     assertNotNull(code, "code is missing");
-//     assertNotNull(description, "description is missing from the response");
-//     
-//     //check if it is empty
-//     assertFalse(code.isEmpty(), "code is empty");
-//     assertFalse(description.isEmpty(), "description is empty");
-//     
-//     //assert code and description
-//     assertEquals(code,"GNR_PARAM_MISSING");
-//     assertEquals(description,"Bad Request.");
-//	 
-// }
+  @Test
+  public void VerifySignUpOtpwithoutTimestamp() throws Exception{
+	  ObjectMapper objectMapper = new ObjectMapper();
+  	
+      String requestTimestamp = "";
+      
+      String plain_otp = "443062";
+      String requestdevice = "3efe6bbeb55f4411";
+      
+      Map<String, Object> jsonBody = new HashMap<>();
+      jsonBody.put("email", email);
+      jsonBody.put("requestTimestamp", requestTimestamp);
+     
+      //encryption with AES256 algorithm0
+      String otp = signatureCreate.encryptAES256(plain_otp, secretKey);
+      jsonBody.put("otp", otp);
+      String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
+      jsonBody.put("pin", pin);
+      
+      //placing token from signup API
+      jsonBody.put("token", token);
+      
+
+   // Generate signature
+      String data = objectMapper.writeValueAsString(jsonBody);
+      String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
+
+   // Add signature
+      jsonBody.put("signature", requestSignature);
+
+    Response response = given()
+            .baseUri(baseURI)
+            .header("X-GEO-Location", "12,12")
+            .header("X-Device-Id",requestdevice)
+            .header("User-Agent", "")
+            .contentType("application/json")
+            .body(jsonBody)
+        .when()
+            .post("/signup/otp/verify")
+        .then()
+            .statusCode(400)
+            .log().all()
+            .extract().response();
+    
+
+    // Extracting and asserting response values
+    String code = response.jsonPath().getString("code");
+    String description = response.jsonPath().getString("description");
+    // check if it is null
+    assertNotNull(code, "code is missing");
+    assertNotNull(description, "description is missing from the response");
+    
+    //check if it is empty
+    assertFalse(code.isEmpty(), "code is empty");
+    assertFalse(description.isEmpty(), "description is empty");
+    
+    //assert code and description
+    assertEquals(code,"GNR_PARAM_MISSING");
+    assertEquals(description,"Bad Request.");
+  }
+//  
+ @Test
+ public void VerifySignUpOtpwithoutOtp() throws Exception {
+	 ObjectMapper objectMapper = new ObjectMapper();
+ 	
+     
+     
+     String plain_otp = "";
+     String requestdevice = "3efe6bbeb55f4411";
+     
+     Map<String, Object> jsonBody = new HashMap<>();
+     jsonBody.put("email", email);
+     jsonBody.put("requestTimestamp", requestTimestamp);
+    
+     //encryption with AES256 algorithm0
+     String otp = signatureCreate.encryptAES256(plain_otp, secretKey);
+     jsonBody.put("otp", otp);
+     String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
+     jsonBody.put("pin", pin);
+     
+     //placing token from signup API
+     jsonBody.put("token", token);
+     
+
+  // Generate signature
+     String data = objectMapper.writeValueAsString(jsonBody);
+     String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
+
+  // Add signature
+     jsonBody.put("signature", requestSignature);
+
+     Response response = given()
+             .baseUri(baseURI)
+             .header("X-GEO-Location", "12,12")
+             .header("X-Device-Id",requestdevice)
+             .header("User-Agent", "")
+             .contentType("application/json")
+             .body(jsonBody)
+         .when()
+             .post("/signup/otp/verify")
+         .then()
+             .statusCode(400)
+             .log().all()
+             .extract().response();
+     
+
+     // Extracting and asserting response values
+     String code = response.jsonPath().getString("code");
+     String description = response.jsonPath().getString("description");
+     // check if it is null
+     assertNotNull(code, "code is missing");
+     assertNotNull(description, "description is missing from the response");
+     
+     //check if it is empty
+     assertFalse(code.isEmpty(), "code is empty");
+     assertFalse(description.isEmpty(), "description is empty");
+     
+     //assert code and description
+     assertEquals(code,"GNR_PARAM_MISSING");
+     assertEquals(description,"Bad Request.");
+ }
 // 
-// @Test
-// public void VerifySignUpwithouttoken() throws Exception {
-//	 ObjectMapper objectMapper = new ObjectMapper();
-// 	String email = "vivek@moco.com.np";
-//     String requestTimestamp = signatureCreate.generateTimestamp();
-//     String plain_pin = "152986";
-//     String plain_otp = "443062";
-//     String requestdevice = "3efe6bbeb55f4411";
-//     
-//     Map<String, Object> jsonBody = new HashMap<>();
-//     jsonBody.put("email", email);
-//     jsonBody.put("requestTimestamp", requestTimestamp);
-//    
-//     //encryption with AES256 algorithm0
-//     String otp = signatureCreate.encryptAES256(plain_otp, secretKey);
-//     jsonBody.put("otp", otp);
-//     String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
-//     jsonBody.put("pin", pin);
-//     
-//     //placing token from signup API
-//     jsonBody.put("token", "");
-//     
-//
-//  // Generate signature
-//     String data = objectMapper.writeValueAsString(jsonBody);
-//     String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
-//
-//  // Add signature
-//     jsonBody.put("signature", requestSignature);
-//
-//     Response response = given()
-//             .baseUri(baseURI)
-//             .header("X-GEO-Location", "12,12")
-//             .header("X-Device-Id",requestdevice)
-//             .header("User-Agent", "")
-//             .contentType("application/json")
-//             .body(jsonBody)
-//         .when()
-//             .post("/signup/otp/verify")
-//         .then()
-//             .statusCode(400)
-//             .log().all()
-//             .extract().response();
-//     
-//
-//     // Extracting and asserting response values
-//     String code = response.jsonPath().getString("code");
-//     String description = response.jsonPath().getString("description");
-//     // check if it is null
-//     assertNotNull(code, "code is missing");
-//     assertNotNull(description, "description is missing from the response");
-//     
-//     //check if it is empty
-//     assertFalse(code.isEmpty(), "code is empty");
-//     assertFalse(description.isEmpty(), "description is empty");
-//     
-//     //assert code and description
-//     assertEquals(code,"GNR_PARAM_MISSING");
-//     assertEquals(description,"Bad Request.");
-// }
-// 
-// @Test
-// public void VerifySignUpwithoutSignature() throws Exception {
-//	// ObjectMapper objectMapper = new ObjectMapper();
-// 	 String email = "vivek@moco.com.np";
-//     String requestTimestamp = signatureCreate.generateTimestamp();
-//     String plain_pin = "152986";
-//     String plain_otp = "443062";
-//     String requestdevice = "3efe6bbeb55f4411";
-//     
-//     Map<String, Object> jsonBody = new HashMap<>();
-//     jsonBody.put("email", email);
-//     jsonBody.put("requestTimestamp", requestTimestamp);
-//    
-//     //encryption with AES256 algorithm0
-//     String otp = signatureCreate.encryptAES256(plain_otp, secretKey);
-//     jsonBody.put("otp", otp);
-//     String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
-//     jsonBody.put("pin", pin);
-//     
-//     //placing token from signup API
-//     jsonBody.put("token", token);
-//     
-//
-//  // Generate signature
-//     //String data = objectMapper.writeValueAsString(jsonBody);
-//     //String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
-//
-//  // Add signature
-//     jsonBody.put("signature", "");
-//
-//     Response response = given()
-//             .baseUri(baseURI)
-//             .header("X-GEO-Location", "12,12")
-//             .header("X-Device-Id", requestdevice)
-//             .header("User-Agent", "")
-//             .contentType("application/json")
-//             .body(jsonBody)
-//         .when()
-//             .post("/signup/otp/verify")
-//         .then()
-//             .statusCode(400)
-//             .log().all()
-//             .extract().response();
-//     
-//
-//     // Extracting and asserting response values
-//     String code = response.jsonPath().getString("code");
-//     String description = response.jsonPath().getString("description");
-//     // check if it is null
-//     assertNotNull(code, "code is missing");
-//     assertNotNull(description, "description is missing from the response");
-//     
-//     //check if it is empty
-//     assertFalse(code.isEmpty(), "code is empty");
-//     assertFalse(description.isEmpty(), "description is empty");
-//     
-//     //assert code and description
-//     assertEquals(code,"GNR_PARAM_MISSING");
-//     assertEquals(description,"Bad Request.");
-// }
-// 
-// @Test
-// public void VerifySignUpwithInvalidEmail() throws Exception {
-//	 ObjectMapper objectMapper = new ObjectMapper();
-// 	String email = "vivekmoco.com.np";
-//     String requestTimestamp = signatureCreate.generateTimestamp();
-//     String plain_pin = "152986";
-//     String plain_otp = "443062";
-//     String requestdevice = "3efe6bbeb55f4411";
-//     
-//     Map<String, Object> jsonBody = new HashMap<>();
-//     jsonBody.put("email", email);
-//     jsonBody.put("requestTimestamp", requestTimestamp);
-//    
-//     //encryption with AES256 algorithm0
-//    // String otp = signatureCreate.encryptAES256(plain_otp, secretKey);
-//     jsonBody.put("otp", plain_otp);
-//     String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
-//     jsonBody.put("pin", pin);
-//     
-//     //placing token from signup API
-//     jsonBody.put("token", token);
-//     
-//
-//  // Generate signature
-//     String data = objectMapper.writeValueAsString(jsonBody);
-//     String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
-//
-//  // Add signature
-//     jsonBody.put("signature", requestSignature);
-//     
-//     System.out.println(jsonBody);
-//
-//     Response response = given()
-//             .baseUri(baseURI)
-//             .header("X-GEO-Location", "12,12")
-//             .header("X-Device-Id", requestdevice)
-//             .header("User-Agent", "NepalTravelApp/1.0.0 android")
-//             .contentType("application/json")
-//             .body(jsonBody)
-//         .when()
-//             .post("/signup/otp/verify")
-//         .then()
-//             .statusCode(422)
-//             .log().all()
-//             .extract().response();
-//     
-//
-//     // Extracting and asserting response values
-//     String code = response.jsonPath().getString("code");
-//     String description = response.jsonPath().getString("description");
-//     // check if it is null
-//     assertNotNull(code, "code is missing");
-//     assertNotNull(description, "description is missing from the response");
-//     
-//     //check if it is empty
-//     assertFalse(code.isEmpty(), "code is empty");
-//     assertFalse(description.isEmpty(), "description is empty");
-//     
-//     //assert code and description
-//     assertEquals(code,"GNR_INVALID_DATA");
-//     assertEquals(description,"Invalid Data.");
-// }
-// @Test
-// public void VerifySignupwithInvalidTimestamp() throws Exception {
-//	 ObjectMapper objectMapper = new ObjectMapper();
-// 	 String email = "vivek@moco.com.np";
-//     String requestTimestamp = "25:88:53";
-//     String plain_pin = "152986";
-//     String plain_otp = "443062";
-//     String requestdevice = "3efe6bbeb55f4411";
-//     
-//     Map<String, Object> jsonBody = new HashMap<>();
-//     jsonBody.put("email", email);
-//     jsonBody.put("requestTimestamp", requestTimestamp);
-//    
-//     //encryption with AES256 algorithm0
-//     //String otp = signatureCreate.encryptAES256(plain_otp, secretKey);
-//     jsonBody.put("otp", plain_otp);
-//     String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
-//     jsonBody.put("pin", pin);
-//     
-//     //placing token from signup API
-//     jsonBody.put("token", token);
-//     
-//
-//  // Generate signature
-//     String data = objectMapper.writeValueAsString(jsonBody);
-//     String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
-//
-//  // Add signature
-//     jsonBody.put("signature", requestSignature);
-//     
-//     System.out.println(jsonBody);
-//
-//     Response response = given()
-//             .baseUri(baseURI)
-//             .header("X-GEO-Location", "12,12")
-//             .header("X-Device-Id", requestdevice)
-//             .header("User-Agent", "NepalTravelApp/1.0.0 android")
-//             .contentType("application/json")
-//             .body(jsonBody)
-//         .when()
-//             .post("/signup/otp/verify")
-//         .then()
-//             .statusCode(422)
-//             .log().all()
-//             .extract().response();
-//     
-//
-//     // Extracting and asserting response values
-//     String code = response.jsonPath().getString("code");
-//     String description = response.jsonPath().getString("description");
-//     // check if it is null
-//     assertNotNull(code, "code is missing");
-//     assertNotNull(description, "description is missing from the response");
-//     
-//     //check if it is empty
-//     assertFalse(code.isEmpty(), "code is empty");
-//     assertFalse(description.isEmpty(), "description is empty");
-//     
-//     //assert code and description
-//     assertEquals(code,"GNR_INVALID_DATA");
-//     assertEquals(description,"Invalid Data.");
-//	 
-// }
-// 
-//@Test
-//public void VerifySignUpwithInvalidOtp() throws Exception {
-//	ObjectMapper objectMapper = new ObjectMapper();
-//	String email = "vivek@moco.com.np";
-//    String requestTimestamp = signatureCreate.generateTimestamp();
-//    String plain_pin = "152986";
-//    String plain_otp = "5$543";
-//    String requestdevice = "3efe6bbeb55f4411";
-//    
-//    Map<String, Object> jsonBody = new HashMap<>();
-//    jsonBody.put("email", email);
-//    jsonBody.put("requestTimestamp", requestTimestamp);
-//   
-//    //encryption with AES256 algorithm0
-//    String otp = signatureCreate.encryptAES256(plain_otp, secretKey);
-//    jsonBody.put("otp", otp);
-//    String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
-//    jsonBody.put("pin", pin);
-//    
-//    //placing token from signup API
-//    jsonBody.put("token", token);
-//    
-//
-// // Generate signature
-//    String data = objectMapper.writeValueAsString(jsonBody);
-//    String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
-//
-// // Add signature
-//    jsonBody.put("signature", requestSignature);
-//
-//    Response response = given()
-//            .baseUri(baseURI)
-//            .header("X-GEO-Location", "12,12")
-//            .header("X-Device-Id", requestdevice)
-//            .header("User-Agent", "")
-//            .contentType("application/json")
-//            .body(jsonBody)
-//        .when()
-//            .post("/signup/otp/verify")
-//        .then()
-//            .statusCode(400)
-//            .log().all()
-//            .extract().response();
-//    
-//
-//    // Extracting and asserting response values
-//    String code = response.jsonPath().getString("code");
-//    String description = response.jsonPath().getString("description");
-//    // check if it is null
-//    assertNotNull(code, "code is missing");
-//    assertNotNull(description, "description is missing from the response");
-//    
-//    //check if it is empty
-//    assertFalse(code.isEmpty(), "code is empty");
-//    assertFalse(description.isEmpty(), "description is empty");
-//    
-//    //assert code and description
-//    assertEquals(code,"GNR_PARAM_MISSING");
-//    assertEquals(description,"Bad Request.");
-//	
-//}
-//
-//@Test
-//public void VerifySignUpwithInvalidPin() throws Exception {
-//	ObjectMapper objectMapper = new ObjectMapper();
-//	String email = "vivek@moco.com.np";
-//    String requestTimestamp = signatureCreate.generateTimestamp();
-//    String plain_pin = "89*7";
-//    String plain_otp = "443062";
-//    String requestdevice = "3efe6bbeb55f4411";
-//    
-//    Map<String, Object> jsonBody = new HashMap<>();
-//    jsonBody.put("email", email);
-//    jsonBody.put("requestTimestamp", requestTimestamp);
-//   
-//    //encryption with AES256 algorithm0
-//    String otp = signatureCreate.encryptAES256(plain_otp, secretKey);
-//    jsonBody.put("otp", otp);
-//    String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
-//    jsonBody.put("pin", pin);
-//    
-//    //placing token from signup API
-//    jsonBody.put("token", token);
-//    
-//
-// // Generate signature
-//    String data = objectMapper.writeValueAsString(jsonBody);
-//    String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
-//
-// // Add signature
-//    jsonBody.put("signature", requestSignature);
-//
-//    Response response = given()
-//            .baseUri(baseURI)
-//            .header("X-GEO-Location", "12,12")
-//            .header("X-Device-Id", requestdevice)
-//            .header("User-Agent", "")
-//            .contentType("application/json")
-//            .body(jsonBody)
-//        .when()
-//            .post("/signup/otp/verify")
-//        .then()
-//            .statusCode(400)
-//            .log().all()
-//            .extract().response();
-//    
-//
-//    // Extracting and asserting response values
-//    String code = response.jsonPath().getString("code");
-//    String description = response.jsonPath().getString("description");
-//    // check if it is null
-//    assertNotNull(code, "code is missing");
-//    assertNotNull(description, "description is missing from the response");
-//    
-//    //check if it is empty
-//    assertFalse(code.isEmpty(), "code is empty");
-//    assertFalse(description.isEmpty(), "description is empty");
-//    
-//    //assert code and description
-//    assertEquals(code,"GNR_PARAM_MISSING");
-//    assertEquals(description,"Bad Request.");
-//}
-// @Test
-// public void VerifySignUpwithInvalidToken() throws Exception {
-//	 ObjectMapper objectMapper = new ObjectMapper();
-// 	String email = "vivek@moco.com.np";
-//     String requestTimestamp = signatureCreate.generateTimestamp();
-//     String plain_pin = "152986";
-//     String plain_otp = "443062";
-//     String requestdevice = "3efe6bbeb55f4411";
-//     
-//     Map<String, Object> jsonBody = new HashMap<>();
-//     jsonBody.put("email", email);
-//     jsonBody.put("requestTimestamp", requestTimestamp);
-//    
-//     //encryption with AES256 algorithm0
-//     String otp = signatureCreate.encryptAES256(plain_otp, secretKey);
-//     jsonBody.put("otp", otp);
-//     String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
-//     jsonBody.put("pin", pin);
-//     
-//     //placing token from signup API
-//     jsonBody.put("token", "lo$5==");
-//     
-//
-//  // Generate signature
-//     String data = objectMapper.writeValueAsString(jsonBody);
-//     String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
-//
-//  // Add signature
-//     jsonBody.put("signature", requestSignature);
-//
-//     Response response = given()
-//             .baseUri(baseURI)
-//             .header("X-GEO-Location", "12,12")
-//             .header("X-Device-Id", requestdevice)
-//             .header("User-Agent", "")
-//             .contentType("application/json")
-//             .body(jsonBody)
-//         .when()
-//             .post("/signup/otp/verify")
-//         .then()
-//             .statusCode(400)
-//             .log().all()
-//             .extract().response();
-//     
-//
-//     // Extracting and asserting response values
-//     String code = response.jsonPath().getString("code");
-//     String description = response.jsonPath().getString("description");
-//     // check if it is null
-//     assertNotNull(code, "code is missing");
-//     assertNotNull(description, "description is missing from the response");
-//     
-//     //check if it is empty
-//     assertFalse(code.isEmpty(), "code is empty");
-//     assertFalse(description.isEmpty(), "description is empty");
-//     
-//     //assert code and description
-//     assertEquals(code,"GNR_PARAM_MISSING");
-//     assertEquals(description,"Bad Request.");
-// }
-// 
-// @Test
-// public void VerifySignUpwithWrongSignature() throws Exception {
-//	 //ObjectMapper objectMapper = new ObjectMapper();
-// 	String email = "vivek@moco.com.np";
-//     String requestTimestamp = signatureCreate.generateTimestamp();
-//     String plain_pin = "152986";
-//     String plain_otp = "443062";
-//     String requestdevice = "3efe6bbeb55f4411";
-//     
-//     Map<String, Object> jsonBody = new HashMap<>();
-//     jsonBody.put("email", email);
-//     jsonBody.put("requestTimestamp", requestTimestamp);
-//    
-//     //encryption with AES256 algorithm0
-//     String otp = signatureCreate.encryptAES256(plain_otp, secretKey);
-//     jsonBody.put("otp", otp);
-//     String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
-//     jsonBody.put("pin", pin);
-//     
-//     //placing token from signup API
-//     jsonBody.put("token", token);
-//     
-//
-//  // Generate signature
-//     //String data = objectMapper.writeValueAsString(jsonBody);
-//     //String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
-//
-//  // Add signature
-//     jsonBody.put("signature", "3edrHytu&6544-===");
-//
-//     Response response = given()
-//             .baseUri(baseURI)
-//             .header("X-GEO-Location", "12,12")
-//             .header("X-Device-Id", requestdevice)
-//             .header("User-Agent", "")
-//             .contentType("application/json")
-//             .body(jsonBody)
-//         .when()
-//             .post("/signup/otp/verify")
-//         .then()
-//             .statusCode(400)
-//             .log().all()
-//             .extract().response();
-//     
-//
-//     // Extracting and asserting response values
-//     String code = response.jsonPath().getString("code");
-//     String description = response.jsonPath().getString("description");
-//     // check if it is null
-//     assertNotNull(code, "code is missing");
-//     assertNotNull(description, "description is missing from the response");
-//     
-//     //check if it is empty
-//     assertFalse(code.isEmpty(), "code is empty");
-//     assertFalse(description.isEmpty(), "description is empty");
-//     
-//     //assert code and description
-//     assertEquals(code,"GNR_PARAM_MISSING");
-//     assertEquals(description,"Bad Request.");
-// }
+ @Test
+ public void VerifySignUpOtpwithoutpin() throws Exception {
+	ObjectMapper objectMapper = new ObjectMapper();
+ 	
+    
+    
+    String plain_otp = "";
+    String requestdevice = "3efe6bbeb55f4411";
+    
+    Map<String, Object> jsonBody = new HashMap<>();
+    jsonBody.put("email", email);
+    jsonBody.put("requestTimestamp", requestTimestamp);
+   
+    //encryption with AES256 algorithm0
+    String otp = signatureCreate.encryptAES256(plain_otp, secretKey);
+    jsonBody.put("otp", otp);
+    String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
+    jsonBody.put("pin", pin);
+    
+    //placing token from signup API
+    jsonBody.put("token", token);
+    
+
+ // Generate signature
+    String data = objectMapper.writeValueAsString(jsonBody);
+    String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
+
+ // Add signature
+    jsonBody.put("signature", requestSignature);
+
+     Response response = given()
+             .baseUri(baseURI)
+             .header("X-GEO-Location", "12,12")
+             .header("X-Device-Id",requestdevice)
+             .header("User-Agent", "")
+             .contentType("application/json")
+             .body(jsonBody)
+         .when()
+             .post("/signup/otp/verify")
+         .then()
+             .statusCode(400)
+             .log().all()
+             .extract().response();
+     
+
+     // Extracting and asserting response values
+     String code = response.jsonPath().getString("code");
+     String description = response.jsonPath().getString("description");
+     // check if it is null
+     assertNotNull(code, "code is missing");
+     assertNotNull(description, "description is missing from the response");
+     
+     //check if it is empty
+     assertFalse(code.isEmpty(), "code is empty");
+     assertFalse(description.isEmpty(), "description is empty");
+     
+     //assert code and description
+     assertEquals(code,"GNR_PARAM_MISSING");
+     assertEquals(description,"Bad Request.");
+	 
+ }
+ 
+ @Test
+ public void VerifySignUpwithouttoken() throws Exception {
+	 ObjectMapper objectMapper = new ObjectMapper();
+ 	
+     
+     
+     String plain_otp = "443062";
+     String requestdevice = "3efe6bbeb55f4411";
+     
+     Map<String, Object> jsonBody = new HashMap<>();
+     jsonBody.put("email", email);
+     jsonBody.put("requestTimestamp", requestTimestamp);
+    
+     //encryption with AES256 algorithm0
+     String otp = signatureCreate.encryptAES256(plain_otp, secretKey);
+     jsonBody.put("otp", otp);
+     String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
+     jsonBody.put("pin", pin);
+     
+     //placing token from signup API
+     jsonBody.put("token", "");
+     
+
+  // Generate signature
+     String data = objectMapper.writeValueAsString(jsonBody);
+     String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
+
+  // Add signature
+     jsonBody.put("signature", requestSignature);
+
+     Response response = given()
+             .baseUri(baseURI)
+             .header("X-GEO-Location", "12,12")
+             .header("X-Device-Id",requestdevice)
+             .header("User-Agent", "")
+             .contentType("application/json")
+             .body(jsonBody)
+         .when()
+             .post("/signup/otp/verify")
+         .then()
+             .statusCode(400)
+             .log().all()
+             .extract().response();
+     
+
+     // Extracting and asserting response values
+     String code = response.jsonPath().getString("code");
+     String description = response.jsonPath().getString("description");
+     // check if it is null
+     assertNotNull(code, "code is missing");
+     assertNotNull(description, "description is missing from the response");
+     
+     //check if it is empty
+     assertFalse(code.isEmpty(), "code is empty");
+     assertFalse(description.isEmpty(), "description is empty");
+     
+     //assert code and description
+     assertEquals(code,"GNR_PARAM_MISSING");
+     assertEquals(description,"Bad Request.");
+ }
+ 
+ @Test
+ public void VerifySignUpwithoutSignature() throws Exception {
+	// ObjectMapper objectMapper = new ObjectMapper();
+ 	 
+     
+     
+     String plain_otp = "443062";
+     String requestdevice = "3efe6bbeb55f4411";
+     
+     Map<String, Object> jsonBody = new HashMap<>();
+     jsonBody.put("email", email);
+     jsonBody.put("requestTimestamp", requestTimestamp);
+    
+     //encryption with AES256 algorithm0
+     String otp = signatureCreate.encryptAES256(plain_otp, secretKey);
+     jsonBody.put("otp", otp);
+     String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
+     jsonBody.put("pin", pin);
+     
+     //placing token from signup API
+     jsonBody.put("token", token);
+     
+
+  // Generate signature
+     //String data = objectMapper.writeValueAsString(jsonBody);
+     //String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
+
+  // Add signature
+     jsonBody.put("signature", "");
+
+     Response response = given()
+             .baseUri(baseURI)
+             .header("X-GEO-Location", "12,12")
+             .header("X-Device-Id", requestdevice)
+             .header("User-Agent", "")
+             .contentType("application/json")
+             .body(jsonBody)
+         .when()
+             .post("/signup/otp/verify")
+         .then()
+             .statusCode(400)
+             .log().all()
+             .extract().response();
+     
+
+     // Extracting and asserting response values
+     String code = response.jsonPath().getString("code");
+     String description = response.jsonPath().getString("description");
+     // check if it is null
+     assertNotNull(code, "code is missing");
+     assertNotNull(description, "description is missing from the response");
+     
+     //check if it is empty
+     assertFalse(code.isEmpty(), "code is empty");
+     assertFalse(description.isEmpty(), "description is empty");
+     
+     //assert code and description
+     assertEquals(code,"GNR_PARAM_MISSING");
+     assertEquals(description,"Bad Request.");
+ }
+ 
+ @Test
+ public void VerifySignUpwithInvalidEmail() throws Exception {
+	 ObjectMapper objectMapper = new ObjectMapper();
+ 	String email = "vivekmoco.com.np";
+     
+     
+     String plain_otp = "443062";
+     String requestdevice = "3efe6bbeb55f4411";
+     
+     Map<String, Object> jsonBody = new HashMap<>();
+     jsonBody.put("email", email);
+     jsonBody.put("requestTimestamp", requestTimestamp);
+    
+     //encryption with AES256 algorithm0
+    // String otp = signatureCreate.encryptAES256(plain_otp, secretKey);
+     jsonBody.put("otp", plain_otp);
+     String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
+     jsonBody.put("pin", pin);
+     
+     //placing token from signup API
+     jsonBody.put("token", token);
+     
+
+  // Generate signature
+     String data = objectMapper.writeValueAsString(jsonBody);
+     String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
+
+  // Add signature
+     jsonBody.put("signature", requestSignature);
+     
+     System.out.println(jsonBody);
+
+     Response response = given()
+             .baseUri(baseURI)
+             .header("X-GEO-Location", "12,12")
+             .header("X-Device-Id", requestdevice)
+             .header("User-Agent", "NepalTravelApp/1.0.0 android")
+             .contentType("application/json")
+             .body(jsonBody)
+         .when()
+             .post("/signup/otp/verify")
+         .then()
+             .statusCode(422)
+             .log().all()
+             .extract().response();
+     
+
+     // Extracting and asserting response values
+     String code = response.jsonPath().getString("code");
+     String description = response.jsonPath().getString("description");
+     // check if it is null
+     assertNotNull(code, "code is missing");
+     assertNotNull(description, "description is missing from the response");
+     
+     //check if it is empty
+     assertFalse(code.isEmpty(), "code is empty");
+     assertFalse(description.isEmpty(), "description is empty");
+     
+     //assert code and description
+     assertEquals(code,"GNR_INVALID_DATA");
+     assertEquals(description,"Invalid Data.");
+ }
+ @Test
+ public void VerifySignupwithInvalidTimestamp() throws Exception {
+	 ObjectMapper objectMapper = new ObjectMapper();
+ 	 
+     String requestTimestamp = "25:88:53";
+     
+     String plain_otp = "443062";
+     String requestdevice = "3efe6bbeb55f4411";
+     
+     Map<String, Object> jsonBody = new HashMap<>();
+     jsonBody.put("email", email);
+     jsonBody.put("requestTimestamp", requestTimestamp);
+    
+     //encryption with AES256 algorithm0
+     //String otp = signatureCreate.encryptAES256(plain_otp, secretKey);
+     jsonBody.put("otp", plain_otp);
+     String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
+     jsonBody.put("pin", pin);
+     
+     //placing token from signup API
+     jsonBody.put("token", token);
+     
+
+  // Generate signature
+     String data = objectMapper.writeValueAsString(jsonBody);
+     String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
+
+  // Add signature
+     jsonBody.put("signature", requestSignature);
+     
+     System.out.println(jsonBody);
+
+     Response response = given()
+             .baseUri(baseURI)
+             .header("X-GEO-Location", "12,12")
+             .header("X-Device-Id", requestdevice)
+             .header("User-Agent", "NepalTravelApp/1.0.0 android")
+             .contentType("application/json")
+             .body(jsonBody)
+         .when()
+             .post("/signup/otp/verify")
+         .then()
+             .statusCode(422)
+             .log().all()
+             .extract().response();
+     
+
+     // Extracting and asserting response values
+     String code = response.jsonPath().getString("code");
+     String description = response.jsonPath().getString("description");
+     // check if it is null
+     assertNotNull(code, "code is missing");
+     assertNotNull(description, "description is missing from the response");
+     
+     //check if it is empty
+     assertFalse(code.isEmpty(), "code is empty");
+     assertFalse(description.isEmpty(), "description is empty");
+     
+     //assert code and description
+     assertEquals(code,"GNR_INVALID_DATA");
+     assertEquals(description,"Invalid Data.");
+	 
+ }
+ 
+@Test
+public void VerifySignUpwithInvalidOtp() throws Exception {
+	ObjectMapper objectMapper = new ObjectMapper();
+	
+    
+    
+    String plain_otp = "5$543";
+    String requestdevice = "3efe6bbeb55f4411";
+    
+    Map<String, Object> jsonBody = new HashMap<>();
+    jsonBody.put("email", email);
+    jsonBody.put("requestTimestamp", requestTimestamp);
+   
+    //encryption with AES256 algorithm0
+    String otp = signatureCreate.encryptAES256(plain_otp, secretKey);
+    jsonBody.put("otp", otp);
+    String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
+    jsonBody.put("pin", pin);
+    
+    //placing token from signup API
+    jsonBody.put("token", token);
+    
+
+ // Generate signature
+    String data = objectMapper.writeValueAsString(jsonBody);
+    String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
+
+ // Add signature
+    jsonBody.put("signature", requestSignature);
+
+    Response response = given()
+            .baseUri(baseURI)
+            .header("X-GEO-Location", "12,12")
+            .header("X-Device-Id", requestdevice)
+            .header("User-Agent", "")
+            .contentType("application/json")
+            .body(jsonBody)
+        .when()
+            .post("/signup/otp/verify")
+        .then()
+            .statusCode(400)
+            .log().all()
+            .extract().response();
+    
+
+    // Extracting and asserting response values
+    String code = response.jsonPath().getString("code");
+    String description = response.jsonPath().getString("description");
+    // check if it is null
+    assertNotNull(code, "code is missing");
+    assertNotNull(description, "description is missing from the response");
+    
+    //check if it is empty
+    assertFalse(code.isEmpty(), "code is empty");
+    assertFalse(description.isEmpty(), "description is empty");
+    
+    //assert code and description
+    assertEquals(code,"GNR_PARAM_MISSING");
+    assertEquals(description,"Bad Request.");
+	
+}
+
+@Test
+public void VerifySignUpwithInvalidPin() throws Exception {
+	ObjectMapper objectMapper = new ObjectMapper();
+	
+    
+    String plain_pin = "89*7";
+    String plain_otp = "443062";
+    String requestdevice = "3efe6bbeb55f4411";
+    
+    Map<String, Object> jsonBody = new HashMap<>();
+    jsonBody.put("email", email);
+    jsonBody.put("requestTimestamp", requestTimestamp);
+   
+    //encryption with AES256 algorithm0
+    String otp = signatureCreate.encryptAES256(plain_otp, secretKey);
+    jsonBody.put("otp", otp);
+    String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
+    jsonBody.put("pin", pin);
+    
+    //placing token from signup API
+    jsonBody.put("token", token);
+    
+
+ // Generate signature
+    String data = objectMapper.writeValueAsString(jsonBody);
+    String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
+
+ // Add signature
+    jsonBody.put("signature", requestSignature);
+
+    Response response = given()
+            .baseUri(baseURI)
+            .header("X-GEO-Location", "12,12")
+            .header("X-Device-Id", requestdevice)
+            .header("User-Agent", "")
+            .contentType("application/json")
+            .body(jsonBody)
+        .when()
+            .post("/signup/otp/verify")
+        .then()
+            .statusCode(400)
+            .log().all()
+            .extract().response();
+    
+
+    // Extracting and asserting response values
+    String code = response.jsonPath().getString("code");
+    String description = response.jsonPath().getString("description");
+    // check if it is null
+    assertNotNull(code, "code is missing");
+    assertNotNull(description, "description is missing from the response");
+    
+    //check if it is empty
+    assertFalse(code.isEmpty(), "code is empty");
+    assertFalse(description.isEmpty(), "description is empty");
+    
+    //assert code and description
+    assertEquals(code,"GNR_PARAM_MISSING");
+    assertEquals(description,"Bad Request.");
+}
+ @Test
+ public void VerifySignUpwithInvalidToken() throws Exception {
+	 ObjectMapper objectMapper = new ObjectMapper();
+ 	
+     
+     
+     String plain_otp = "443062";
+     String requestdevice = "3efe6bbeb55f4411";
+     
+     Map<String, Object> jsonBody = new HashMap<>();
+     jsonBody.put("email", email);
+     jsonBody.put("requestTimestamp", requestTimestamp);
+    
+     //encryption with AES256 algorithm0
+     String otp = signatureCreate.encryptAES256(plain_otp, secretKey);
+     jsonBody.put("otp", otp);
+     String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
+     jsonBody.put("pin", pin);
+     
+     //placing token from signup API
+     jsonBody.put("token", "lo$5==");
+     
+
+  // Generate signature
+     String data = objectMapper.writeValueAsString(jsonBody);
+     String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
+
+  // Add signature
+     jsonBody.put("signature", requestSignature);
+
+     Response response = given()
+             .baseUri(baseURI)
+             .header("X-GEO-Location", "12,12")
+             .header("X-Device-Id", requestdevice)
+             .header("User-Agent", "")
+             .contentType("application/json")
+             .body(jsonBody)
+         .when()
+             .post("/signup/otp/verify")
+         .then()
+             .statusCode(400)
+             .log().all()
+             .extract().response();
+     
+
+     // Extracting and asserting response values
+     String code = response.jsonPath().getString("code");
+     String description = response.jsonPath().getString("description");
+     // check if it is null
+     assertNotNull(code, "code is missing");
+     assertNotNull(description, "description is missing from the response");
+     
+     //check if it is empty
+     assertFalse(code.isEmpty(), "code is empty");
+     assertFalse(description.isEmpty(), "description is empty");
+     
+     //assert code and description
+     assertEquals(code,"GNR_PARAM_MISSING");
+     assertEquals(description,"Bad Request.");
+ }
+ 
+ @Test
+ public void VerifySignUpwithWrongSignature() throws Exception {
+	 //ObjectMapper objectMapper = new ObjectMapper();
+ 	
+     
+     
+     String plain_otp = "443062";
+     String requestdevice = "3efe6bbeb55f4411";
+     
+     Map<String, Object> jsonBody = new HashMap<>();
+     jsonBody.put("email", email);
+     jsonBody.put("requestTimestamp", requestTimestamp);
+    
+     //encryption with AES256 algorithm0
+     String otp = signatureCreate.encryptAES256(plain_otp, secretKey);
+     jsonBody.put("otp", otp);
+     String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
+     jsonBody.put("pin", pin);
+     
+     //placing token from signup API
+     jsonBody.put("token", token);
+     
+
+  // Generate signature
+     //String data = objectMapper.writeValueAsString(jsonBody);
+     //String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
+
+  // Add signature
+     jsonBody.put("signature", "3edrHytu&6544-===");
+
+     Response response = given()
+             .baseUri(baseURI)
+             .header("X-GEO-Location", "12,12")
+             .header("X-Device-Id", requestdevice)
+             .header("User-Agent", "")
+             .contentType("application/json")
+             .body(jsonBody)
+         .when()
+             .post("/signup/otp/verify")
+         .then()
+             .statusCode(400)
+             .log().all()
+             .extract().response();
+     
+
+     // Extracting and asserting response values
+     String code = response.jsonPath().getString("code");
+     String description = response.jsonPath().getString("description");
+     // check if it is null
+     assertNotNull(code, "code is missing");
+     assertNotNull(description, "description is missing from the response");
+     
+     //check if it is empty
+     assertFalse(code.isEmpty(), "code is empty");
+     assertFalse(description.isEmpty(), "description is empty");
+     
+     //assert code and description
+     assertEquals(code,"GNR_PARAM_MISSING");
+     assertEquals(description,"Bad Request.");
+ }
+ 
  @Test
  public void VerifyOtpwithValidCredentials() throws Exception {
 	 ObjectMapper objectMapper = new ObjectMapper();
-	 //ObjectNode jsonBody = JsonNodeFactory.instance.objectNode();
-	// Optional: Don't sort keys alphabetically unless backend expects it
-	 //objectMapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, false);
- 	 String email = "vivek@moco.com.np";
-     String requestTimestamp = signatureCreate.generateTimestamp();
-     String plain_pin = "152986";
-     String plain_otp = "707121";
-     String requestdevice = "moco-travel-app";
-     
      Map<String, Object> jsonBody = new LinkedHashMap<>();
      jsonBody.put("email", email);
      jsonBody.put("requestTimestamp", requestTimestamp);
@@ -1020,11 +953,6 @@ public class signupOtpVerify {
      
   // Add signature
      jsonBody.put("signature", requestSignature);
-     
-
-     
-     //System.out.println(signatureCreate.decryptAES256(otp,secretKey));
-     //System.out.println(signatureCreate.decryptAES256(pin,secretKey));
     
      Response response = given()
              .baseUri(baseURI)
@@ -1066,17 +994,18 @@ public class signupOtpVerify {
      System.out.println("Request ID: " + response.getHeaders().hasHeaderWithName("X-AUTH-TOKEN"));
      
  }
+ 
 // @Test
 // public void VerifyOtpwithexpiredOtp() throws Exception {
 //	 ObjectMapper objectMapper = new ObjectMapper();
 //	 //ObjectNode jsonBody = JsonNodeFactory.instance.objectNode();
 //	// Optional: Don't sort keys alphabetically unless backend expects it
 //	 //objectMapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, false);
-// 	 String email = "vivek@moco.com.np";
-//     String requestTimestamp = signatureCreate.generateTimestamp();
-//     String plain_pin = "152986";
-//     String plain_otp = "003282";
-//     String requestdevice = "moco-travel-app";
+// 	 
+//     
+//     
+//     
+//     
 //     
 //     Map<String, Object> jsonBody = new LinkedHashMap<>();
 //     jsonBody.put("email", email);
