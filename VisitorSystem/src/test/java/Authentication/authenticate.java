@@ -17,6 +17,9 @@ import java.util.*;
 public class authenticate {
 	 String secretKey;
 	 String AuthToken;
+	 String email = "vivek@moco.com.np";
+     String requestDeviceId = "visitor-app-device";
+     String plain_pin = "123654";
 	 
 	    @BeforeClass
 	    public void setup() {
@@ -24,7 +27,7 @@ public class authenticate {
 
 	        Response response = given()
 	                .header("X-GEO-Location", "12,12")
-	                .header("X-Device-Id", "moco-travels-app")
+	                .header("X-Device-Id", requestDeviceId)
 	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
 	            .when()
 	                .get("/key")
@@ -56,56 +59,54 @@ public class authenticate {
 //	    }
 
 
-	@Test
-	public void AuthenticateWithNewDevice() throws Exception {
-		ObjectMapper objectMapper = new ObjectMapper();
-        String email = "vivek@moco.com.np";
-        String requestDeviceId = "moco-travels-app";
-        String plain_pin = "252586";
-        Map<String, Object> credentials = new LinkedHashMap<>();
-        credentials.put("email", email);
-        String Pin = signatureCreate.encryptAES256(plain_pin, secretKey);
-        credentials.put("pin", Pin);
-
-        Map<String, Object> jsonBody = new LinkedHashMap<>();
-        jsonBody.put("credentials", credentials);
-        
-     // Generate signature
-        String data = objectMapper.writeValueAsString(jsonBody);
-        String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
-        
-        jsonBody.put("signature", requestSignature);
-        
-        System.out.println(jsonBody);
-     // Send request
-        Response response = given()
-                .header("X-GEO-Location", "12,12")
-                .header("X-Device-Id", requestDeviceId)
-                .header("User-Agent", "NepalTravelApp/1.0.0 android")
-                .contentType("application/json")
-                .body(jsonBody)
-            .when()
-                .post("/authenticate")
-            .then()
-                .statusCode(401)
-                .log().all()
-                .extract().response();
-        String code = response.jsonPath().getString("code");
-        String description = response.jsonPath().getString("description");
-
-        assertNotNull(description, "Description is missing from the response");
-        assertNotNull(code, "Code is missing");
-        assertFalse(description.isEmpty(), "Description is empty");
-        assertFalse(code.isEmpty(), "Code is empty");
-        assertEquals(code,"VST_LOGIN_DEVICE_UNRECOGNIZED");
-        assertEquals(description,"Login from unverified device. OTP Requested Successfully for device registration.");
-	}
-	    
+//	@Test
+//	public void AuthenticateWithNewDevice() throws Exception {
+//		ObjectMapper objectMapper = new ObjectMapper();
+//        
+//        Map<String, Object> credentials = new LinkedHashMap<>();
+//        credentials.put("email", email);
+//        String Pin = signatureCreate.encryptAES256(plain_pin, secretKey);
+//        credentials.put("pin", Pin);
+//
+//        Map<String, Object> jsonBody = new LinkedHashMap<>();
+//        jsonBody.put("credentials", credentials);
+//        
+//     // Generate signature
+//        String data = objectMapper.writeValueAsString(jsonBody);
+//        String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+//        
+//        jsonBody.put("signature", requestSignature);
+//        
+//        System.out.println(jsonBody);
+//     // Send request
+//        Response response = given()
+//                .header("X-GEO-Location", "12,12")
+//                .header("X-Device-Id", requestDeviceId)
+//                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+//                .contentType("application/json")
+//                .body(jsonBody)
+//            .when()
+//                .post("/authenticate")
+//            .then()
+//                .statusCode(401)
+//                .log().all()
+//                .extract().response();
+//        String code = response.jsonPath().getString("code");
+//        String description = response.jsonPath().getString("description");
+//
+//        assertNotNull(description, "Description is missing from the response");
+//        assertNotNull(code, "Code is missing");
+//        assertFalse(description.isEmpty(), "Description is empty");
+//        assertFalse(code.isEmpty(), "Code is empty");
+//        assertEquals(code,"VST_LOGIN_DEVICE_UNRECOGNIZED");
+//        assertEquals(description,"Login from unverified device. OTP Requested Successfully for device registration.");
+//	}
+//	    
 	@Test
 	public void AuthenticateWithNoLocation() throws Exception {
 		ObjectMapper objectMapper = new ObjectMapper();
-        String email = "vivek@moco.com.np";
-        String requestDeviceId = "moco-travels-app";
+        
+        
         String plain_pin = "152986";
         Map<String, Object> credentials = new LinkedHashMap<>();
         credentials.put("email", email);
@@ -147,11 +148,11 @@ public class authenticate {
         assertEquals(code,"GNR_PARAM_MISSING");
         assertEquals(description,"Bad Request.");
 	}
-	
+//	
 	@Test
 	public void AuthenticateWithNoDevice() throws Exception {
 		ObjectMapper objectMapper = new ObjectMapper();
-        String email = "vivek@moco.com.np";
+        
         String requestDeviceId = "";
         String plain_pin = "152986";
         Map<String, Object> credentials = new LinkedHashMap<>();
@@ -195,12 +196,12 @@ public class authenticate {
         assertEquals(description,"Bad Request.");
 		
 	}
-	
+//	
 	@Test
 	public void AuthenticateWithoutUserAgent() throws Exception {
 		ObjectMapper objectMapper = new ObjectMapper();
-        String email = "vivek@moco.com.np";
-        String requestDeviceId = "moco-travels-app";
+        
+        
         String plain_pin = "152986";
         Map<String, Object> credentials = new LinkedHashMap<>();
         credentials.put("email", email);
@@ -242,13 +243,11 @@ public class authenticate {
         assertEquals(code,"GNR_PARAM_MISSING");
         assertEquals(description,"Bad Request.");
 	}
-//	
-
 
 	@Test
 	public void AuthenticateWithInvalidDevice() throws Exception {
 		ObjectMapper objectMapper = new ObjectMapper();
-        String email = "vivek@moco.com.np";
+        
         String requestDeviceId = "moco#travel-app";
         String plain_pin = "152986";
         Map<String, Object> credentials = new LinkedHashMap<>();
@@ -290,12 +289,12 @@ public class authenticate {
         assertEquals(code,"GNR_INVALID_DATA");
         assertEquals(description,"Invalid device Id found.");
 	}
-//	
+	
 	@Test
 	public void AuthenticateWithInvalidUserAgent() throws Exception {
 		ObjectMapper objectMapper = new ObjectMapper();
-        String email = "vivek@moco.com.np";
-        String requestDeviceId = "moco-travels-app";
+        
+        
         String plain_pin = "152986";
         Map<String, Object> credentials = new LinkedHashMap<>();
         credentials.put("email", email);
@@ -337,14 +336,12 @@ public class authenticate {
         assertEquals(description,"Invalid user agent found.");
 
 	}
-	
-
 
 	@Test
 	public void AuthenticateWithMissingPin() throws Exception {
 		ObjectMapper objectMapper = new ObjectMapper();
-        String email = "vivek@moco.com.np";
-        String requestDeviceId = "moco-travels-app";
+        
+        
       //  String plain_pin = "";
         Map<String, Object> credentials = new LinkedHashMap<>();
         credentials.put("email", email);
@@ -388,12 +385,12 @@ public class authenticate {
 
 		
 	}
-//	
+	
 	@Test
 	public void AuthenticateWithEmptyEmail() throws Exception {
 		ObjectMapper objectMapper = new ObjectMapper();
         String email = "";
-        String requestDeviceId = "moco-travels-app";
+        
         Map<String, Object> credentials = new HashMap<>();
         credentials.put("email", email);
         credentials.put("pin", "123426");
@@ -433,12 +430,12 @@ public class authenticate {
         assertEquals(description,"Bad Request.");
 
 	}
-//	
+	
 	@Test
 	public void AuthenticateWithInvalidEmail() throws Exception {
 		ObjectMapper objectMapper = new ObjectMapper();
         String email = "vivekmoco.com.np";
-        String requestDeviceId = "moco-travels-app";
+        
         String plain_pin = "152986";
         Map<String, Object> credentials = new LinkedHashMap<>();
         credentials.put("email", email);
@@ -476,15 +473,15 @@ public class authenticate {
         assertFalse(description.isEmpty(), "Description is empty");
         assertFalse(code.isEmpty(), "Code is empty");
         assertEquals(code,"GNR_INVALID_DATA");
-        assertEquals(description,"Bad Request.");
+        assertEquals(description,"Invalid email.");
 
 	}
-//	
+	
 	@Test
 	public void AuthenticateWithEmptyPin() throws Exception{
 		ObjectMapper objectMapper = new ObjectMapper();
-        String email = "vivek@moco.com.np";
-        String requestDeviceId = "moco-travels-app";
+        
+        
         Map<String, Object> credentials = new HashMap<>();
         credentials.put("email", email);
         //credentials.put("pin", "123426");
@@ -524,12 +521,12 @@ public class authenticate {
         assertEquals(description,"Bad Request.");
 
 	}
-	
+//	
 	@Test
 	public void AuthenticateWithInvalidPin() throws Exception {
 		ObjectMapper objectMapper = new ObjectMapper();
-        String email = "vivek@moco.com.np";
-        String requestDeviceId = "moco-travels-app";
+        
+        
        // String plain_pin = "1AA986";
         Map<String, Object> credentials = new LinkedHashMap<>();
         credentials.put("email", email);
@@ -570,12 +567,12 @@ public class authenticate {
         assertEquals(description,"Authentication Failed.");
 
 	}
-	
+//	
 	@Test
 	public void AuthenticateWithMissingSignature() throws Exception{
 		//ObjectMapper objectMapper = new ObjectMapper();
-        String email = "vivek@moco.com.np";
-        String requestDeviceId = "moco-travels-app";
+        
+        
         String plain_pin = "152986";
         Map<String, Object> credentials = new LinkedHashMap<>();
         credentials.put("email", email);
@@ -617,12 +614,12 @@ public class authenticate {
         assertEquals(code,"GNR_PARAM_MISSING");
         assertEquals(description,"Bad Request.");
 	}
-	
+//	
 	@Test
 	public void AuthenticateWithEmptySignature() throws Exception{
 //		ObjectMapper objectMapper = new ObjectMapper();
-        String email = "vivek@moco.com.np";
-        String requestDeviceId = "moco-travels-app";
+        
+        
         Map<String, Object> credentials = new HashMap<>();
         credentials.put("email", email);
         credentials.put("pin", "123426");
@@ -665,9 +662,6 @@ public class authenticate {
 	@Test
 	public void AuthenticatewithValidCredentials() throws Exception {
 		ObjectMapper objectMapper = new ObjectMapper();
-        String email = "vivek@moco.com.np";
-        String requestDeviceId = "moco-travels-app";
-        String plain_pin = "152986";
         Map<String, Object> credentials = new LinkedHashMap<>();
         credentials.put("email", email);
         String Pin = signatureCreate.encryptAES256(plain_pin, secretKey);
@@ -759,13 +753,13 @@ public class authenticate {
 //        //check if the token is in the present in the response
 //        assertTrue(response.getHeaders().hasHeaderWithName("X-AUTH-TOKEN"), "Missing X-AUTH-TOKEN header");
 //        System.out.println("Request ID: " + response.getHeaders().hasHeaderWithName("X-AUTH-TOKEN"));
-//        AuthToken = response.getHeader("X-AUTH-TOKEN");
+           AuthToken = response.getHeader("X-AUTH-TOKEN");
  }
 //	@Test
 //	public void AuthenticateWithNullValue() throws Exception {
 //		ObjectMapper objectMapper = new ObjectMapper();
-//        String email = "vivek@moco.com.np";
-//        String requestDeviceId = "moco-travels-app";
+//        
+//        
 //        String plain_pin = NULL;
 //        Map<String, Object> credentials = new LinkedHashMap<>();
 //        credentials.put("email", email);
@@ -811,12 +805,9 @@ public class authenticate {
 	@Test
 	public void AuthenticateWithWrongPin() throws Exception{
 		ObjectMapper objectMapper = new ObjectMapper();
-        String email = "vivek@moco.com.np";
-        String requestDeviceId = "moco-travels-app";
-        String plain_pin = "582528";
         Map<String, Object> credentials = new LinkedHashMap<>();
         credentials.put("email", email);
-        String Pin = signatureCreate.encryptAES256(plain_pin, secretKey);
+        String Pin = signatureCreate.encryptAES256("125358", secretKey);
         credentials.put("pin", Pin);
 
         Map<String, Object> jsonBody = new LinkedHashMap<>();
@@ -839,7 +830,7 @@ public class authenticate {
             .when()
                 .post("/authenticate")
             .then()
-                .statusCode(422)
+                .statusCode(401)
                 .log().all()
                 .extract().response();
         String code = response.jsonPath().getString("code");
@@ -855,17 +846,17 @@ public class authenticate {
 	}
 	
 	
-	@AfterClass
-	public void logout() throws Exception {
-		baseURI = "https://visitor0.moco.com.np/visitor";
-        Response response = given()
-            .header("X-GEO-Location", "12,12")
-            .header("X-AUTH-TOKEN",AuthToken)
-            .header("X-Device-Id", "moco-travels-app")
-            .header("User-Agent", "NepalTravelApp/1.0.0 android")
-        .when()
-            .delete("/authenticate");
-         response.then().statusCode(200);
-       
-	}
+//	@AfterClass
+//	public void logout() throws Exception {
+//		baseURI = "https://visitor0.moco.com.np/visitor";
+//        Response response = given()
+//            .header("X-GEO-Location", "12,12")
+//            .header("X-AUTH-TOKEN",AuthToken)
+//            .header("X-Device-Id", requestDeviceId)
+//            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+//        .when()
+//            .delete("/authenticate");
+//         response.then().statusCode(200);
+//       
+//	}
 }

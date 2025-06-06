@@ -15,63 +15,63 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class session {
-	String email = "vivek@moco.com.np";
-	String requestDeviceId = "moco-travels-app";
-	String plain_pin = "152986";
+	
+	String requestDeviceId = "visitor-app-device";
 	String secretKey = "ABC123XYZ";
 	String AuthToken;
-	
+	String input_email = "vivek@moco.com.np";
+	String input_pin = "125896";
 	@BeforeClass
-	public void login() throws Exception {
-		 RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
-	        
-	        Response response1 = given()
-	                .header("X-GEO-Location", "12,12")
-	                .header("X-Device-Id", requestDeviceId)
-	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
-	            .when()
-	                .get("/key")
-	            .then()
-	                .statusCode(200)
-	                .extract().response();
+	public void getToken() throws Exception{
+		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
+        
+        Response response1 = given()
+                .header("X-GEO-Location", "12,12")
+                .header("X-Device-Id", requestDeviceId)
+                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+            .when()
+                .get("/key")
+            .then()
+                .statusCode(200)
+                .extract().response();
 
-	        String secretKey1 = response1.jsonPath().getString("signOnKey");
-	        //assertNotNull(secretKey, "Secret key is null!");
-	        
-	        ObjectMapper objectMapper = new ObjectMapper();
-	        Map<String, Object> credentials = new LinkedHashMap<>();
-	        credentials.put("email", email);
-	        String Pin = signatureCreate.encryptAES256(plain_pin, secretKey1);
-	        credentials.put("pin", Pin);
+       String secretKey1 = response1.jsonPath().getString("signOnKey");
+        //assertNotNull(secretKey, "Secret key is null!");
+        
+        ObjectMapper objectMapper = new ObjectMapper();
+        String email = input_email;
+        String plain_pin = input_pin;
+        Map<String, Object> credentials = new LinkedHashMap<>();
+        credentials.put("email", email);
+        String Pin = signatureCreate.encryptAES256(plain_pin, secretKey1);
+        credentials.put("pin", Pin);
 
-	        Map<String, Object> jsonBody = new LinkedHashMap<>();
-	        jsonBody.put("credentials", credentials);
-	        
-	     // Generate signature
-	        String data = objectMapper.writeValueAsString(jsonBody);
-	        String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey1);
-	        
-	        jsonBody.put("signature", requestSignature);
-	        
-	        System.out.println(jsonBody);
-	     // Send request
-	        Response response2 = given()
-	                .header("X-GEO-Location", "12,12")
-	                .header("X-Device-Id", requestDeviceId)
-	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
-	                .contentType("application/json")
-	                .body(jsonBody)
-	            .when()
-	                .post("/authenticate")
-	            .then()
-	                .statusCode(200)
-	                .log().all()
-	                .extract().response();
-	        AuthToken = response2.getHeader("X-AUTH-TOKEN");
-	        //secretKey = response2.jsonPath().getString("sessionKey");
-		
+        Map<String, Object> jsonBody = new LinkedHashMap<>();
+        jsonBody.put("credentials", credentials);
+        
+     // Generate signature
+        String data = objectMapper.writeValueAsString(jsonBody);
+        String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey1);
+        
+        jsonBody.put("signature", requestSignature);
+        
+        
+     // Send request
+        Response response2 = given()
+                .header("X-GEO-Location", "12,12")
+                .header("X-Device-Id", requestDeviceId)
+                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+                .contentType("application/json")
+                .body(jsonBody)
+            .when()
+                .post("/authenticate")
+            .then()
+                .statusCode(200)
+                .log().all()
+                .extract().response();
+        AuthToken = response2.getHeader("X-AUTH-TOKEN");
+	    String secretKey2 = response2.jsonPath().getString("sessionKey");
 	}
-	
 	
 	
 	
@@ -90,6 +90,7 @@ public class session {
             .header("X-Device-Id", requestDeviceId)
             .header("User-Agent", "NepalTravelApp/1.0.0 android")
             .header("X-AUTH-TOKEN",AuthToken)
+            .header("X-CREDENTIAL","")
             .header("X-SYSTEM-ID","transaction")
             .header("X-SYSTEM-SIGNATURE",Signature) 
             .header("Request-Timestamp","2025-05-13 14:38:00")
@@ -603,7 +604,7 @@ public class session {
          assertEquals(code,"GNR_AUTHENTICATION_FAIL");
          assertEquals(description,"Authentication failed.");
 	}
-	
+////	
 	@Test
 	public void GetSessionwithInvalidRequestTimestamp() throws Exception {
          baseURI = "https://visitor0.moco.com.np/visitor";
@@ -639,43 +640,43 @@ public class session {
          assertEquals(description,"Invalid request timestamp found.");
 		
 	}
-//	@Test
-//	public void GetSessionwithinvalidSystemCredentials() throws Exception {
-//		  baseURI = "https://visitor0.moco.com.np/visitor";
+////	@Test
+////	public void GetSessionwithinvalidSystemCredentials() throws Exception {
+////		  baseURI = "https://visitor0.moco.com.np/visitor";
+////			
+////			String data = "12,12"+AuthToken+requestDeviceId+"NepalTravelApp/1.0.0 android"+"transaction"+"qq"+"2025-04-30 11:00:00";
+//////			: X-GEO-LOCATION+ X-AUTH-TOKEN + X-DEVICE-ID+ User-Agent + X-SYSTEM-ID+ X-CREDENTIAL(Optional) + Request-Timestamp
+////			String Signature = signatureCreate.generateHMACSHA256(data, secretKey);
+////			System.out.println(Signature);
+////
+////	        Response response = (Response) given()
+////	            .header("X-GEO-Location", "12,12")
+////	            .header("X-Device-Id", requestDeviceId)
+////	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+////	            .header("X-AUTH-TOKEN",AuthToken)
+////	            .header("X-SYSTEM-ID","transaction")
+////	            .header("X-CREDENTIAL","qq")
+////	            .header("X-SYSTEM-SIGNATURE",Signature) 
+////	            .header("Request-Timestamp","2025-04-30 11:00:00")
+////	            .when()
+////	            .get("/session")
+////	        .then()
+////	            .statusCode(422)
+////	            .extract().response();
+////	        
+////	        String code = response.jsonPath().getString("code");
+////	        String description = response.jsonPath().getString("description");
+//////	        // Check if the signature is not null or empty
+////	         assertNotNull(code, "code is missing from the response");
+////	         assertFalse(code.isEmpty(), "code is empty in the response");
+////	         assertNotNull(description, "description is missing from the response");
+////	         assertFalse(description.isEmpty(), "description is empty in the response");
+////	         //check if the code value is as per the decided
+////	         assertEquals(code,"GNR_INVALID_DATA");
+////	         assertEquals(description,"Invalid Geo location found.");
 //			
-//			String data = "12,12"+AuthToken+requestDeviceId+"NepalTravelApp/1.0.0 android"+"transaction"+"qq"+"2025-04-30 11:00:00";
-////			: X-GEO-LOCATION+ X-AUTH-TOKEN + X-DEVICE-ID+ User-Agent + X-SYSTEM-ID+ X-CREDENTIAL(Optional) + Request-Timestamp
-//			String Signature = signatureCreate.generateHMACSHA256(data, secretKey);
-//			System.out.println(Signature);
-//
-//	        Response response = (Response) given()
-//	            .header("X-GEO-Location", "12,12")
-//	            .header("X-Device-Id", requestDeviceId)
-//	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
-//	            .header("X-AUTH-TOKEN",AuthToken)
-//	            .header("X-SYSTEM-ID","transaction")
-//	            .header("X-CREDENTIAL","qq")
-//	            .header("X-SYSTEM-SIGNATURE",Signature) 
-//	            .header("Request-Timestamp","2025-04-30 11:00:00")
-//	            .when()
-//	            .get("/session")
-//	        .then()
-//	            .statusCode(422)
-//	            .extract().response();
-//	        
-//	        String code = response.jsonPath().getString("code");
-//	        String description = response.jsonPath().getString("description");
-////	        // Check if the signature is not null or empty
-//	         assertNotNull(code, "code is missing from the response");
-//	         assertFalse(code.isEmpty(), "code is empty in the response");
-//	         assertNotNull(description, "description is missing from the response");
-//	         assertFalse(description.isEmpty(), "description is empty in the response");
-//	         //check if the code value is as per the decided
-//	         assertEquals(code,"GNR_INVALID_DATA");
-//	         assertEquals(description,"Invalid Geo location found.");
-			
-//	}
-	
+////	}
+////	
 	@AfterClass
 	public void logout() {
 		baseURI = "https://visitor0.moco.com.np/visitor";

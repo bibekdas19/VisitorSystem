@@ -16,75 +16,60 @@ import java.util.Map;
 
 public class deleteBiometric {
 	String AuthToken;
+	String secretKey;
+	String requestDeviceId = "visitor-app-device"; 
+	String input_email = "vivek@moco.com.np";
+	String input_pin = "123654";
 	@BeforeClass
-	public void setBiometric() throws Exception {
-		 RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
-	        
-	        Response response1 = given()
-	                .header("X-GEO-Location", "12,12")
-	                .header("X-Device-Id", "moco-travels-app")
-	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
-	            .when()
-	                .get("/key")
-	            .then()
-	                .statusCode(200)
-	                .extract().response();
+	public void getToken() throws Exception{
+		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
+        
+        Response response1 = given()
+                .header("X-GEO-Location", "12,12")
+                .header("X-Device-Id", requestDeviceId)
+                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+            .when()
+                .get("/key")
+            .then()
+                .statusCode(200)
+                .extract().response();
 
-	       String secretKey1 = response1.jsonPath().getString("signOnKey");
-	        //assertNotNull(secretKey, "Secret key is null!");
-	        
-	        ObjectMapper objectMapper = new ObjectMapper();
-	        String email = "vivek@moco.com.np";
-	        String requestDeviceId = "moco-travels-app";
-	        String plain_pin = "152986";
-	        Map<String, Object> credentials = new LinkedHashMap<>();
-	        credentials.put("email", email);
-	        String Pin = signatureCreate.encryptAES256(plain_pin, secretKey1);
-	        credentials.put("pin", Pin);
+       String secretKey1 = response1.jsonPath().getString("signOnKey");
+        //assertNotNull(secretKey, "Secret key is null!");
+        
+        ObjectMapper objectMapper = new ObjectMapper();
+        String email = input_email;
+        String plain_pin = input_pin;
+        Map<String, Object> credentials = new LinkedHashMap<>();
+        credentials.put("email", email);
+        String Pin = signatureCreate.encryptAES256(plain_pin, secretKey1);
+        credentials.put("pin", Pin);
 
-	        Map<String, Object> jsonBody = new LinkedHashMap<>();
-	        jsonBody.put("credentials", credentials);
-	        
-	     // Generate signature
-	        String data = objectMapper.writeValueAsString(jsonBody);
-	        String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey1);
-	        
-	        jsonBody.put("signature", requestSignature);
-	        
-	        
-	     // Send request
-	        Response response2 = given()
-	                .header("X-GEO-Location", "12,12")
-	                .header("X-Device-Id", requestDeviceId)
-	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
-	                .contentType("application/json")
-	                .body(jsonBody)
-	            .when()
-	                .post("/authenticate")
-	            .then()
-	                .statusCode(200)
-	                .log().all()
-	                .extract().response();
-	        AuthToken = response2.getHeader("X-AUTH-TOKEN");
-	        String secretKey = response2.jsonPath().getString("sessionKey");
-	        
-	        Map<String, Object> jsonMap = new LinkedHashMap<>();
-			jsonMap.put("hash","tzLhMbbV+G/oQrgXvBg34su8wk1rztNBiR3");
-			String data1 = objectMapper.writeValueAsString(jsonMap);
-	        
-			String requestSignature1 = signatureCreate.generateHMACSHA256(data1, secretKey);
-			jsonMap.put("signature", requestSignature1);
-			
-			System.out.println(jsonMap);
-			Response response = (Response) given()
-		            .header("X-GEO-Location", "12,12")
-		            .header("X-Device-Id", "moco-travels-app")
-		            .header("User-Agent", "NepalTravelApp/1.0.0 android")
-		            .header("X-AUTH-TOKEN",AuthToken)
-		            .body(jsonMap)
-		        .when()
-		            .post("/biometric");
-		        response.then().statusCode(200);
+        Map<String, Object> jsonBody = new LinkedHashMap<>();
+        jsonBody.put("credentials", credentials);
+        
+     // Generate signature
+        String data = objectMapper.writeValueAsString(jsonBody);
+        String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey1);
+        
+        jsonBody.put("signature", requestSignature);
+        
+        
+     // Send request
+        Response response2 = given()
+                .header("X-GEO-Location", "12,12")
+                .header("X-Device-Id", requestDeviceId)
+                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+                .contentType("application/json")
+                .body(jsonBody)
+            .when()
+                .post("/authenticate")
+            .then()
+                .statusCode(200)
+                .log().all()
+                .extract().response();
+        AuthToken = response2.getHeader("X-AUTH-TOKEN");
+	     secretKey = response2.jsonPath().getString("sessionKey");
 	}
 	
 	
@@ -122,7 +107,7 @@ public class deleteBiometric {
         Response response = given()
             .header("X-GEO-Location", "12,12")
             .header("X-AUTH-TOKEN","")
-            .header("X-Device-Id", "moco-travels-app")
+            .header("X-Device-Id", requestDeviceId)
             .header("User-Agent", "NepalTravelApp/1.0.0 android")
         .when()
             .delete("/biometric")
@@ -149,7 +134,7 @@ public class deleteBiometric {
         Response response = given()
             .header("X-GEO-Location", "")
             .header("X-AUTH-TOKEN",AuthToken)
-            .header("X-Device-Id", "moco-travels-app")
+            .header("X-Device-Id", requestDeviceId)
             .header("User-Agent", "NepalTravelApp/1.0.0 android")
         .when()
             .delete("/biometric")
@@ -176,7 +161,7 @@ public class deleteBiometric {
         Response response = given()
             .header("X-GEO-Location", "12,12")
             .header("X-AUTH-TOKEN",AuthToken)
-            .header("X-Device-Id", "moco-travels-app")
+            .header("X-Device-Id", requestDeviceId)
             .header("User-Agent", "")
         .when()
             .delete("/biometric")
@@ -231,7 +216,7 @@ public class deleteBiometric {
         Response response = given()
             .header("X-GEO-Location", "12##")
             .header("X-AUTH-TOKEN",AuthToken)
-            .header("X-Device-Id", "moco-travels-app")
+            .header("X-Device-Id", requestDeviceId)
             .header("User-Agent", "NepalTravelApp/1.0.0 android")
         .when()
             .delete("/biometric")
@@ -258,7 +243,7 @@ public class deleteBiometric {
         Response response = given()
             .header("X-GEO-Location", "12,12")
             .header("X-AUTH-TOKEN",AuthToken)
-            .header("X-Device-Id", "moco-travels-app")
+            .header("X-Device-Id", requestDeviceId)
             .header("User-Agent", "NepalTravelApp.0 android")
         .when()
             .delete("/biometric")
@@ -285,7 +270,7 @@ public class deleteBiometric {
         Response response = given()
             .header("X-GEO-Location", "12,12")
             .header("X-AUTH-TOKEN","22")
-            .header("X-Device-Id", "moco-travels-app")
+            .header("X-Device-Id", requestDeviceId)
             .header("User-Agent", "NepalTravelApp/1.0.0 android")
         .when()
             .delete("/biometric")
@@ -313,7 +298,7 @@ public class deleteBiometric {
 //        Response response = given()
 //            .header("X-GEO-Location", "12,12")
 //            .header("X-AUTH-TOKEN",AuthToken)
-//            .header("X-Device-Id", "moco-travels-app")
+//            .header("X-Device-Id", requestDeviceId)
 //            .header("User-Agent", "NepalTravelApp/1.0.0 android")
 //        .when()
 //            .delete("/biometric")
@@ -332,7 +317,7 @@ public class deleteBiometric {
         Response response = given()
             .header("X-GEO-Location", "12,12")
             .header("X-AUTH-TOKEN",AuthToken)
-            .header("X-Device-Id", "moco-travels-app")
+            .header("X-Device-Id", requestDeviceId)
             .header("User-Agent", "NepalTravelApp/1.0.0 android")
         .when()
             .delete("/biometric")
@@ -361,7 +346,7 @@ public class deleteBiometric {
         Response response = given()
             .header("X-GEO-Location", "12,12")
             .header("X-AUTH-TOKEN",AuthToken)
-            .header("X-Device-Id", "moco-travels-app")
+            .header("X-Device-Id", requestDeviceId)
             .header("User-Agent", "NepalTravelApp/1.0.0 android")
         .when()
             .delete("/authenticate");

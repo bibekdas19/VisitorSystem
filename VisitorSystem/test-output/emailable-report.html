@@ -9,55 +9,10 @@
 <table>
 <tr><th>Test</th><th># Passed</th><th># Skipped</th><th># Retried</th><th># Failed</th><th>Time (ms)</th><th>Included Groups</th><th>Excluded Groups</th></tr>
 <tr><th colspan="8">Default suite</th></tr>
-<tr><td><a href="#t0">Default test</a></td><td class="num">15</td><td class="num">0</td><td class="num">0</td><td class="num attn">1</td><td class="num">20,627</td><td></td><td></td></tr>
+<tr><td><a href="#t0">Default test</a></td><td class="num">1</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">3,399</td><td></td><td></td></tr>
 </table>
-<table id='summary'><thead><tr><th>Class</th><th>Method</th><th>Start</th><th>Time (ms)</th></tr></thead><tbody><tr><th colspan="4">Default suite</th></tr></tbody><tbody id="t0"><tr><th colspan="4">Default test &#8212; failed</th></tr><tr class="failedeven"><td rowspan="1">OTP.verifyresetOtp</td><td><a href="#m0">VerifyOtpwithValidCredentials</a></td><td rowspan="1">1747307510972</td><td rowspan="1">5098</td></tr><tr><th colspan="4">Default test &#8212; passed</th></tr><tr class="passedeven"><td rowspan="15">OTP.verifyresetOtp</td><td><a href="#m1">VerifySignUpOtpwithoutOtp</a></td><td rowspan="1">1747307516077</td><td rowspan="1">1023</td></tr><tr class="passedeven"><td><a href="#m2">VerifySignUpOtpwithoutTimestamp</a></td><td rowspan="1">1747307517105</td><td rowspan="1">524</td></tr><tr class="passedeven"><td><a href="#m3">VerifySignUpOtpwithoutpin</a></td><td rowspan="1">1747307517633</td><td rowspan="1">2795</td></tr><tr class="passedeven"><td><a href="#m4">VerifySignUpwithInvalidEmail</a></td><td rowspan="1">1747307520434</td><td rowspan="1">641</td></tr><tr class="passedeven"><td><a href="#m5">VerifySignUpwithInvalidOtp</a></td><td rowspan="1">1747307521077</td><td rowspan="1">1338</td></tr><tr class="passedeven"><td><a href="#m6">VerifySignUpwithInvalidPin</a></td><td rowspan="1">1747307522419</td><td rowspan="1">679</td></tr><tr class="passedeven"><td><a href="#m7">VerifySignUpwithInvalidToken</a></td><td rowspan="1">1747307523102</td><td rowspan="1">348</td></tr><tr class="passedeven"><td><a href="#m8">VerifySignUpwithWrongSignature</a></td><td rowspan="1">1747307523455</td><td rowspan="1">310</td></tr><tr class="passedeven"><td><a href="#m9">VerifySignUpwithoutSignature</a></td><td rowspan="1">1747307523766</td><td rowspan="1">122</td></tr><tr class="passedeven"><td><a href="#m10">VerifySignUpwithouttoken</a></td><td rowspan="1">1747307523891</td><td rowspan="1">795</td></tr><tr class="passedeven"><td><a href="#m11">VerifySignupOtpwithoutemail</a></td><td rowspan="1">1747307524690</td><td rowspan="1">429</td></tr><tr class="passedeven"><td><a href="#m12">VerifySignupwithInvalidTimestamp</a></td><td rowspan="1">1747307525122</td><td rowspan="1">2592</td></tr><tr class="passedeven"><td><a href="#m13">verifySignUpOtpwithoutDeviceId</a></td><td rowspan="1">1747307527717</td><td rowspan="1">1635</td></tr><tr class="passedeven"><td><a href="#m14">verifySignUpOtpwithoutLocation</a></td><td rowspan="1">1747307529357</td><td rowspan="1">893</td></tr><tr class="passedeven"><td><a href="#m15">verifySignUpwithoutUserAgent</a></td><td rowspan="1">1747307530253</td><td rowspan="1">1283</td></tr></tbody>
+<table id='summary'><thead><tr><th>Class</th><th>Method</th><th>Start</th><th>Time (ms)</th></tr></thead><tbody><tr><th colspan="4">Default suite</th></tr></tbody><tbody id="t0"><tr><th colspan="4">Default test &#8212; passed</th></tr><tr class="passedeven"><td rowspan="1">Device.LoginDevice</td><td><a href="#m0">getToken</a></td><td rowspan="1">1748856998036</td><td rowspan="1">3366</td></tr></tbody>
 </table>
-<h2>Default test</h2><h3 id="m0">OTP.verifyresetOtp#VerifyOtpwithValidCredentials</h3><table class="result"><tr><th>Exception</th></tr><tr><td><div class="stacktrace">java.lang.AssertionError: sessionkey is missing from the response expected object to not be null
-	at org.testng.Assert.fail(Assert.java:99)
-	at org.testng.Assert.assertNotNull(Assert.java:942)
-	at OTP.verifyresetOtp.VerifyOtpwithValidCredentials(verifyresetOtp.java:980)
-	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
-	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:133)
-	at org.testng.internal.TestInvoker.invokeMethod(TestInvoker.java:598)
-	at org.testng.internal.TestInvoker.invokeTestMethod(TestInvoker.java:173)
-	at org.testng.internal.MethodRunner.runInSequence(MethodRunner.java:46)
-	at org.testng.internal.TestInvoker$MethodInvocationAgent.invoke(TestInvoker.java:824)
-	at org.testng.internal.TestInvoker.invokeTestMethods(TestInvoker.java:146)
-	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:146)
-	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:128)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1597)
-	at org.testng.TestRunner.privateRun(TestRunner.java:794)
-	at org.testng.TestRunner.run(TestRunner.java:596)
-	at org.testng.SuiteRunner.runTest(SuiteRunner.java:377)
-	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:371)
-	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:332)
-	at org.testng.SuiteRunner.run(SuiteRunner.java:276)
-	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:53)
-	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:96)
-	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1212)
-	at org.testng.TestNG.runSuitesLocally(TestNG.java:1134)
-	at org.testng.TestNG.runSuites(TestNG.java:1063)
-	at org.testng.TestNG.run(TestNG.java:1031)
-	at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:115)
-	at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:293)
-	at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:91)
-</div></td></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
-<h3 id="m1">OTP.verifyresetOtp#VerifySignUpOtpwithoutOtp</h3><table class="result"><tr><th class="invisible"/></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
-<h3 id="m2">OTP.verifyresetOtp#VerifySignUpOtpwithoutTimestamp</h3><table class="result"><tr><th class="invisible"/></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
-<h3 id="m3">OTP.verifyresetOtp#VerifySignUpOtpwithoutpin</h3><table class="result"><tr><th class="invisible"/></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
-<h3 id="m4">OTP.verifyresetOtp#VerifySignUpwithInvalidEmail</h3><table class="result"><tr><th class="invisible"/></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
-<h3 id="m5">OTP.verifyresetOtp#VerifySignUpwithInvalidOtp</h3><table class="result"><tr><th class="invisible"/></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
-<h3 id="m6">OTP.verifyresetOtp#VerifySignUpwithInvalidPin</h3><table class="result"><tr><th class="invisible"/></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
-<h3 id="m7">OTP.verifyresetOtp#VerifySignUpwithInvalidToken</h3><table class="result"><tr><th class="invisible"/></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
-<h3 id="m8">OTP.verifyresetOtp#VerifySignUpwithWrongSignature</h3><table class="result"><tr><th class="invisible"/></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
-<h3 id="m9">OTP.verifyresetOtp#VerifySignUpwithoutSignature</h3><table class="result"><tr><th class="invisible"/></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
-<h3 id="m10">OTP.verifyresetOtp#VerifySignUpwithouttoken</h3><table class="result"><tr><th class="invisible"/></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
-<h3 id="m11">OTP.verifyresetOtp#VerifySignupOtpwithoutemail</h3><table class="result"><tr><th class="invisible"/></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
-<h3 id="m12">OTP.verifyresetOtp#VerifySignupwithInvalidTimestamp</h3><table class="result"><tr><th class="invisible"/></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
-<h3 id="m13">OTP.verifyresetOtp#verifySignUpOtpwithoutDeviceId</h3><table class="result"><tr><th class="invisible"/></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
-<h3 id="m14">OTP.verifyresetOtp#verifySignUpOtpwithoutLocation</h3><table class="result"><tr><th class="invisible"/></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
-<h3 id="m15">OTP.verifyresetOtp#verifySignUpwithoutUserAgent</h3><table class="result"><tr><th class="invisible"/></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
+<h2>Default test</h2><h3 id="m0">Device.LoginDevice#getToken</h3><table class="result"><tr><th class="invisible"/></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
 </body>
 </html>

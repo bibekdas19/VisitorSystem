@@ -80,4 +80,24 @@ public class signatureCreate {
 
         return new String(decrypted, StandardCharsets.UTF_8);
     }
+    
+    public static String encryptAESCard(String data, String secretKey) throws Exception {
+        // 1. Hash the secretKey using SHA-256 to get a 256-bit key
+        MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
+        byte[] keyBytes = sha256.digest(secretKey.getBytes("UTF-8"));
+
+        // 2. Create AES key spec with ECB mode
+        SecretKeySpec secretKeySpec = new SecretKeySpec(keyBytes, "AES");
+
+        // 3. AES/ECB/PKCS5Padding (same as PKCS7 for 16-byte blocks)
+        Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+        cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
+
+        // 4. Encrypt the data and encode it as Base64
+        byte[] encryptedBytes = cipher.doFinal(data.getBytes("UTF-8"));
+        return Base64.getEncoder().encodeToString(encryptedBytes);
+    }
+    
+    
+    
 }

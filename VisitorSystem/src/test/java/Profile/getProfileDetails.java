@@ -1,75 +1,86 @@
 package Profile;
 
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 //import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import OTP.signatureCreate;
+import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import static io.restassured.RestAssured.*;
 import static org.testng.Assert.*;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 //import java.util.*;
 
 public class getProfileDetails {
-	String AuthToken = "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ2aXZla0Btb2NvLmNvbS5ucCIsImlzcyI6IlZJU0lUT1ItU0VSVklDRSIsImp0aSI6Im1vY28tdHJhdmVsLWFwcCIsImlhdCI6MTc0NzExMjAwNSwiZXhwIjoxNzQ3MTQyMDA1fQ.XxlXO-cniFD7sy6A841T84w8rLtJi-vebQjQ7qqkfOmeI7yCdW3iypLQlsTr_3ke";
+	String AuthToken;
+	String requestDeviceId = "visitor-app-device"; 
+	String input_email = "vivek@moco.com.np";
+	String input_pin = "123654";
+	@BeforeClass
+	public void getToken() throws Exception{
+		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
+        
+        Response response1 = given()
+                .header("X-GEO-Location", "12,12")
+                .header("X-Device-Id", requestDeviceId)
+                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+            .when()
+                .get("/key")
+            .then()
+                .statusCode(200)
+                .extract().response();
 
-//	@BeforeClass
-//	public void getToken() throws Exception {
-//		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
-//		//get the signOn key
-//		Response keyResponse = given()
-//				.baseUri(baseURI)
-//				.header("X-GEO-Location", "12,12")
-//				.header("X-Device-Id", "travel-app-phone")
-//				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-//				.header("X-AUTH-TOKEN",AuthToken)
-//				.when()
-//				.get("/key")
-//				.then()
-//				.statusCode(200)
-//				.extract().response();
-//
-//		String secretKey = keyResponse.jsonPath().getString("signOnKey");
-//		assertNotNull(secretKey, "Secret key is null!");
-//
-//		//authenticate before for the auth token
-//		ObjectMapper objectMapper = new ObjectMapper();
-//		String email = "vivek@moco.com.np";
-//		String requestDeviceId = "travel-app-phone";
-//		Map<String, Object> credentials = new HashMap<>();
-//		credentials.put("email", email);
-//		credentials.put("pin", "123426");
-//
-//		Map<String, Object> jsonBody = new HashMap<>();
-//		jsonBody.put("credentials", credentials);
-//
-//		// Generate signature
-//		String data = objectMapper.writeValueAsString(jsonBody);
-//		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
-//
-//		jsonBody.put("signature", requestSignature);
-//
-//		// Send request
-//		Response Authresponse = given()
-//				.header("X-GEO-Location", "12,12")
-//				.header("X-Device-Id", requestDeviceId)
-//				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-//				.contentType("application/json")
-//				.body(jsonBody)
-//				.when()
-//				.post("authenticate")
-//				.then()
-//				.statusCode(200)
-//				.log().all()
-//				.extract().response();
-//		AuthToken = Authresponse.getHeader("X-AUTH-TOKEN");
-//
-//	}
+       String secretKey1 = response1.jsonPath().getString("signOnKey");
+        //assertNotNull(secretKey, "Secret key is null!");
+        
+        ObjectMapper objectMapper = new ObjectMapper();
+        String email = input_email;
+        String plain_pin = input_pin;
+        Map<String, Object> credentials = new LinkedHashMap<>();
+        credentials.put("email", email);
+        String Pin = signatureCreate.encryptAES256(plain_pin, secretKey1);
+        credentials.put("pin", Pin);
+
+        Map<String, Object> jsonBody = new LinkedHashMap<>();
+        jsonBody.put("credentials", credentials);
+        
+     // Generate signature
+        String data = objectMapper.writeValueAsString(jsonBody);
+        String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey1);
+        
+        jsonBody.put("signature", requestSignature);
+        
+        
+     // Send request
+        Response response2 = given()
+                .header("X-GEO-Location", "12,12")
+                .header("X-Device-Id", requestDeviceId)
+                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+                .contentType("application/json")
+                .body(jsonBody)
+            .when()
+                .post("/authenticate")
+            .then()
+                .statusCode(200)
+                .log().all()
+                .extract().response();
+        AuthToken = response2.getHeader("X-AUTH-TOKEN");
+	        //String secretKey = response2.jsonPath().getString("sessionKey");
+	}
 	
 	@Test
 	public void getProfileInformation() {
 		baseURI = "https://visitor0.moco.com.np/visitor";
 		Response response = given()
 	            .header("X-GEO-Location", "12,12")
-	            .header("X-Device-Id", "moco-travel-app")
+	            .header("X-Device-Id", requestDeviceId)
 	            .header("X-AUTH-TOKEN",AuthToken)
 	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
 	        .when()
@@ -353,6 +364,19 @@ public class getProfileDetails {
 	     assertEquals(code,"GNR_ERR");
 		 assertEquals(description,"Internal Server Error");
 		
+		
+	}
+	@AfterClass
+	public void logout() {
+		baseURI = "https://visitor0.moco.com.np/visitor";
+	      Response response = given()
+	          .header("X-GEO-Location", "12,12")
+	          .header("X-AUTH-TOKEN",AuthToken)
+	          .header("X-Device-Id", requestDeviceId)
+	          .header("User-Agent", "NepalTravelApp/1.0.0 android")
+	      .when()
+	          .delete("/authenticate");
+	      response.then().statusCode(200);
 		
 	}
 }   
