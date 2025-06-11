@@ -743,16 +743,33 @@ public class authenticate {
         assertFalse(loginAttemptCountPin.isEmpty(), "loginAttemptCount is missing");
         assertFalse(loginAttemptCountBiometric.isEmpty(), "isBiometric is missing");
         assertFalse(registrationDate.isEmpty(),"registration date is missing");
-//        
-//        //check if the device id is same in request and response
-//        
-//        assertEquals(requestDeviceId,deviceId);
-////        assertEquals("John Smith",fullName);
-////        assertEquals("India",country);
-////        
-//        //check if the token is in the present in the response
-//        assertTrue(response.getHeaders().hasHeaderWithName("X-AUTH-TOKEN"), "Missing X-AUTH-TOKEN header");
-//        System.out.println("Request ID: " + response.getHeaders().hasHeaderWithName("X-AUTH-TOKEN"));
+
+      //matching response signature with calculated hash
+        Map<String, Object> fields = new LinkedHashMap<>();
+        fields.put("deviceId", deviceId);
+        fields.put("sessionKey", sessionKey);
+        
+        Map<String, Object> profile = new LinkedHashMap<>();
+        profile.put("fullName",fullName);
+        profile.put("country",country);
+        profile.put("documentNumber",documentNumber);
+        profile.put("documentType",documentType);
+        profile.put("dateOfBirth",dateOfBirth);
+        profile.put("email",email);
+        profile.put("gender",gender);
+        profile.put("status",status);
+        profile.put("verificationStatus",verificationStatus);
+        profile.put("loginAttemptCountPin",loginAttemptCountPin);
+        profile.put("loginAttemptCountBiometric",loginAttemptCountBiometric);
+        profile.put("registrationDate",registrationDate);
+
+        fields.put("profile",profile);
+
+        String partialJson = objectMapper.writeValueAsString(fields);
+        String partialSignature = signatureCreate.generateHMACSHA256(partialJson, secretKey);
+        assertEquals(signature, partialSignature);
+          
+        
            AuthToken = response.getHeader("X-AUTH-TOKEN");
  }
 //	@Test

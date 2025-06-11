@@ -571,6 +571,17 @@ public class signupOtp {
         assertFalse(description.isEmpty(), "Description is empty");
         assertFalse(code.isEmpty(), "Code is empty");
         
+        
+        //matching response signature with calculated hash
+        Map<String, Object> fields = new LinkedHashMap<>();
+        fields.put("code", code);
+        fields.put("description", description);
+        fields.put("token", token);
+
+        String partialJson = objectMapper.writeValueAsString(fields);
+        String partialSignature = signatureCreate.generateHMACSHA256(partialJson, secretKey);
+        assertEquals(responseSignature, partialSignature);
+        
         System.out.println(token);
  
     }

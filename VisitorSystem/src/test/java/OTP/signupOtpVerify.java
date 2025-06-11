@@ -15,12 +15,12 @@ import java.util.*;
 
 public class signupOtpVerify {
 	String baseURI = "https://visitor0.moco.com.np/visitor";
-    String secretKey = "ddc580dd85667569914f5f7983080e37bb07b37d6709275cc32ed3e4985c024c";
-    String token = "UTSjH5qGa5WgzAy7CNmTkfsdEgPQ2BawH-SO1LqoSIM";
+    String secretKey = "9a51b6f1dfcfd8d2f26f3d159d10536ead69bd4ceae791e23993de10c9f0480d";
+    String token = "tptXwk2AgfgkcyLgnpGsgWH3FPqTtUrPIkfzqr_gJ0Q";
     String email = "vivek@moco.com.np";
     String requestTimestamp = signatureCreate.generateTimestamp();
     String plain_pin = "123654";
-    String plain_otp = "612177";
+    String plain_otp = "844314";
     String requestdevice = "visitor-app-device";
 
     @Test

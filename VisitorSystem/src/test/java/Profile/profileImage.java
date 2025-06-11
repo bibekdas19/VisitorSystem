@@ -18,9 +18,9 @@ import java.util.Map;
 
 public class profileImage {
 	String AuthToken;
-	String requestDeviceId = "visitor-app-device"; 
+	String requestDeviceId = "53129af51bb3e30b"; 
 	String input_email = "vivek@moco.com.np";
-	String input_pin = "123654";
+	String input_pin = "147258";
 	@BeforeClass
 	public void getToken() throws Exception{
 		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
@@ -414,17 +414,17 @@ public class profileImage {
 		
 	}
 	
-	@AfterClass
-	public void logout() {
-		baseURI = "https://visitor0.moco.com.np/visitor";
-	      Response response = given()
-	          .header("X-GEO-Location", "12,12")
-	          .header("X-AUTH-TOKEN",AuthToken)
-	          .header("X-Device-Id", requestDeviceId)
-	          .header("User-Agent", "NepalTravelApp/1.0.0 android")
-	      .when()
-	          .delete("/authenticate");
-	      response.then().statusCode(200);
-	}
+//	@AfterClass
+//	public void logout() {
+//		baseURI = "https://visitor0.moco.com.np/visitor";
+//	      Response response = given()
+//	          .header("X-GEO-Location", "12,12")
+//	          .header("X-AUTH-TOKEN",AuthToken)
+//	          .header("X-Device-Id", requestDeviceId)
+//	          .header("User-Agent", "NepalTravelApp/1.0.0 android")
+//	      .when()
+//	          .delete("/authenticate");
+//	      response.then().statusCode(200);
+//	}
 		
 	}

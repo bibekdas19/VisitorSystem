@@ -3,11 +3,13 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="OTP.signupOtpVerify">
+      <class name="Profile.selfie">
         <methods>
-          <include name="VerifyOtpwithValidCredentials"/>
+          <include name="getToken"/>
+          <include name="uploadSelfiewithvalidCredentails"/>
+          <include name="logout"/>
         </methods>
-      </class> <!-- OTP.signupOtpVerify -->
+      </class> <!-- Profile.selfie -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

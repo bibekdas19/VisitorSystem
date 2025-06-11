@@ -454,7 +454,7 @@ RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
 	    	assertEquals(description,"Bad Request.");
     }
 	}
-////
+
 	@Test
 	public void uploadSelfiewithinvalidImage() throws Exception {
 		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
@@ -786,164 +786,165 @@ RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
 	    	assertEquals(description,"Successfully verified Portrait/Selfie.");
     }
 	}
-//	
-////	@Test
-////	public void uploadSelfieforsameperson() throws Exception {
-////		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
-////
-////	    File selfie = new File("C:/Users/Dell/Downloads/chineses.jpg");
-////
-////	    if (!selfie.exists()) {
-////	        System.out.println("File not found: " + selfie.getAbsolutePath());
-////	        return;
-////	    }
-////
-////	    // Use logging filters to compare with curl if needed
-////	    RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
-////
-////	    // Use InputStream to avoid encoding issues
-////	    try (FileInputStream fis = new FileInputStream(selfie)) {
-////	        Response response = given()
-////	                .header("X-GEO-Location", "12,12")
-////	                .header("X-AUTH-TOKEN", "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzYW5kZXNodGhhcGFAbW9jby5jb20ubnAiLCJpc3MiOiJWSVNJVE9SLVNFUlZJQ0UiLCJqdGkiOiJzYW5kZXNoLXRoYXBhLWFwcCIsImlhdCI6MTc0NjQzNDYxMCwiZXhwIjoxNzQ2NDY0NjEwfQ.qzN9rDnIhBEGiqTQ4VQQYG6FJCTZ_s_6BWEDAoRC2Fe3JbIdTOHO6Yk4-h2fzKxh")
-////	                .header("X-Device-Id", "sandesh-thapa-app")
-////	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
-////	                .header("Accept", "*/*")  // matches curl default
-////	                .multiPart("selfie", "chineses.jpg", fis, "image/jpeg") // key, filename, stream, type
-////	                .when()
-////	                .post("/selfie")
-////	                .then()
-////	                .statusCode(403)
-////	                .extract().response();
-////
-////	        
-////	String code = response.jsonPath().getString("code");
-////	String description = response.jsonPath().getString("description");
-////	String signature = response.jsonPath().getString("signature");
-////
-////	assertNotNull(description, "Description is missing from the response");
-////	assertNotNull(code, "Code is missing");
-////	assertNotNull(signature,"signature is missing");
-////
-////	assertFalse(description.isEmpty(), "Description is empty");
-////	assertFalse(code.isEmpty(), "Code is empty");
-////	assertFalse(signature.isEmpty(),"signature is empty");
-////
-////	assertEquals(code,"GNR_FORBIDDEN");
-////	assertEquals(description,"Successfully verified Portrait/Selfie.");
-////    }
-////	}
-////	@Test
-////	public void uploadSelfiewithvalidllCredentails() throws Exception {
-////		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
-////
-////	    File selfie = new File("C:/Users/Dell/Downloads/chineses.jpg");
-////
-////	    if (!selfie.exists()) {
-////	        System.out.println("File not found: " + selfie.getAbsolutePath());
-////	        return;
-////	    }
-////
-////	    // Use logging filters to compare with curl if needed
-////	    RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
-////
-////	    // Use InputStream to avoid encoding issues
-////	    try (FileInputStream fis = new FileInputStream(selfie)) {
-////	        Response response = given()
-////	                .header("X-GEO-Location", "12,12")
-////	                .header("X-AUTH-TOKEN", AuthToken)
-////	                .header("X-Device-Id", requestDeviceId)
-////	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
-////	                .header("Accept", "*/*")  // matches curl default
-////	                .multiPart("selfie", "chineses.jpg", fis, "image/jpeg") // key, filename, stream, type
-////	                .when()
-////	                .post("/selfie")
-////	                .then()
-////	                .statusCode(200)
-////	                .extract().response();
-////
-////	        
-////	String code = response.jsonPath().getString("code");
-////	String description = response.jsonPath().getString("description");
-////	String signature = response.jsonPath().getString("signature");
-////
-////	assertNotNull(description, "Description is missing from the response");
-////	assertNotNull(code, "Code is missing");
-////	assertNotNull(signature,"signature is missing");
-////
-////	assertFalse(description.isEmpty(), "Description is empty");
-////	assertFalse(code.isEmpty(), "Code is empty");
-////	assertFalse(signature.isEmpty(),"signature is empty");
-////
-////	assertEquals(code,"GNR_OK");
-////	assertEquals(description,"Successfully verified Portrait/Selfie.");
-////    }
-////	}
-//	
-//	@Test
-//	public void uploadSelfiewithvalidCredentails() throws Exception {
-//		    RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
-//
-//		    File selfie = new File("C:/Users/Dell/Downloads/Image_20241216_121143_255.jpeg");
-//		    //File selfie = new File("C:/Users/Dell/Downloads/WhatsApp Image 2025-05-23 at 14.53.45.jpeg");
-//
-//		    if (!selfie.exists()) {
-//		        System.out.println("File not found: " + selfie.getAbsolutePath());
-//		        return;
-//		    }
-//
-//		    // Use logging filters to compare with curl if needed
-//		    RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
-//
-//		    // Use InputStream to avoid encoding issues
-//		    try (FileInputStream fis = new FileInputStream(selfie)) {
-//		        Response response = given()
-//		                .header("X-GEO-Location", "12,12")
-//		                .header("X-AUTH-TOKEN", AuthToken)
-//		                .header("X-Device-Id", requestDeviceId)
-//		                .header("User-Agent", "NepalTravelApp/1.0.0 android")
-//		                .header("Accept", "*/*")  // matches curl default
-//		                .multiPart("selfie", "Image_20241216_121143_255.jpeg", fis, "image/jpeg") // key, filename, stream, type
-//		                .when()
-//		                .post("/selfie")
-//		                .then()
-//		                .statusCode(200)
-//		                .extract().response();
-//
-//		        
-//		        
-//				String code = response.jsonPath().getString("code");
-//				String description = response.jsonPath().getString("description");
-//				String signature = response.jsonPath().getString("signature");
-//		
-//				assertNotNull(description, "Description is missing from the response");
-//				assertNotNull(code, "Code is missing");
-//				assertNotNull(signature,"signature is missing");
-//		
-//				assertFalse(description.isEmpty(), "Description is empty");
-//				assertFalse(code.isEmpty(), "Code is empty");
-//				assertFalse(signature.isEmpty(),"signature is empty");
-//		
-//				assertEquals(code,"GNR_OK");
-//				assertEquals(description,"Successfully verified Portrait/Selfie.");
-//		    }
 
-//	}
 	
-//	@AfterClass
-//	public void logout() {
-//		baseURI = "https://visitor0.moco.com.np/visitor";
-//      Response response = given()
-//          .header("X-GEO-Location", "12,12")
-//          .header("X-AUTH-TOKEN",AuthToken)
-//          .header("X-Device-Id", requestDeviceId)
-//          .header("User-Agent", "NepalTravelApp/1.0.0 android")
-//      .when()
-//          .delete("/authenticate");
-//      response.then().statusCode(200);
-//          
-//		
-//	}
-}
+	@Test
+	public void uploadSelfieforsameperson() throws Exception {
+		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
+
+	    File selfie = new File("C:/Users/Dell/Downloads/chineses.jpg");
+
+	    if (!selfie.exists()) {
+	        System.out.println("File not found: " + selfie.getAbsolutePath());
+	        return;
+	    }
+
+	    // Use logging filters to compare with curl if needed
+	    RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
+
+	    // Use InputStream to avoid encoding issues
+	    try (FileInputStream fis = new FileInputStream(selfie)) {
+	        Response response = given()
+	                .header("X-GEO-Location", "12,12")
+	                .header("X-AUTH-TOKEN", "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJzYW5kZXNodGhhcGFAbW9jby5jb20ubnAiLCJpc3MiOiJWSVNJVE9SLVNFUlZJQ0UiLCJqdGkiOiJzYW5kZXNoLXRoYXBhLWFwcCIsImlhdCI6MTc0NjQzNDYxMCwiZXhwIjoxNzQ2NDY0NjEwfQ.qzN9rDnIhBEGiqTQ4VQQYG6FJCTZ_s_6BWEDAoRC2Fe3JbIdTOHO6Yk4-h2fzKxh")
+	                .header("X-Device-Id", "sandesh-thapa-app")
+	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+	                .header("Accept", "*/*")  // matches curl default
+	                .multiPart("selfie", "chineses.jpg", fis, "image/jpeg") // key, filename, stream, type
+	                .when()
+	                .post("/selfie")
+	                .then()
+	                .statusCode(403)
+	                .extract().response();
+
+	        
+	String code = response.jsonPath().getString("code");
+	String description = response.jsonPath().getString("description");
+	String signature = response.jsonPath().getString("signature");
+
+	assertNotNull(description, "Description is missing from the response");
+	assertNotNull(code, "Code is missing");
+	assertNotNull(signature,"signature is missing");
+
+	assertFalse(description.isEmpty(), "Description is empty");
+	assertFalse(code.isEmpty(), "Code is empty");
+	assertFalse(signature.isEmpty(),"signature is empty");
+
+	assertEquals(code,"GNR_FORBIDDEN");
+	assertEquals(description,"Successfully verified Portrait/Selfie.");
+    }
+
+	}
+	@Test
+	public void uploadSelfiewithvalidllCredentails() throws Exception {
+		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
+
+	    File selfie = new File("C:/Users/Dell/Downloads/chineses.jpg");
+
+	    if (!selfie.exists()) {
+	        System.out.println("File not found: " + selfie.getAbsolutePath());
+	        return;
+	    }
+
+	    // Use logging filters to compare with curl if needed
+	    RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
+
+	    // Use InputStream to avoid encoding issues
+	    try (FileInputStream fis = new FileInputStream(selfie)) {
+	        Response response = given()
+	                .header("X-GEO-Location", "12,12")
+	                .header("X-AUTH-TOKEN", AuthToken)
+	                .header("X-Device-Id", requestDeviceId)
+	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+	                .header("Accept", "*/*")  // matches curl default
+	                .multiPart("selfie", "chineses.jpg", fis, "image/jpeg") // key, filename, stream, type
+	                .when()
+	                .post("/selfie")
+	                .then()
+	                .statusCode(200)
+	                .extract().response();
+
+	        
+	String code = response.jsonPath().getString("code");
+	String description = response.jsonPath().getString("description");
+	String signature = response.jsonPath().getString("signature");
+
+	assertNotNull(description, "Description is missing from the response");
+	assertNotNull(code, "Code is missing");
+	assertNotNull(signature,"signature is missing");
+
+	assertFalse(description.isEmpty(), "Description is empty");
+	assertFalse(code.isEmpty(), "Code is empty");
+	assertFalse(signature.isEmpty(),"signature is empty");
+
+	assertEquals(code,"GNR_OK");
+	assertEquals(description,"Successfully verified Portrait/Selfie.");
+    }
+	}
+	
+	@Test
+	public void uploadSelfiewithvalidCredentails() throws Exception {
+		    RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
+
+		    File selfie = new File("C:/Users/Dell/Downloads/Image_20241216_121143_255.jpeg");
+		    //File selfie = new File("C:/Users/Dell/Downloads/WhatsApp Image 2025-05-23 at 14.53.45.jpeg");
+
+		    if (!selfie.exists()) {
+		        System.out.println("File not found: " + selfie.getAbsolutePath());
+		        return;
+		    }
+
+		    // Use logging filters to compare with curl if needed
+		    RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
+
+		    // Use InputStream to avoid encoding issues
+		    try (FileInputStream fis = new FileInputStream(selfie)) {
+		        Response response = given()
+		                .header("X-GEO-Location", "12,12")
+		                .header("X-AUTH-TOKEN", AuthToken)
+		                .header("X-Device-Id", requestDeviceId)
+		                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+		                .header("Accept", "*/*")  // matches curl default
+		                .multiPart("selfie", "Image_20241216_121143_255.jpeg", fis, "image/jpeg") // key, filename, stream, type
+		                .when()
+		                .post("/selfie")
+		                .then()
+		                .statusCode(200)
+		                .extract().response();
+
+		        
+		        
+				String code = response.jsonPath().getString("code");
+				String description = response.jsonPath().getString("description");
+				String signature = response.jsonPath().getString("signature");
+		
+				assertNotNull(description, "Description is missing from the response");
+				assertNotNull(code, "Code is missing");
+				assertNotNull(signature,"signature is missing");
+		
+				assertFalse(description.isEmpty(), "Description is empty");
+				assertFalse(code.isEmpty(), "Code is empty");
+				assertFalse(signature.isEmpty(),"signature is empty");
+		
+				assertEquals(code,"GNR_OK");
+				assertEquals(description,"Successfully verified Portrait/Selfie.");
+		    }
+		    }
+
+
+	@AfterClass
+	public void logout() {
+		baseURI = "https://visitor0.moco.com.np/visitor";
+      Response response = given()
+          .header("X-GEO-Location", "12,12")
+          .header("X-AUTH-TOKEN",AuthToken)
+          .header("X-Device-Id", requestDeviceId)
+          .header("User-Agent", "NepalTravelApp/1.0.0 android")
+      .when()
+          .delete("/authenticate");
+      response.then().statusCode(200);
+	}
+	}
+
 
 
