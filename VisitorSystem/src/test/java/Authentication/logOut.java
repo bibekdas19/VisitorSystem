@@ -19,7 +19,7 @@ public class logOut {
 	String AuthToken;
 	String requestDeviceId = "visitor-app-device"; 
 	String email = "vivek@moco.com.np";
-	String plain_pin = "123654";
+	String plain_pin = "123653";
 	@BeforeClass
 	public void setup() throws Exception {
         RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
@@ -257,7 +257,7 @@ public class logOut {
         Response response = given()
             .header("X-GEO-Location", "12,12")
             .header("X-AUTH-TOKEN","xx")
-            .header("X-Device-Id", "moco-travels-app")
+            .header("X-Device-Id", requestDeviceId)
             .header("User-Agent", "NepalTravelApp/1.0.0 android")
         .when()
             .delete("/authenticate")
@@ -307,7 +307,7 @@ public class logOut {
         Response response = given()
             .header("X-GEO-Location", "12,12")
             .header("X-AUTH-TOKEN",AuthToken)
-            .header("X-Device-Id", "moco-travels-app")
+            .header("X-Device-Id", requestDeviceId)
             .header("User-Agent", "NepalTravelApp/1.0.0 android")
         .when()
             .delete("/authenticate")

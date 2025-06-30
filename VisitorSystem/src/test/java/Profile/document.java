@@ -21,10 +21,16 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class document {
-	
-	String AuthToken;
+//	
+//	String AuthToken;
 	String requestDeviceId = "visitor-app-device"; 
 	String input_email = "vivek@moco.com.np";
+//	String input_pin = "123654";
+	
+
+	String AuthToken;
+//	String requestDeviceId = "sandesh-thapa-app"; 
+//	String input_email = "sandeshthapa@moco.com.np";
 	String input_pin = "123654";
 	@BeforeClass
 	public void getToken() throws Exception{
@@ -743,7 +749,7 @@ public class document {
 		    RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
 
 		   // File document = new File("C:/Users/Dell/Downloads/WhatsApp Image 2024-12-16 at 12.18.17.jpeg");
-              File document = new File("C:/Users/Dell/Downloads/aadhar.jpg");
+              File document = new File("C:/Users/Dell/Downloads/WhatsApp Image 2025-06-02 at 09.48.46.jpg");
 		    if (!document.exists()) {
 		        System.out.println("File not found: " + document.getAbsolutePath());
 		        return;
@@ -760,7 +766,7 @@ public class document {
 		                .header("X-Device-Id", requestDeviceId)
 		                .header("User-Agent", "NepalTravelApp/1.0.0 android")
 		                .header("Accept", "*/*")  // matches curl default
-		                .multiPart("document", "aadhar.jpg", fis, "image/jpeg") // key, filename, stream, type
+		                .multiPart("document", "WhatsApp Image 2025-06-02 at 09.48.46.jpg", fis, "image/jpeg") // key, filename, stream, type
 		                .when()
 		                .post("/document")
 		                .then()
@@ -786,59 +792,59 @@ public class document {
 		    }
 
 	}
-//	@Test
-//	public void uploaddocumentwithvaliddocument() throws Exception {
-//		    RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
-//		  //  File document = new File("C:/Users/Dell/Downloads/WhatsApp Image 2025-05-23 at 13.19.09.jpeg");
-//		   File document = new File("C:/Users/Dell/Downloads/WhatsApp Image 2024-12-16 at 12.18.17.jpeg");
-//              //File document = new File("C:/Users/Dell/Downloads/aadhar.jpg");
-//		    if (!document.exists()) {
-//		        System.out.println("File not found: " + document.getAbsolutePath());
-//		        return;
-//		    }
-//
-//		    // Use logging filters to compare with curl if needed
-//		    RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
-//
-//		    // Use InputStream to avoid encoding issues
-//		    try (FileInputStream fis = new FileInputStream(document)) {
-//		        Response response = given()
-//		                .header("X-GEO-Location", "12,12")
-//		                .header("X-AUTH-TOKEN", AuthToken)
-//		                .header("X-Device-Id", requestDeviceId)
-//		                .header("User-Agent", "NepalTravelApp/1.0.0 android")
-//		                .header("Accept", "*/*")  // matches curl default
-//		                .multiPart("document", "WhatsApp Image 2024-12-16 at 12.18.17.jpeg", fis, "image/jpeg") // key, filename, stream, type
-//		                .when()
-//		                .post("/document")
-//		                .then()
-//		                .statusCode(200)
-//		                .extract().response();
-//
-//		        
-//		        
-//				String country = response.jsonPath().getString("country");
-//			   String documentExpiryDate = response.jsonPath().getString("documentExpiryDate");
-//				String signature = response.jsonPath().getString("signature");
-//				String gender = response.jsonPath().getString("gender");
-//				String documentType = response.jsonPath().getString("documentType");
-//				String documentNumber = response.jsonPath().getString("documentNumber");
-//				String fullName = response.jsonPath().getString("fullName");
-//				String dateOfBirth = response.jsonPath().getString("dateOfBirth");
-//		
-//				assertNotNull(country, "country is missing from the response");
-//				assertNotNull(documentExpiryDate, "documentExpiryDate is missing");
-//				assertNotNull(signature,"signature is missing");
-//				assertNotNull(gender,"gender is missing");
-//				assertNotNull(documentType,"documentType is missing");
-//				assertNotNull(documentNumber);
-//				assertNotNull(fullName);
-//				assertNotNull(dateOfBirth);
-//
-//		    }
-//
-//	}
-//	
+	@Test
+	public void uploaddocumentwithvaliddocument() throws Exception {
+		    RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
+		  //  File document = new File("C:/Users/Dell/Downloads/WhatsApp Image 2025-05-23 at 13.19.09.jpeg");
+		   File document = new File("C:/Users/Dell/Downloads/passeport.jpeg");
+              //File document = new File("C:/Users/Dell/Downloads/aadhar.jpg");
+		    if (!document.exists()) {
+		        System.out.println("File not found: " + document.getAbsolutePath());
+		        return;
+		    }
+
+		    // Use logging filters to compare with curl if needed
+		    RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
+
+		    // Use InputStream to avoid encoding issues
+		    try (FileInputStream fis = new FileInputStream(document)) {
+		        Response response = given()
+		                .header("X-GEO-Location", "12,12")
+		                .header("X-AUTH-TOKEN", AuthToken)
+		                .header("X-Device-Id", requestDeviceId)
+		                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+		                .header("Accept", "*/*")  // matches curl default
+		                .multiPart("document", "passeport.jpeg", fis, "image/jpeg") // key, filename, stream, type
+		                .when()
+		                .post("/document")
+		                .then()
+		                .statusCode(200)
+		                .extract().response();
+
+		        
+		        
+				String country = response.jsonPath().getString("country");
+			   String documentExpiryDate = response.jsonPath().getString("documentExpiryDate");
+				String signature = response.jsonPath().getString("signature");
+				String gender = response.jsonPath().getString("gender");
+				String documentType = response.jsonPath().getString("documentType");
+				String documentNumber = response.jsonPath().getString("documentNumber");
+				String fullName = response.jsonPath().getString("fullName");
+				String dateOfBirth = response.jsonPath().getString("dateOfBirth");
+		
+				assertNotNull(country, "country is missing from the response");
+				assertNotNull(documentExpiryDate, "documentExpiryDate is missing");
+				assertNotNull(signature,"signature is missing");
+				assertNotNull(gender,"gender is missing");
+				assertNotNull(documentType,"documentType is missing");
+				assertNotNull(documentNumber);
+				assertNotNull(fullName);
+				assertNotNull(dateOfBirth);
+
+		    }
+
+	}
+	
 	@Test
 	public void uploaddocumentwithexpireddocument() throws Exception {
 		    RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";

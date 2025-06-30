@@ -340,7 +340,7 @@ public class signupOtp {
         assertFalse(description.isEmpty(), "Description is empty");
         assertFalse(code.isEmpty(), "Code is empty");
         assertEquals(code,"GNR_PARAM_MISSING");
-        assertEquals(description,"Bad Request.");
+        assertEquals(description,"Email cannot be blank.");
     	
     }
     
@@ -385,7 +385,7 @@ public class signupOtp {
         assertFalse(description.isEmpty(), "Description is empty");
         assertFalse(code.isEmpty(), "Code is empty");
         assertEquals(code,"GNR_PARAM_MISSING");
-        assertEquals(description,"Bad Request.");
+        assertEquals(description,"Request timestamp cannot be blank.");
     	
     }
     
@@ -430,7 +430,7 @@ public class signupOtp {
         assertFalse(description.isEmpty(), "Description is empty");
         assertFalse(code.isEmpty(), "Code is empty");
         assertEquals(code,"GNR_PARAM_MISSING");
-        assertEquals(description,"Bad Request.");
+        assertEquals(description,"Signature cannot be blank.");
     }
     
     @Test
@@ -474,7 +474,7 @@ public class signupOtp {
         assertFalse(description.isEmpty(), "Description is empty");
         assertFalse(code.isEmpty(), "Code is empty");
         assertEquals(code,"GNR_INVALID_DATA");
-        assertEquals(description,"Invalid Data.");
+        assertEquals(description,"Invalid Request timestamp.");
     }
     
     @Test
@@ -518,7 +518,7 @@ public class signupOtp {
         assertFalse(description.isEmpty(), "Description is empty");
         assertFalse(code.isEmpty(), "Code is empty");
         assertEquals(code,"GNR_INVALID_DATA");
-        assertEquals(description,"Invalid Data.");
+        assertEquals(description,"Invalid email.");
     }
     
     @Test

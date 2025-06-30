@@ -12,13 +12,13 @@ import java.util.*;
 
 public class verifyresetOtp {
 	String baseURI = "https://visitor0.moco.com.np/visitor";
-    String secretKey = "8fe9a36a8aad82bc66fb361e46ad33db284b4af114353b36ddebc925d3d93b43";
-    String token = "hMWl7g3TayOGs5-eojhl_Lvn1UngZHu-I-E7MEzwOSk";
+    String secretKey = "4100ef09cbaab262b27f37aa421f62cef3a9fad5b63cf88a271940c372626ddd";
+    String token = "o9-adPiCxNlLfr6nSjHo8sCbp_kYfVkIIfIJ0pKMbes";
     String email = "vivek@moco.com.np";
     String requestTimestamp = signatureCreate.generateTimestamp();
-    String plain_pin = "125896";
-    String plain_otp = "549787";
-    String requestdevice = "visitor-app-device";
+    String plain_pin = "123654";
+    String plain_otp = "616243";
+    String requestdevice = "visitor-app-device4";
 
     @Test
     public void verifySignUpOtpwithoutDeviceId() throws Exception {
@@ -77,7 +77,7 @@ public class verifyresetOtp {
         assertEquals(description,"Bad Request.");
     	
     }
-    
+//    
     @Test
     public void verifySignUpOtpwithoutLocation() throws Exception{
     	ObjectMapper objectMapper = new ObjectMapper();
@@ -134,7 +134,7 @@ public class verifyresetOtp {
         assertEquals(description,"Bad Request.");
 
     }
-    
+//    
     @Test
     public void verifySignUpwithoutUserAgent() throws Exception {
     	ObjectMapper objectMapper = new ObjectMapper();
@@ -192,7 +192,7 @@ public class verifyresetOtp {
         
 
     }
-    
+//    
     @Test
     public void VerifySignupOtpwithoutemail() throws Exception{
     	ObjectMapper objectMapper = new ObjectMapper();
@@ -253,7 +253,7 @@ public class verifyresetOtp {
         assertEquals(code,"GNR_PARAM_MISSING");
         assertEquals(description,"Bad Request.");
     }
-//    
+    
   @Test
   public void VerifySignUpOtpwithoutTimestamp() throws Exception{
 	  ObjectMapper objectMapper = new ObjectMapper();
@@ -314,7 +314,7 @@ public class verifyresetOtp {
     assertEquals(code,"GNR_PARAM_MISSING");
     assertEquals(description,"Bad Request.");
   }
-//  
+  
  @Test
  public void VerifySignUpOtpwithoutOtp() throws Exception {
 	 ObjectMapper objectMapper = new ObjectMapper();
@@ -960,7 +960,7 @@ public void VerifySignUpwithInvalidPin() throws Exception {
          .when()
              .post("/reset/otp/verify")
          .then()
-             .statusCode(500)
+             .statusCode(401)
              .log().all()
              .extract().response();
      response.prettyPrint();
@@ -991,67 +991,79 @@ public void VerifySignUpwithInvalidPin() throws Exception {
 //     
  }
  
-// @Test
-// public void VerifyOtpwithValidCredentials() throws Exception {
-//	 ObjectMapper objectMapper = new ObjectMapper();
-//     Map<String, Object> jsonBody = new LinkedHashMap<>();
-//     jsonBody.put("email", email);
-//     jsonBody.put("requestTimestamp", requestTimestamp);
-//     jsonBody.put("otp", plain_otp);
-//     String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
-//     jsonBody.put("pin",pin);
-//     
-//     //placing token from signup API
-//     jsonBody.put("token", token);
-//    // System.out.println(jsonBody);
-//
-//  // Generate signature
-//     String data = objectMapper.writeValueAsString(jsonBody);
-//     String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
-//     
-//  // Add signature
-//     jsonBody.put("signature", requestSignature);
-//    
-//     Response response = given()
-//             .baseUri(baseURI)
-//             .header("X-GEO-Location", "12,12")
-//             .header("X-Device-Id",requestdevice)
-//             .header("User-Agent", "NepalTravelApp/1.0.0 android")
-//             .contentType("application/json")
-//             .body(jsonBody)
-//         .when()
-//             .post("/reset/otp/verify")
-//         .then()
-//             .statusCode(200)
-//             .log().all()
-//             .extract().response();
-//     response.prettyPrint();
-//     
-//
-//     // Extracting and asserting response values
-//     String code = response.jsonPath().getString("code");
-//     String status = response.jsonPath().getString("status");
-//     String description = response.jsonPath().getString("description");
-//     String signature = response.jsonPath().getString("signature");
-//
-//     assertNotNull(signature, "Signature is missing");
-//     assertNotNull(status, "sessionkey is missing from the response");
-//     assertNotNull(description, "description is missing from the response");
-//     assertNotNull(code, "code in reponse is missing");
-//
-//     assertFalse(signature.isEmpty(), "Signature is empty");
-//     assertFalse(description.isEmpty(), "Device ID is empty");
-//     assertFalse(code.isEmpty(), "code is empty");
-//     assertFalse(status.isEmpty(), "status is empty");
-//     
-//     //assert device and email is equal with request
-//     assertEquals(code,"GNR_OK");
-//     assertEquals(status,"SUCCESS");
-//     
-//    // assertTrue(response.getHeaders().hasHeaderWithName("X-AUTH-TOKEN"), "Missing X-AUTH-TOKEN header");
-//     System.out.println("Request ID: " + response.getHeaders().hasHeaderWithName("X-AUTH-TOKEN"));
-//     
-// }
+ @Test
+ public void VerifyOtpwithValidCredentials() throws Exception {
+	 ObjectMapper objectMapper = new ObjectMapper();
+     Map<String, Object> jsonBody = new LinkedHashMap<>();
+     jsonBody.put("email", email);
+     jsonBody.put("requestTimestamp", requestTimestamp);
+     jsonBody.put("otp", plain_otp);
+     String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
+     jsonBody.put("pin",pin);
+     
+     //placing token from signup API
+     jsonBody.put("token", token);
+    // System.out.println(jsonBody);
+
+  // Generate signature
+     String data = objectMapper.writeValueAsString(jsonBody);
+     String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
+     
+  // Add signature
+     jsonBody.put("signature", requestSignature);
+    
+     Response response = given()
+             .baseUri(baseURI)
+             .header("X-GEO-Location", "12,12")
+             .header("X-Device-Id",requestdevice)
+             .header("User-Agent", "NepalTravelApp/1.0.0 android")
+             .contentType("application/json")
+             .body(jsonBody)
+         .when()
+             .post("/reset/otp/verify")
+         .then()
+             .statusCode(200)
+             .log().all()
+             .extract().response();
+     response.prettyPrint();
+     
+
+     // Extracting and asserting response values
+     String code = response.jsonPath().getString("code");
+     String status = response.jsonPath().getString("status");
+     String description = response.jsonPath().getString("description");
+     String signature = response.jsonPath().getString("signature");
+
+     assertNotNull(signature, "Signature is missing");
+     assertNotNull(status, "sessionkey is missing from the response");
+     assertNotNull(description, "description is missing from the response");
+     assertNotNull(code, "code in reponse is missing");
+
+     assertFalse(signature.isEmpty(), "Signature is empty");
+     assertFalse(description.isEmpty(), "Device ID is empty");
+     assertFalse(code.isEmpty(), "code is empty");
+     assertFalse(status.isEmpty(), "status is empty");
+     
+     //assert device and email is equal with request
+     assertEquals(code,"GNR_OK");
+     assertEquals(status,"SUCCESS");
+     
+   //verify signature
+     //matching response signature with calculated hash
+     Map<String, Object> fields = new LinkedHashMap<>();
+     fields.put("code", code);
+     fields.put("status", status);
+     fields.put("description", description);
+     
+
+     String partialJson = objectMapper.writeValueAsString(fields);
+     String partialSignature = signatureCreate.generateHMACSHA256(partialJson, secretKey);
+     assertEquals(signature, partialSignature);
+     
+    // assertTrue(response.getHeaders().hasHeaderWithName("X-AUTH-TOKEN"), "Missing X-AUTH-TOKEN header");
+     System.out.println("Request ID: " + response.getHeaders().hasHeaderWithName("X-AUTH-TOKEN"));
+     
+ }
  
  @Test
  public void VerifyOtpwithexpiredOtp() throws Exception {
@@ -1059,7 +1071,7 @@ public void VerifySignUpwithInvalidPin() throws Exception {
      Map<String, Object> jsonBody = new LinkedHashMap<>();
      jsonBody.put("email", email);
      jsonBody.put("requestTimestamp", requestTimestamp);
-     jsonBody.put("otp", plain_otp);
+     jsonBody.put("otp", "252586");
      String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
      jsonBody.put("pin",pin);
      

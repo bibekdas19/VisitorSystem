@@ -18,9 +18,9 @@ import java.util.Map;
 
 public class profileImage {
 	String AuthToken;
-	String requestDeviceId = "53129af51bb3e30b"; 
+	String requestDeviceId = "visitor-app-device"; 
 	String input_email = "vivek@moco.com.np";
-	String input_pin = "147258";
+	String input_pin = "123654";
 	@BeforeClass
 	public void getToken() throws Exception{
 		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";

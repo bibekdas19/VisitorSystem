@@ -3,13 +3,13 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="Profile.selfie">
+      <class name="Profile.getProfileDetails">
         <methods>
+          <include name="getProfileInformationwithServerDown"/>
           <include name="getToken"/>
-          <include name="uploadSelfiewithvalidCredentails"/>
           <include name="logout"/>
         </methods>
-      </class> <!-- Profile.selfie -->
+      </class> <!-- Profile.getProfileDetails -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

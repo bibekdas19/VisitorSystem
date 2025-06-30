@@ -36,9 +36,11 @@ public class getProfileDetails {
             .then()
                 .statusCode(200)
                 .extract().response();
+        		response1.prettyPrint();
 
        String secretKey1 = response1.jsonPath().getString("signOnKey");
         //assertNotNull(secretKey, "Secret key is null!");
+       	
         
         ObjectMapper objectMapper = new ObjectMapper();
         String email = input_email;

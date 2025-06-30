@@ -9,12 +9,12 @@
 <table>
 <tr><th>Test</th><th># Passed</th><th># Skipped</th><th># Retried</th><th># Failed</th><th>Time (ms)</th><th>Included Groups</th><th>Excluded Groups</th></tr>
 <tr><th colspan="8">Default suite</th></tr>
-<tr><td><a href="#t0">Default test</a></td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num attn">1</td><td class="num">5,106</td><td></td><td></td></tr>
+<tr><td><a href="#t0">Default test</a></td><td class="num">8</td><td class="num">0</td><td class="num">0</td><td class="num attn">1</td><td class="num">18,661</td><td></td><td></td></tr>
 </table>
-<table id='summary'><thead><tr><th>Class</th><th>Method</th><th>Start</th><th>Time (ms)</th></tr></thead><tbody><tr><th colspan="4">Default suite</th></tr></tbody><tbody id="t0"><tr><th colspan="4">Default test &#8212; failed</th></tr><tr class="failedeven"><td rowspan="1">Profile.selfie</td><td><a href="#m0">uploadSelfiewithvalidCredentails</a></td><td rowspan="1">1749637503513</td><td rowspan="1">685</td></tr></tbody>
+<table id='summary'><thead><tr><th>Class</th><th>Method</th><th>Start</th><th>Time (ms)</th></tr></thead><tbody><tr><th colspan="4">Default suite</th></tr></tbody><tbody id="t0"><tr><th colspan="4">Default test &#8212; failed</th></tr><tr class="failedeven"><td rowspan="1">Profile.getProfileDetails</td><td><a href="#m0">getProfileInformationwithServerDown</a></td><td rowspan="1">1751262435698</td><td rowspan="1">1593</td></tr><tr><th colspan="4">Default test &#8212; passed</th></tr><tr class="passedeven"><td rowspan="8">Profile.getProfileDetails</td><td><a href="#m1">getProfileInformation</a></td><td rowspan="1">1751262433897</td><td rowspan="1">457</td></tr><tr class="passedeven"><td><a href="#m2">getProfileInformationwithInvalidAuth</a></td><td rowspan="1">1751262434357</td><td rowspan="1">230</td></tr><tr class="passedeven"><td><a href="#m3">getProfileInformationwithInvalidDevice</a></td><td rowspan="1">1751262434590</td><td rowspan="1">213</td></tr><tr class="passedeven"><td><a href="#m4">getProfileInformationwithInvalidLocation</a></td><td rowspan="1">1751262434805</td><td rowspan="1">889</td></tr><tr class="passedeven"><td><a href="#m5">getProfileInformationwithoutAuth</a></td><td rowspan="1">1751262437299</td><td rowspan="1">3084</td></tr><tr class="passedeven"><td><a href="#m6">getProfileInformationwithoutDevice</a></td><td rowspan="1">1751262440386</td><td rowspan="1">2342</td></tr><tr class="passedeven"><td><a href="#m7">getProfileInformationwithoutGeo</a></td><td rowspan="1">1751262442731</td><td rowspan="1">867</td></tr><tr class="passedeven"><td><a href="#m8">getProfileInformationwithoutUserAgent</a></td><td rowspan="1">1751262443602</td><td rowspan="1">2948</td></tr></tbody>
 </table>
-<h2>Default test</h2><h3 id="m0">Profile.selfie#uploadSelfiewithvalidCredentails</h3><table class="result"><tr><th>Exception</th></tr><tr><td><div class="stacktrace">java.lang.AssertionError: 1 expectation failed.
-Expected status code &lt;200&gt; but was &lt;500&gt;.
+<h2>Default test</h2><h3 id="m0">Profile.getProfileDetails#getProfileInformationwithServerDown</h3><table class="result"><tr><th>Exception</th></tr><tr><td><div class="stacktrace">java.lang.AssertionError: 1 expectation failed.
+Expected status code &lt;500&gt; but was &lt;200&gt;.
 
 	at java.base/jdk.internal.reflect.DirectConstructorHandleAccessor.newInstance(DirectConstructorHandleAccessor.java:62)
 	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:502)
@@ -38,7 +38,7 @@ Expected status code &lt;200&gt; but was &lt;500&gt;.
 	at io.restassured.specification.ResponseSpecification$statusCode$0.callCurrent(Unknown Source)
 	at io.restassured.internal.ResponseSpecificationImpl.statusCode(ResponseSpecificationImpl.groovy:143)
 	at io.restassured.internal.ValidatableResponseOptionsImpl.statusCode(ValidatableResponseOptionsImpl.java:89)
-	at Profile.selfie.uploadSelfiewithvalidCredentails(selfie.java:912)
+	at Profile.getProfileDetails.getProfileInformationwithServerDown(getProfileDetails.java:350)
 	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
 	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:133)
@@ -66,5 +66,13 @@ Expected status code &lt;200&gt; but was &lt;500&gt;.
 	at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:293)
 	at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:91)
 </div></td></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
+<h3 id="m1">Profile.getProfileDetails#getProfileInformation</h3><table class="result"><tr><th class="invisible"/></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
+<h3 id="m2">Profile.getProfileDetails#getProfileInformationwithInvalidAuth</h3><table class="result"><tr><th class="invisible"/></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
+<h3 id="m3">Profile.getProfileDetails#getProfileInformationwithInvalidDevice</h3><table class="result"><tr><th class="invisible"/></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
+<h3 id="m4">Profile.getProfileDetails#getProfileInformationwithInvalidLocation</h3><table class="result"><tr><th class="invisible"/></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
+<h3 id="m5">Profile.getProfileDetails#getProfileInformationwithoutAuth</h3><table class="result"><tr><th class="invisible"/></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
+<h3 id="m6">Profile.getProfileDetails#getProfileInformationwithoutDevice</h3><table class="result"><tr><th class="invisible"/></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
+<h3 id="m7">Profile.getProfileDetails#getProfileInformationwithoutGeo</h3><table class="result"><tr><th class="invisible"/></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
+<h3 id="m8">Profile.getProfileDetails#getProfileInformationwithoutUserAgent</h3><table class="result"><tr><th class="invisible"/></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
 </body>
 </html>

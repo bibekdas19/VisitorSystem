@@ -15,7 +15,7 @@ import java.util.*;
 
 public class changePin {
 	String plain_old_pin = "123654";
-    String plain_new_pin = "125254";
+    String plain_new_pin = "123653";
     String AuthToken;
 	String requestDeviceId = "visitor-app-device"; 
 	String secretKey;
@@ -70,7 +70,7 @@ public class changePin {
                 .log().all()
                 .extract().response();
         AuthToken = response2.getHeader("X-AUTH-TOKEN");
-	     secretKey = response2.jsonPath().getString("sessionKey");
+	     secretKey = signatureCreate.decryptAES(response2.jsonPath().getString("sessionKey"),secretKey1);
 	}
 
 	
@@ -794,6 +794,17 @@ public class changePin {
          assertEquals(code,"GNR_OK");
 		 assertEquals(description,"PIN changed successfully.");
 		 
+		 //verify signature
+	     //matching response signature with calculated hash
+	     Map<String, Object> fields = new LinkedHashMap<>();
+	     fields.put("code", code);
+	     fields.put("description", description);
+	     
+
+	     String partialJson = objectMapper.writeValueAsString(fields);
+	     String partialSignature = signatureCreate.generateHMACSHA256(partialJson, secretKey);
+	     assertEquals(signature, partialSignature);
+		 
 		 
         
 	}
@@ -846,7 +857,7 @@ public class changePin {
         assertFalse(description.isEmpty(), "description is empty");
         
          assertEquals(code,"GNR_ERR");
-		 assertEquals(description,"Decryption failed.");
+		 assertEquals(description,"Error while authorizing visitor.");
 	}
 	
 //	@AfterClass

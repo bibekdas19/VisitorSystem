@@ -15,12 +15,12 @@ import java.util.*;
 
 public class signupOtpVerify {
 	String baseURI = "https://visitor0.moco.com.np/visitor";
-    String secretKey = "9a51b6f1dfcfd8d2f26f3d159d10536ead69bd4ceae791e23993de10c9f0480d";
-    String token = "tptXwk2AgfgkcyLgnpGsgWH3FPqTtUrPIkfzqr_gJ0Q";
+    String secretKey = "fb53dccfdb44967a8c2d4497e01867aa6ee53d7d267c3a095602dbef82b750c0";
+    String token = "Xdn5K2T0y_xnuVTBEJnCFg_b5o71UioitUuvkdlp79Y";
     String email = "vivek@moco.com.np";
     String requestTimestamp = signatureCreate.generateTimestamp();
     String plain_pin = "123654";
-    String plain_otp = "844314";
+    String plain_otp = "948191";
     String requestdevice = "visitor-app-device";
 
     @Test
@@ -623,7 +623,7 @@ public class signupOtpVerify {
      
      //assert code and description
      assertEquals(code,"GNR_INVALID_DATA");
-     assertEquals(description,"Invalid Data.");
+     assertEquals(description,"Invalid email.");
  }
  @Test
  public void VerifySignupwithInvalidTimestamp() throws Exception {
@@ -685,7 +685,7 @@ public class signupOtpVerify {
      
      //assert code and description
      assertEquals(code,"GNR_INVALID_DATA");
-     assertEquals(description,"Invalid Data.");
+     assertEquals(description,"Invalid Request timestamp.");
 	 
  }
  
@@ -989,6 +989,22 @@ public void VerifySignUpwithInvalidPin() throws Exception {
      //assert device and email is equal with request
      assertEquals(requestdevice,deviceId);
      assertEquals(email,responseEmail);
+     
+     
+     
+     //verify signature
+     //matching response signature with calculated hash
+     Map<String, Object> fields = new LinkedHashMap<>();
+     fields.put("deviceId", deviceId);
+     fields.put("sessionKey", sessionKey);
+     fields.put("email", responseEmail);
+     
+
+     String partialJson = objectMapper.writeValueAsString(fields);
+     String partialSignature = signatureCreate.generateHMACSHA256(partialJson, secretKey);
+     assertEquals(signature, partialSignature);
+     
+     
      
     // assertTrue(response.getHeaders().hasHeaderWithName("X-AUTH-TOKEN"), "Missing X-AUTH-TOKEN header");
      System.out.println("Request ID: " + response.getHeaders().hasHeaderWithName("X-AUTH-TOKEN"));

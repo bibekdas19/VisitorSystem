@@ -1,8 +1,9 @@
 package Authentication;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
 
+import org.testng.annotations.*;
+import org.testng.annotations.Test;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import OTP.signatureCreate;
@@ -10,6 +11,8 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import static io.restassured.RestAssured.*;
 import static org.testng.Assert.*;
+
+
 
 import java.util.*;
 
@@ -427,7 +430,7 @@ public class authenticate {
         assertFalse(description.isEmpty(), "Description is empty");
         assertFalse(code.isEmpty(), "Code is empty");
         assertEquals(code,"GNR_PARAM_MISSING");
-        assertEquals(description,"Bad Request.");
+        assertEquals(description,"Email cannot be blank.");
 
 	}
 	
@@ -484,7 +487,7 @@ public class authenticate {
         
         Map<String, Object> credentials = new HashMap<>();
         credentials.put("email", email);
-        //credentials.put("pin", "123426");
+        credentials.put("pin", "");
 
         Map<String, Object> jsonBody = new HashMap<>();
         jsonBody.put("credentials", credentials);
@@ -612,7 +615,7 @@ public class authenticate {
         assertFalse(description.isEmpty(), "Description is empty");
         assertFalse(code.isEmpty(), "Code is empty");
         assertEquals(code,"GNR_PARAM_MISSING");
-        assertEquals(description,"Bad Request.");
+        assertEquals(description,"Signature cannot be blank.");
 	}
 //	
 	@Test
@@ -656,7 +659,7 @@ public class authenticate {
         assertFalse(description.isEmpty(), "Description is empty");
         assertFalse(code.isEmpty(), "Code is empty");
         assertEquals(code,"GNR_PARAM_MISSING");
-        assertEquals(description,"Bad Request.");
+        assertEquals(description,"Signature cannot be blank.");
 	}
 	
 	@Test
@@ -745,30 +748,53 @@ public class authenticate {
         assertFalse(registrationDate.isEmpty(),"registration date is missing");
 
       //matching response signature with calculated hash
-        Map<String, Object> fields = new LinkedHashMap<>();
-        fields.put("deviceId", deviceId);
-        fields.put("sessionKey", sessionKey);
+//        Map<String, Object> fields = new LinkedHashMap<>();
+//        fields.put("deviceId", deviceId);
+//        fields.put("sessionKey", sessionKey);
+//        
+//        Map<String, Object> profile = new LinkedHashMap<>();
+//        profile.put("fullName",fullName);
+//        profile.put("country",country);
+//        profile.put("documentNumber",documentNumber);
+//        profile.put("documentType",documentType);
+//        profile.put("dateOfBirth",dateOfBirth);
+//        profile.put("documentExpiryDate", documentExpiryDate);
+//        profile.put("email",email);
+//        profile.put("gender",gender);
+//        profile.put("status",status);
+//        profile.put("verificationStatus",verificationStatus);
+//        profile.put("loginAttemptCountPin",loginAttemptCountPin);
+//        profile.put("loginAttemptCountBiometric",loginAttemptCountBiometric);
+//        profile.put("registrationDate",registrationDate);
+//
+//        fields.put("profile",profile);
+//        
+//        
+//        JSONObject jsonObject = new JSONObject(fields);
+//        String jsonString = jsonObject.toString(); // compact JSON with consistent ordering
+//        System.out.print(jsonString);
+//        String generatedSignature = signatureCreate.generateHMACSHA256(jsonString, secretKey);
+//        assertEquals(signature, generatedSignature, "Response signature doesn't match");
+
+//        String partialJson = objectMapper.writeValueAsString(fields);
+//        String partialSignature = signatureCreate.generateHMACSHA256(partialJson, secretKey);
+//        fields.put("signature", partialSignature);
+//        System.out.println(fields);
+//        assertEquals(signature, partialSignature);
         
-        Map<String, Object> profile = new LinkedHashMap<>();
-        profile.put("fullName",fullName);
-        profile.put("country",country);
-        profile.put("documentNumber",documentNumber);
-        profile.put("documentType",documentType);
-        profile.put("dateOfBirth",dateOfBirth);
-        profile.put("email",email);
-        profile.put("gender",gender);
-        profile.put("status",status);
-        profile.put("verificationStatus",verificationStatus);
-        profile.put("loginAttemptCountPin",loginAttemptCountPin);
-        profile.put("loginAttemptCountBiometric",loginAttemptCountBiometric);
-        profile.put("registrationDate",registrationDate);
-
-        fields.put("profile",profile);
-
-        String partialJson = objectMapper.writeValueAsString(fields);
-        String partialSignature = signatureCreate.generateHMACSHA256(partialJson, secretKey);
-        assertEquals(signature, partialSignature);
-          
+        //convert the json into string
+        String jsonResponse = response.getBody().asString();
+        // Parse JSON string to JsonObject
+        JsonObject jsonObject = JsonParser.parseString(jsonResponse).getAsJsonObject();
+        //remove signature
+        jsonObject.remove("signature");
+        //set the jsonObject to string
+        String dataToSign = jsonObject.toString();
+        String calculatedSignature = signatureCreate.generateHMACSHA256(dataToSign, secretKey);
+        
+        assertEquals(signature, calculatedSignature, "Response signature doesn't match");
+        
+         
         
            AuthToken = response.getHeader("X-AUTH-TOKEN");
  }
@@ -857,23 +883,23 @@ public class authenticate {
         assertNotNull(code, "Code is missing");
         assertFalse(description.isEmpty(), "Description is empty");
         assertFalse(code.isEmpty(), "Code is empty");
-        assertEquals(code,"VST_LOGIN_REMAINING_ATTEMPT_X");
-        assertEquals(description,"Bad Request.");
+        assertTrue(code.startsWith("VST_LOGIN_REMAINING_ATTEMPT"), "Code does not start with expected prefix");
+        assertEquals(description,"Authentication failed.");
 
 	}
 	
 	
-//	@AfterClass
-//	public void logout() throws Exception {
-//		baseURI = "https://visitor0.moco.com.np/visitor";
-//        Response response = given()
-//            .header("X-GEO-Location", "12,12")
-//            .header("X-AUTH-TOKEN",AuthToken)
-//            .header("X-Device-Id", requestDeviceId)
-//            .header("User-Agent", "NepalTravelApp/1.0.0 android")
-//        .when()
-//            .delete("/authenticate");
-//         response.then().statusCode(200);
-//       
-//	}
+	@AfterClass
+	public void logout() throws Exception {
+		baseURI = "https://visitor0.moco.com.np/visitor";
+        Response response = given()
+            .header("X-GEO-Location", "12,12")
+            .header("X-AUTH-TOKEN",AuthToken)
+            .header("X-Device-Id", requestDeviceId)
+            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+        .when()
+            .delete("/authenticate");
+         response.then().statusCode(200);
+       
+	}
 }

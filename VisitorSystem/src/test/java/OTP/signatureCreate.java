@@ -1,7 +1,9 @@
 package OTP;
 import javax.crypto.Mac;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.Date;
 import java.util.TimeZone;
@@ -66,19 +68,43 @@ public class signatureCreate {
     }
     
     public static String decryptAES256(String encryptedText, String base64Key) throws Exception {
-        byte[] decodedKey = Base64.getDecoder().decode(base64Key);
-        if (decodedKey.length != 32) {
-            throw new IllegalArgumentException("Invalid AES key length: must be 32 bytes for AES-256");
+    	byte[] keyBytes = Base64.getDecoder().decode(base64Key);
+        if (keyBytes.length != 32) {
+            throw new IllegalArgumentException("Key must be 256 bits (32 bytes)");
         }
 
-        SecretKeySpec keySpec = new SecretKeySpec(decodedKey, "AES");
-        Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-        cipher.init(Cipher.DECRYPT_MODE, keySpec);
+        SecretKeySpec secretKeySpec = new SecretKeySpec(keyBytes, "AES");
 
-        byte[] decodedEncryptedText = Base64.getDecoder().decode(encryptedText);
-        byte[] decrypted = cipher.doFinal(decodedEncryptedText);
+        // Decode base64-encoded input
+        byte[] encryptedBytesWithIV = Base64.getDecoder().decode(encryptedText);
 
-        return new String(decrypted, StandardCharsets.UTF_8);
+        // Extract IV (first 16 bytes)
+        byte[] iv = Arrays.copyOfRange(encryptedBytesWithIV, 0, 16);
+        IvParameterSpec ivSpec = new IvParameterSpec(iv);
+
+        // Extract encrypted content (remaining bytes)
+        byte[] encryptedBytes = Arrays.copyOfRange(encryptedBytesWithIV, 16, encryptedBytesWithIV.length);
+
+        // Decrypt
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+        cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, ivSpec);
+        byte[] decryptedBytes = cipher.doFinal(encryptedBytes);
+
+        return new String(decryptedBytes, StandardCharsets.UTF_8);
+//        byte[] decodedKey = Base64.getDecoder().decode(base64Key);
+//        if (decodedKey.length != 32) {
+//            throw new IllegalArgumentException("Invalid AES key length: must be 32 bytes for AES-256");
+//        }
+//
+//        SecretKeySpec keySpec = new SecretKeySpec(decodedKey, "AES");
+//        Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+//        cipher.init(Cipher.DECRYPT_MODE, keySpec);
+//
+//        byte[] decodedEncryptedText = Base64.getDecoder().decode(encryptedText);
+//        byte[] decrypted = cipher.doFinal(decodedEncryptedText);
+//
+//        return new String(decrypted, StandardCharsets.UTF_8);
+    	  
     }
     
     public static String encryptAESCard(String data, String secretKey) throws Exception {
@@ -97,6 +123,28 @@ public class signatureCreate {
         byte[] encryptedBytes = cipher.doFinal(data.getBytes("UTF-8"));
         return Base64.getEncoder().encodeToString(encryptedBytes);
     }
+    public static String decryptAES(String encryptedData, String sharedKey) throws Exception {
+        // 1. SHA-256 hash of the shared key
+        MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
+        byte[] keyBytes = sha256.digest(sharedKey.getBytes("UTF-8"));
+
+        // 2. Create AES key specification
+        SecretKeySpec secretKey = new SecretKeySpec(keyBytes, "AES");
+
+        // 3. Set up AES cipher in ECB mode with PKCS5Padding
+        Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+        cipher.init(Cipher.DECRYPT_MODE, secretKey);
+
+        // 4. Decode base64 input and decrypt
+        byte[] decodedData = Base64.getDecoder().decode(encryptedData);
+        byte[] decryptedBytes = cipher.doFinal(decodedData);
+
+        // 5. Convert to string
+        return new String(decryptedBytes, "UTF-8");
+    }
+    
+   
+   
     
     
     

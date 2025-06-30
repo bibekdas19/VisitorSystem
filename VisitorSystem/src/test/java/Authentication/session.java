@@ -20,15 +20,15 @@ public class session {
 	String secretKey = "ABC123XYZ";
 	String AuthToken;
 	String input_email = "vivek@moco.com.np";
-	String input_pin = "125896";
+	String input_pin = "123653";
 	@BeforeClass
 	public void getToken() throws Exception{
 		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
         
         Response response1 = given()
-                .header("X-GEO-Location", "12,12")
-                .header("X-Device-Id", requestDeviceId)
-                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+                .header("X-GEO-LOCATION", "12,12")
+                .header("X-DEVICE-ID", requestDeviceId)
+                .header("User-Agent", "TravelApp/1.0.0 android")
             .when()
                 .get("/key")
             .then()
@@ -58,9 +58,9 @@ public class session {
         
      // Send request
         Response response2 = given()
-                .header("X-GEO-Location", "12,12")
-                .header("X-Device-Id", requestDeviceId)
-                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+                .header("X-GEO-LOCATION", "12,12")
+                .header("X-DEVICE-ID", requestDeviceId)
+                .header("User-Agent", "TravelApp/1.0.0 android")
                 .contentType("application/json")
                 .body(jsonBody)
             .when()
@@ -80,20 +80,20 @@ public class session {
 	public void GetSessionInformation() throws Exception {
 		baseURI = "https://visitor0.moco.com.np/visitor";
 		
-		String data = "12,12"+AuthToken+requestDeviceId+"NepalTravelApp/1.0.0 android"+"transaction"+""+"2025-05-13 14:38:00";
-//		: X-GEO-LOCATION+ X-AUTH-TOKEN + X-DEVICE-ID+ User-Agent + X-SYSTEM-ID+ X-CREDENTIAL(Optional) + Request-Timestamp
+		String data = "12,12"+AuthToken+requestDeviceId+"TravelApp/1.0.0 android"+"transaction"+""+"2025-05-13 14:38:00";
+//		: X-GEO-LOCATION+ X-AUTH-TOKEN + X-DEVICE-ID+ User-Agent + X-SYSTEM-ID+ X-CREDENTIAL(Optional) + X-REQUEST-TIMESTAMP
 		String Signature = signatureCreate.generateHMACSHA256(data, secretKey);
 		System.out.println(Signature);
 
         Response response = (Response) given()
-            .header("X-GEO-Location", "12,12")
-            .header("X-Device-Id", requestDeviceId)
-            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+            .header("X-GEO-LOCATION", "12,12")
+            .header("X-DEVICE-ID", requestDeviceId)
+            .header("User-Agent", "TravelApp/1.0.0 android")
             .header("X-AUTH-TOKEN",AuthToken)
             .header("X-CREDENTIAL","")
             .header("X-SYSTEM-ID","transaction")
             .header("X-SYSTEM-SIGNATURE",Signature) 
-            .header("Request-Timestamp","2025-05-13 14:38:00")
+            .header("X-REQUEST-TIMESTAMP","2025-05-13 14:38:00")
             .when()
             .get("/session")
         .then()
@@ -162,19 +162,19 @@ public class session {
 	public void GetSessionwithoutDevice() throws Exception {
          baseURI = "https://visitor0.moco.com.np/visitor";
 		
-		String data = "12,12"+AuthToken+requestDeviceId+"NepalTravelApp/1.0.0 android"+"transaction"+""+"2025-04-30 11:00:00";
-//		: X-GEO-LOCATION+ X-AUTH-TOKEN + X-DEVICE-ID+ User-Agent + X-SYSTEM-ID+ X-CREDENTIAL(Optional) + Request-Timestamp
+		String data = "12,12"+AuthToken+requestDeviceId+"TravelApp/1.0.0 android"+"transaction"+""+"2025-04-30 11:00:00";
+//		: X-GEO-LOCATION+ X-AUTH-TOKEN + X-DEVICE-ID+ User-Agent + X-SYSTEM-ID+ X-CREDENTIAL(Optional) + X-REQUEST-TIMESTAMP
 		String Signature = signatureCreate.generateHMACSHA256(data, secretKey);
 		System.out.println(Signature);
 
         Response response = (Response) given()
-            .header("X-GEO-Location", "12,12")
-            .header("X-Device-Id", "")
-            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+            .header("X-GEO-LOCATION", "12,12")
+            .header("X-DEVICE-ID", "")
+            .header("User-Agent", "TravelApp/1.0.0 android")
             .header("X-AUTH-TOKEN",AuthToken)
             .header("X-SYSTEM-ID","transaction")
             .header("X-SYSTEM-SIGNATURE",Signature) 
-            .header("Request-Timestamp","2025-04-30 15:16:00")
+            .header("X-REQUEST-TIMESTAMP","2025-04-30 15:16:00")
             .when()
             .get("/session")
         .then()
@@ -197,19 +197,19 @@ public class session {
 	public void GetSessionwithoutLocation() throws Exception {
          baseURI = "https://visitor0.moco.com.np/visitor";
 		
-		String data = "12,12"+AuthToken+requestDeviceId+"NepalTravelApp/1.0.0 android"+"transaction"+""+"2025-04-30 11:00:00";
-//		: X-GEO-LOCATION+ X-AUTH-TOKEN + X-DEVICE-ID+ User-Agent + X-SYSTEM-ID+ X-CREDENTIAL(Optional) + Request-Timestamp
+		String data = "12,12"+AuthToken+requestDeviceId+"TravelApp/1.0.0 android"+"transaction"+""+"2025-04-30 11:00:00";
+//		: X-GEO-LOCATION+ X-AUTH-TOKEN + X-DEVICE-ID+ User-Agent + X-SYSTEM-ID+ X-CREDENTIAL(Optional) + X-REQUEST-TIMESTAMP
 		String Signature = signatureCreate.generateHMACSHA256(data, secretKey);
 		System.out.println(Signature);
 
         Response response = (Response) given()
-            .header("X-GEO-Location", "")
-            .header("X-Device-Id", requestDeviceId)
-            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+            .header("X-GEO-LOCATION", "")
+            .header("X-DEVICE-ID", requestDeviceId)
+            .header("User-Agent", "TravelApp/1.0.0 android")
             .header("X-AUTH-TOKEN",AuthToken)
             .header("X-SYSTEM-ID","transaction")
             .header("X-SYSTEM-SIGNATURE",Signature) 
-            .header("Request-Timestamp","2025-04-30 15:16:00")
+            .header("X-REQUEST-TIMESTAMP","2025-04-30 15:16:00")
             .when()
             .get("/session")
         .then()
@@ -232,19 +232,19 @@ public class session {
 	public void GetSessionwithoutUserAgent() throws Exception {
 		 baseURI = "https://visitor0.moco.com.np/visitor";
 			
-			String data = "12,12"+AuthToken+requestDeviceId+"NepalTravelApp/1.0.0 android"+"transaction"+""+"2025-04-30 11:00:00";
-//			: X-GEO-LOCATION+ X-AUTH-TOKEN + X-DEVICE-ID+ User-Agent + X-SYSTEM-ID+ X-CREDENTIAL(Optional) + Request-Timestamp
+			String data = "12,12"+AuthToken+requestDeviceId+"TravelApp/1.0.0 android"+"transaction"+""+"2025-04-30 11:00:00";
+//			: X-GEO-LOCATION+ X-AUTH-TOKEN + X-DEVICE-ID+ User-Agent + X-SYSTEM-ID+ X-CREDENTIAL(Optional) + X-REQUEST-TIMESTAMP
 			String Signature = signatureCreate.generateHMACSHA256(data, secretKey);
 			System.out.println(Signature);
 
 	        Response response = (Response) given()
-	            .header("X-GEO-Location", "")
-	            .header("X-Device-Id", requestDeviceId)
+	            .header("X-GEO-LOCATION", "")
+	            .header("X-DEVICE-ID", requestDeviceId)
 	            .header("User-Agent", "")
 	            .header("X-AUTH-TOKEN",AuthToken)
 	            .header("X-SYSTEM-ID","transaction")
 	            .header("X-SYSTEM-SIGNATURE",Signature) 
-	            .header("Request-Timestamp","2025-04-30 15:16:00")
+	            .header("X-REQUEST-TIMESTAMP","2025-04-30 15:16:00")
 	            .when()
 	            .get("/session")
 	        .then()
@@ -267,19 +267,19 @@ public class session {
 	public void GetSessionwithoutAuth() throws Exception{
 		 baseURI = "https://visitor0.moco.com.np/visitor";
 			
-			String data = "12,12"+AuthToken+requestDeviceId+"NepalTravelApp/1.0.0 android"+"transaction"+""+"2025-04-30 11:00:00";
-//			: X-GEO-LOCATION+ X-AUTH-TOKEN + X-DEVICE-ID+ User-Agent + X-SYSTEM-ID+ X-CREDENTIAL(Optional) + Request-Timestamp
+			String data = "12,12"+AuthToken+requestDeviceId+"TravelApp/1.0.0 android"+"transaction"+""+"2025-04-30 11:00:00";
+//			: X-GEO-LOCATION+ X-AUTH-TOKEN + X-DEVICE-ID+ User-Agent + X-SYSTEM-ID+ X-CREDENTIAL(Optional) + X-REQUEST-TIMESTAMP
 			String Signature = signatureCreate.generateHMACSHA256(data, secretKey);
 			System.out.println(Signature);
 
 	        Response response = (Response) given()
-	            .header("X-GEO-Location", "")
-	            .header("X-Device-Id", requestDeviceId)
-	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+	            .header("X-GEO-LOCATION", "")
+	            .header("X-DEVICE-ID", requestDeviceId)
+	            .header("User-Agent", "TravelApp/1.0.0 android")
 	            .header("X-AUTH-TOKEN","")
 	            .header("X-SYSTEM-ID","transaction")
 	            .header("X-SYSTEM-SIGNATURE",Signature) 
-	            .header("Request-Timestamp","2025-04-30 15:16:00")
+	            .header("X-REQUEST-TIMESTAMP","2025-04-30 15:16:00")
 	            .when()
 	            .get("/session")
 	        .then()
@@ -301,19 +301,19 @@ public class session {
 	public void GetSessionwithoutSystemID() throws Exception {
 		 baseURI = "https://visitor0.moco.com.np/visitor";
 			
-			String data = "12,12"+AuthToken+requestDeviceId+"NepalTravelApp/1.0.0 android"+"transaction"+""+"2025-04-30 11:00:00";
-//			: X-GEO-LOCATION+ X-AUTH-TOKEN + X-DEVICE-ID+ User-Agent + X-SYSTEM-ID+ X-CREDENTIAL(Optional) + Request-Timestamp
+			String data = "12,12"+AuthToken+requestDeviceId+"TravelApp/1.0.0 android"+"transaction"+""+"2025-04-30 11:00:00";
+//			: X-GEO-LOCATION+ X-AUTH-TOKEN + X-DEVICE-ID+ User-Agent + X-SYSTEM-ID+ X-CREDENTIAL(Optional) + X-REQUEST-TIMESTAMP
 			String Signature = signatureCreate.generateHMACSHA256(data, secretKey);
 			System.out.println(Signature);
 
 	        Response response = (Response) given()
-	            .header("X-GEO-Location", "")
-	            .header("X-Device-Id", requestDeviceId)
-	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+	            .header("X-GEO-LOCATION", "")
+	            .header("X-DEVICE-ID", requestDeviceId)
+	            .header("User-Agent", "TravelApp/1.0.0 android")
 	            .header("X-AUTH-TOKEN",AuthToken)
 	            .header("X-SYSTEM-ID","")
 	            .header("X-SYSTEM-SIGNATURE",Signature) 
-	            .header("Request-Timestamp","2025-04-30 15:16:00")
+	            .header("X-REQUEST-TIMESTAMP","2025-04-30 15:16:00")
 	            .when()
 	            .get("/session")
 	        .then()
@@ -335,19 +335,19 @@ public class session {
 	public void GetSessionwithoutSignature() throws Exception {
 		 baseURI = "https://visitor0.moco.com.np/visitor";
 			
-			String data = "12,12"+AuthToken+requestDeviceId+"NepalTravelApp/1.0.0 android"+"transaction"+""+"2025-04-30 11:00:00";
-//			: X-GEO-LOCATION+ X-AUTH-TOKEN + X-DEVICE-ID+ User-Agent + X-SYSTEM-ID+ X-CREDENTIAL(Optional) + Request-Timestamp
+			String data = "12,12"+AuthToken+requestDeviceId+"TravelApp/1.0.0 android"+"transaction"+""+"2025-04-30 11:00:00";
+//			: X-GEO-LOCATION+ X-AUTH-TOKEN + X-DEVICE-ID+ User-Agent + X-SYSTEM-ID+ X-CREDENTIAL(Optional) + X-REQUEST-TIMESTAMP
 			String Signature = signatureCreate.generateHMACSHA256(data, secretKey);
 			System.out.println(Signature);
 
 	        Response response = (Response) given()
-	            .header("X-GEO-Location", "")
-	            .header("X-Device-Id", requestDeviceId)
-	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+	            .header("X-GEO-LOCATION", "")
+	            .header("X-DEVICE-ID", requestDeviceId)
+	            .header("User-Agent", "TravelApp/1.0.0 android")
 	            .header("X-AUTH-TOKEN",AuthToken)
 	            .header("X-SYSTEM-ID","transaction")
 	            .header("X-SYSTEM-SIGNATURE","") 
-	            .header("Request-Timestamp","2025-04-30 15:16:00")
+	            .header("X-REQUEST-TIMESTAMP","2025-04-30 15:16:00")
 	            .when()
 	            .get("/session")
 	        .then()
@@ -368,19 +368,19 @@ public class session {
 	public void GetSessionwithoutRequestTimestamp() throws Exception {
 		 baseURI = "https://visitor0.moco.com.np/visitor";
 			
-			String data = "12,12"+AuthToken+requestDeviceId+"NepalTravelApp/1.0.0 android"+"transaction"+""+"2025-04-30 11:00:00";
-//			: X-GEO-LOCATION+ X-AUTH-TOKEN + X-DEVICE-ID+ User-Agent + X-SYSTEM-ID+ X-CREDENTIAL(Optional) + Request-Timestamp
+			String data = "12,12"+AuthToken+requestDeviceId+"TravelApp/1.0.0 android"+"transaction"+""+"2025-04-30 11:00:00";
+//			: X-GEO-LOCATION+ X-AUTH-TOKEN + X-DEVICE-ID+ User-Agent + X-SYSTEM-ID+ X-CREDENTIAL(Optional) + X-REQUEST-TIMESTAMP
 			String Signature = signatureCreate.generateHMACSHA256(data, secretKey);
 			System.out.println(Signature);
 
 	        Response response = (Response) given()
-	            .header("X-GEO-Location", "")
-	            .header("X-Device-Id", requestDeviceId)
-	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+	            .header("X-GEO-LOCATION", "")
+	            .header("X-DEVICE-ID", requestDeviceId)
+	            .header("User-Agent", "TravelApp/1.0.0 android")
 	            .header("X-AUTH-TOKEN",AuthToken)
 	            .header("X-SYSTEM-ID","transaction")
 	            .header("X-SYSTEM-SIGNATURE",Signature) 
-	            .header("Request-Timestamp","")
+	            .header("X-REQUEST-TIMESTAMP","")
 	            .when()
 	            .get("/session")
 	        .then()
@@ -403,19 +403,19 @@ public class session {
 	public void GetSessionwithInvalidDevice() throws Exception {
 		baseURI = "https://visitor0.moco.com.np/visitor";
 		
-		String data = "12,12"+AuthToken+"op00$"+"NepalTravelApp/1.0.0 android"+"transaction"+""+"2025-04-30 11:00:00";
-//		: X-GEO-LOCATION+ X-AUTH-TOKEN + X-DEVICE-ID+ User-Agent + X-SYSTEM-ID+ X-CREDENTIAL(Optional) + Request-Timestamp
+		String data = "12,12"+AuthToken+"op00$"+"TravelApp/1.0.0 android"+"transaction"+""+"2025-04-30 11:00:00";
+//		: X-GEO-LOCATION+ X-AUTH-TOKEN + X-DEVICE-ID+ User-Agent + X-SYSTEM-ID+ X-CREDENTIAL(Optional) + X-REQUEST-TIMESTAMP
 		String Signature = signatureCreate.generateHMACSHA256(data, secretKey);
 		System.out.println(Signature);
 
         Response response = (Response) given()
-            .header("X-GEO-Location", "12,12")
-            .header("X-Device-Id", "op00$")
-            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+            .header("X-GEO-LOCATION", "12,12")
+            .header("X-DEVICE-ID", "op00$")
+            .header("User-Agent", "TravelApp/1.0.0 android")
             .header("X-AUTH-TOKEN",AuthToken)
             .header("X-SYSTEM-ID","transaction")
             .header("X-SYSTEM-SIGNATURE",Signature) 
-            .header("Request-Timestamp","2025-04-30 15:16:00")
+            .header("X-REQUEST-TIMESTAMP","2025-04-30 15:16:00")
             .when()
             .get("/session")
         .then()
@@ -438,19 +438,19 @@ public class session {
 	public void GetSessionwithInvalidLocation() throws Exception {
 		baseURI = "https://visitor0.moco.com.np/visitor";
 		
-		String data = "12,12"+AuthToken+requestDeviceId+"NepalTravelApp/1.0.0 android"+"transaction"+""+"2025-04-30 11:00:00";
-//		: X-GEO-LOCATION+ X-AUTH-TOKEN + X-DEVICE-ID+ User-Agent + X-SYSTEM-ID+ X-CREDENTIAL(Optional) + Request-Timestamp
+		String data = "12,12"+AuthToken+requestDeviceId+"TravelApp/1.0.0 android"+"transaction"+""+"2025-04-30 11:00:00";
+//		: X-GEO-LOCATION+ X-AUTH-TOKEN + X-DEVICE-ID+ User-Agent + X-SYSTEM-ID+ X-CREDENTIAL(Optional) + X-REQUEST-TIMESTAMP
 		String Signature = signatureCreate.generateHMACSHA256(data, secretKey);
 		System.out.println(Signature);
 
         Response response = (Response) given()
-            .header("X-GEO-Location", "$%")
-            .header("X-Device-Id", requestDeviceId)
-            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+            .header("X-GEO-LOCATION", "$%")
+            .header("X-DEVICE-ID", requestDeviceId)
+            .header("User-Agent", "TravelApp/1.0.0 android")
             .header("X-AUTH-TOKEN",AuthToken)
             .header("X-SYSTEM-ID","transaction")
             .header("X-SYSTEM-SIGNATURE",Signature) 
-            .header("Request-Timestamp","2025-04-30 15:16:00")
+            .header("X-REQUEST-TIMESTAMP","2025-04-30 15:16:00")
             .when()
             .get("/session")
         .then()
@@ -472,19 +472,19 @@ public class session {
 	public void GetSessionwithInvalidUser() throws Exception {
         baseURI = "https://visitor0.moco.com.np/visitor";
 		
-		String data = "12,12"+AuthToken+requestDeviceId+"NepalTravelApp/1.0.0 android"+"transaction"+""+"2025-04-30 11:00:00";
-//		: X-GEO-LOCATION+ X-AUTH-TOKEN + X-DEVICE-ID+ User-Agent + X-SYSTEM-ID+ X-CREDENTIAL(Optional) + Request-Timestamp
+		String data = "12,12"+AuthToken+requestDeviceId+"TravelApp/1.0.0 android"+"transaction"+""+"2025-04-30 11:00:00";
+//		: X-GEO-LOCATION+ X-AUTH-TOKEN + X-DEVICE-ID+ User-Agent + X-SYSTEM-ID+ X-CREDENTIAL(Optional) + X-REQUEST-TIMESTAMP
 		String Signature = signatureCreate.generateHMACSHA256(data, secretKey);
 		System.out.println(Signature);
 
         Response response = (Response) given()
-            .header("X-GEO-Location", "12,12")
-            .header("X-Device-Id", requestDeviceId)
-            .header("User-Agent", "NepalTravelApp/.0.0 android")
+            .header("X-GEO-LOCATION", "12,12")
+            .header("X-DEVICE-ID", requestDeviceId)
+            .header("User-Agent", "TravelApp/.0.0 android")
             .header("X-AUTH-TOKEN",AuthToken)
             .header("X-SYSTEM-ID","transaction")
             .header("X-SYSTEM-SIGNATURE",Signature) 
-            .header("Request-Timestamp","2025-04-30 15:16:00")
+            .header("X-REQUEST-TIMESTAMP","2025-04-30 15:16:00")
             .when()
             .get("/session")
         .then()
@@ -506,19 +506,19 @@ public class session {
 	public void GetSessionwithInvalidAuth() throws Exception {
         baseURI = "https://visitor0.moco.com.np/visitor";
 		
-		String data = "12,12"+AuthToken+requestDeviceId+"NepalTravelApp/1.0.0 android"+"transaction"+""+"2025-04-30 11:00:00";
-//		: X-GEO-LOCATION+ X-AUTH-TOKEN + X-DEVICE-ID+ User-Agent + X-SYSTEM-ID+ X-CREDENTIAL(Optional) + Request-Timestamp
+		String data = "12,12"+AuthToken+requestDeviceId+"TravelApp/1.0.0 android"+"transaction"+""+"2025-04-30 11:00:00";
+//		: X-GEO-LOCATION+ X-AUTH-TOKEN + X-DEVICE-ID+ User-Agent + X-SYSTEM-ID+ X-CREDENTIAL(Optional) + X-REQUEST-TIMESTAMP
 		String Signature = signatureCreate.generateHMACSHA256(data, secretKey);
 		System.out.println(Signature);
 
         Response response = (Response) given()
-            .header("X-GEO-Location", "12,12")
-            .header("X-Device-Id", requestDeviceId)
-            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+            .header("X-GEO-LOCATION", "12,12")
+            .header("X-DEVICE-ID", requestDeviceId)
+            .header("User-Agent", "TravelApp/1.0.0 android")
             .header("X-AUTH-TOKEN","7887")
             .header("X-SYSTEM-ID","transaction")
             .header("X-SYSTEM-SIGNATURE",Signature) 
-            .header("Request-Timestamp","2025-04-30 15:16:00")
+            .header("X-REQUEST-TIMESTAMP","2025-04-30 15:16:00")
             .when()
             .get("/session")
         .then()
@@ -540,23 +540,23 @@ public class session {
 	public void GetSessionwithInvalidSystemID() throws Exception {
          baseURI = "https://visitor0.moco.com.np/visitor";
 		
-		String data = "12,12"+AuthToken+requestDeviceId+"NepalTravelApp/1.0.0 android"+"transactisss)()(n"+""+"2025-04-30 15:16:00";
-//		: X-GEO-LOCATION+ X-AUTH-TOKEN + X-DEVICE-ID+ User-Agent + X-SYSTEM-ID+ X-CREDENTIAL(Optional) + Request-Timestamp
+		String data = "12,12"+AuthToken+requestDeviceId+"TravelApp/1.0.0 android"+"transactisss)()(n"+""+"2025-04-30 15:16:00";
+//		: X-GEO-LOCATION+ X-AUTH-TOKEN + X-DEVICE-ID+ User-Agent + X-SYSTEM-ID+ X-CREDENTIAL(Optional) + X-REQUEST-TIMESTAMP
 		String Signature = signatureCreate.generateHMACSHA256(data, secretKey);
 		System.out.println(Signature);
 
         Response response = (Response) given()
-            .header("X-GEO-Location", "12,12")
-            .header("X-Device-Id", requestDeviceId)
-            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+            .header("X-GEO-LOCATION", "12,12")
+            .header("X-DEVICE-ID", requestDeviceId)
+            .header("User-Agent", "TravelApp/1.0.0 android")
             .header("X-AUTH-TOKEN",AuthToken)
             .header("X-SYSTEM-ID","transactisss)()(n")
             .header("X-SYSTEM-SIGNATURE",Signature) 
-            .header("Request-Timestamp","2025-04-30 15:16:00")
+            .header("X-REQUEST-TIMESTAMP","2025-04-30 15:16:00")
             .when()
             .get("/session")
             .then()
-            .statusCode(401)
+            .statusCode(422)
             .extract().response();
         
         String code = response.jsonPath().getString("code");
@@ -567,26 +567,26 @@ public class session {
          assertNotNull(description, "description is missing from the response");
          assertFalse(description.isEmpty(), "description is empty in the response");
          //check if the code value is as per the decided
-         assertEquals(code,"GNR_AUTHENTICATION_FAIL");
-         assertEquals(description,"Authentication failed.");
+         assertEquals(code,"GNR_INVALID_DATA");
+         assertEquals(description,"Invalid System ID.");
 	}
 	@Test
 	public void GetSessionwithInvalidSignature() throws Exception {
          baseURI = "https://visitor0.moco.com.np/visitor";
 		
-		String data = "12,12"+AuthToken+requestDeviceId+"NepalTravelApp/1.0.0 android"+"transaction"+""+"2025-04-30 11:00:00";
-//		: X-GEO-LOCATION+ X-AUTH-TOKEN + X-DEVICE-ID+ User-Agent + X-SYSTEM-ID+ X-CREDENTIAL(Optional) + Request-Timestamp
+		String data = "12,12"+AuthToken+requestDeviceId+"TravelApp/1.0.0 android"+"transaction"+""+"2025-04-30 11:00:00";
+//		: X-GEO-LOCATION+ X-AUTH-TOKEN + X-DEVICE-ID+ User-Agent + X-SYSTEM-ID+ X-CREDENTIAL(Optional) + X-REQUEST-TIMESTAMP
 		String Signature = signatureCreate.generateHMACSHA256(data, secretKey);
 		System.out.println(Signature);
 
         Response response = (Response) given()
-            .header("X-GEO-Location", "12,12")
-            .header("X-Device-Id", requestDeviceId)
-            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+            .header("X-GEO-LOCATION", "12,12")
+            .header("X-DEVICE-ID", requestDeviceId)
+            .header("User-Agent", "TravelApp/1.0.0 android")
             .header("X-AUTH-TOKEN",AuthToken)
             .header("X-SYSTEM-ID","transaction")
             .header("X-SYSTEM-SIGNATURE","aasa") 
-            .header("Request-Timestamp","2025-04-30 15:16:00")
+            .header("X-REQUEST-TIMESTAMP","2025-04-30 15:16:00")
             .when()
             .get("/session")
         .then()
@@ -609,19 +609,19 @@ public class session {
 	public void GetSessionwithInvalidRequestTimestamp() throws Exception {
          baseURI = "https://visitor0.moco.com.np/visitor";
 		
-		String data = "12,12"+AuthToken+requestDeviceId+"NepalTravelApp/1.0.0 android"+"transaction"+""+"2025-04-30 25:16:00";
-//		: X-GEO-LOCATION+ X-AUTH-TOKEN + X-DEVICE-ID+ User-Agent + X-SYSTEM-ID+ X-CREDENTIAL(Optional) + Request-Timestamp
+		String data = "12,12"+AuthToken+requestDeviceId+"TravelApp/1.0.0 android"+"transaction"+""+"2025-04-30 25:16:00";
+//		: X-GEO-LOCATION+ X-AUTH-TOKEN + X-DEVICE-ID+ User-Agent + X-SYSTEM-ID+ X-CREDENTIAL(Optional) + X-REQUEST-TIMESTAMP
 		String Signature = signatureCreate.generateHMACSHA256(data, secretKey);
 		System.out.println(Signature);
 
         Response response = (Response) given()
-            .header("X-GEO-Location", "12,12")
-            .header("X-Device-Id", requestDeviceId)
-            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+            .header("X-GEO-LOCATION", "12,12")
+            .header("X-DEVICE-ID", requestDeviceId)
+            .header("User-Agent", "TravelApp/1.0.0 android")
             .header("X-AUTH-TOKEN",AuthToken)
             .header("X-SYSTEM-ID","transaction")
             .header("X-SYSTEM-SIGNATURE",Signature) 
-            .header("Request-Timestamp","2025-04-30 25:16:00")
+            .header("X-REQUEST-TIMESTAMP","2025-04-30 25:16:00")
             .when()
             .get("/session")
         .then()
@@ -637,27 +637,27 @@ public class session {
          assertFalse(description.isEmpty(), "description is empty in the response");
          //check if the code value is as per the decided
          assertEquals(code,"GNR_INVALID_DATA");
-         assertEquals(description,"Invalid request timestamp found.");
+         assertEquals(description,"Invalid Request Timestamp.");
 		
 	}
 ////	@Test
 ////	public void GetSessionwithinvalidSystemCredentials() throws Exception {
 ////		  baseURI = "https://visitor0.moco.com.np/visitor";
 ////			
-////			String data = "12,12"+AuthToken+requestDeviceId+"NepalTravelApp/1.0.0 android"+"transaction"+"qq"+"2025-04-30 11:00:00";
-//////			: X-GEO-LOCATION+ X-AUTH-TOKEN + X-DEVICE-ID+ User-Agent + X-SYSTEM-ID+ X-CREDENTIAL(Optional) + Request-Timestamp
+////			String data = "12,12"+AuthToken+requestDeviceId+"TravelApp/1.0.0 android"+"transaction"+"qq"+"2025-04-30 11:00:00";
+//////			: X-GEO-LOCATION+ X-AUTH-TOKEN + X-DEVICE-ID+ User-Agent + X-SYSTEM-ID+ X-CREDENTIAL(Optional) + X-REQUEST-TIMESTAMP
 ////			String Signature = signatureCreate.generateHMACSHA256(data, secretKey);
 ////			System.out.println(Signature);
 ////
 ////	        Response response = (Response) given()
-////	            .header("X-GEO-Location", "12,12")
-////	            .header("X-Device-Id", requestDeviceId)
-////	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+////	            .header("X-GEO-LOCATION", "12,12")
+////	            .header("X-DEVICE-ID", requestDeviceId)
+////	            .header("User-Agent", "TravelApp/1.0.0 android")
 ////	            .header("X-AUTH-TOKEN",AuthToken)
 ////	            .header("X-SYSTEM-ID","transaction")
 ////	            .header("X-CREDENTIAL","qq")
 ////	            .header("X-SYSTEM-SIGNATURE",Signature) 
-////	            .header("Request-Timestamp","2025-04-30 11:00:00")
+////	            .header("X-REQUEST-TIMESTAMP","2025-04-30 11:00:00")
 ////	            .when()
 ////	            .get("/session")
 ////	        .then()
@@ -681,10 +681,10 @@ public class session {
 	public void logout() {
 		baseURI = "https://visitor0.moco.com.np/visitor";
         Response response = given()
-            .header("X-GEO-Location", "12,12")
+            .header("X-GEO-LOCATION", "12,12")
             .header("X-AUTH-TOKEN",AuthToken)
-            .header("X-Device-Id", requestDeviceId)
-            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+            .header("X-DEVICE-ID", requestDeviceId)
+            .header("User-Agent", "TravelApp/1.0.0 android")
         .when()
             .delete("/authenticate")
         .then()

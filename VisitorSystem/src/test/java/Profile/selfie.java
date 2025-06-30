@@ -42,10 +42,10 @@ RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
         String secretKey1 = response.jsonPath().getString("signOnKey");
         assertNotNull(secretKey1, "Secret key is null!");
         
+        
+        
+        //authenticating into the visitor services.
         ObjectMapper objectMapper = new ObjectMapper();
-        
-
-        
         Map<String, Object> credentials = new LinkedHashMap<>();
         credentials.put("email", input_email);
         String Pin = signatureCreate.encryptAES256(input_pin, secretKey1);
@@ -498,7 +498,7 @@ RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
 	    	
 
 	    	assertEquals(code,"GNR_INVALID_DATA");
-	    	assertEquals(description,"Invalid image format found.");
+	    	assertEquals(description,"Uploaded file is not a jpeg image.");
     }
 	}
 
@@ -555,7 +555,7 @@ RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
 	public void uploadSelfiewithSpoofimage() throws Exception {
 		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
 
-	    File selfie = new File("C:/Users/Dell/Downloads/spoof.jpg");
+	    File selfie = new File("C:/Users/Dell/Downloads/copy.jpeg");
 
 	    if (!selfie.exists()) {
 	        System.out.println("File not found: " + selfie.getAbsolutePath());
@@ -573,7 +573,7 @@ RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
 	                .header("X-Device-Id", requestDeviceId)
 	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
 	                .header("Accept", "*/*")  // matches curl default
-	                .multiPart("selfie", "spoof.jpg", fis, "image/jpeg") // key, filename, stream, type
+	                .multiPart("selfie", "copy.jpeg", fis, "image/jpeg") // key, filename, stream, type
 	                .when()
 	                .post("/selfie")
 	                .then()
@@ -594,7 +594,7 @@ RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
 	    	
 
 	    	assertEquals(code,"VST_PROFILE_IMG_SPOOF");
-	    	assertEquals(description,"Successfully verified Portrait/Selfie.");
+	    	assertEquals(description,"Selfie is identified as not real.");
     }
 	}
 
@@ -886,7 +886,7 @@ RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
 	public void uploadSelfiewithvalidCredentails() throws Exception {
 		    RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
 
-		    File selfie = new File("C:/Users/Dell/Downloads/Image_20241216_121143_255.jpeg");
+		    File selfie = new File("C:/Users/Dell/Downloads/portrait.jpeg");
 		    //File selfie = new File("C:/Users/Dell/Downloads/WhatsApp Image 2025-05-23 at 14.53.45.jpeg");
 
 		    if (!selfie.exists()) {
@@ -905,7 +905,7 @@ RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
 		                .header("X-Device-Id", requestDeviceId)
 		                .header("User-Agent", "NepalTravelApp/1.0.0 android")
 		                .header("Accept", "*/*")  // matches curl default
-		                .multiPart("selfie", "Image_20241216_121143_255.jpeg", fis, "image/jpeg") // key, filename, stream, type
+		                .multiPart("selfie", "portrait.jpeg", fis, "image/jpeg") // key, filename, stream, type
 		                .when()
 		                .post("/selfie")
 		                .then()
@@ -932,18 +932,18 @@ RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
 		    }
 
 
-	@AfterClass
-	public void logout() {
-		baseURI = "https://visitor0.moco.com.np/visitor";
-      Response response = given()
-          .header("X-GEO-Location", "12,12")
-          .header("X-AUTH-TOKEN",AuthToken)
-          .header("X-Device-Id", requestDeviceId)
-          .header("User-Agent", "NepalTravelApp/1.0.0 android")
-      .when()
-          .delete("/authenticate");
-      response.then().statusCode(200);
-	}
+//	@AfterClass
+//	public void logout() {
+//		baseURI = "https://visitor0.moco.com.np/visitor";
+//      Response response = given()
+//          .header("X-GEO-Location", "12,12")
+//          .header("X-AUTH-TOKEN",AuthToken)
+//          .header("X-Device-Id", requestDeviceId)
+//          .header("User-Agent", "NepalTravelApp/1.0.0 android")
+//      .when()
+//          .delete("/authenticate");
+//      response.then().statusCode(200);
+//	}
 	}
 
 

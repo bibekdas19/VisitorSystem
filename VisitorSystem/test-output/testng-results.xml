@@ -1,26 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results ignored="17" total="18" passed="0" failed="1" skipped="0">
+<testng-results ignored="0" total="9" passed="8" failed="1" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2025-06-11T16:09:59 NPT" name="Default suite" finished-at="2025-06-11T16:10:04 NPT" duration-ms="5106">
+  <suite started-at="2025-06-30T11:32:08 NPT" name="Default suite" finished-at="2025-06-30T11:32:26 NPT" duration-ms="18661">
     <groups>
     </groups>
-    <test started-at="2025-06-11T16:09:59 NPT" name="Default test" finished-at="2025-06-11T16:10:04 NPT" duration-ms="5106">
-      <class name="Profile.selfie">
-        <test-method is-config="true" signature="getToken()[pri:0, instance:Profile.selfie@428640fa]" started-at="2025-06-11T16:09:59 NPT" name="getToken" finished-at="2025-06-11T16:10:03 NPT" duration-ms="3927" status="PASS">
+    <test started-at="2025-06-30T11:32:08 NPT" name="Default test" finished-at="2025-06-30T11:32:26 NPT" duration-ms="18661">
+      <class name="Profile.getProfileDetails">
+        <test-method is-config="true" signature="getToken()[pri:0, instance:Profile.getProfileDetails@27462a88]" started-at="2025-06-30T11:32:08 NPT" name="getToken" finished-at="2025-06-30T11:32:13 NPT" duration-ms="5731" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- getToken -->
-        <test-method signature="uploadSelfiewithvalidCredentails()[pri:0, instance:Profile.selfie@428640fa]" started-at="2025-06-11T16:10:03 NPT" name="uploadSelfiewithvalidCredentails" finished-at="2025-06-11T16:10:04 NPT" duration-ms="685" status="FAIL">
+        <test-method signature="getProfileInformation()[pri:0, instance:Profile.getProfileDetails@27462a88]" started-at="2025-06-30T11:32:13 NPT" name="getProfileInformation" finished-at="2025-06-30T11:32:14 NPT" duration-ms="457" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getProfileInformation -->
+        <test-method signature="getProfileInformationwithInvalidAuth()[pri:0, instance:Profile.getProfileDetails@27462a88]" started-at="2025-06-30T11:32:14 NPT" name="getProfileInformationwithInvalidAuth" finished-at="2025-06-30T11:32:14 NPT" duration-ms="230" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getProfileInformationwithInvalidAuth -->
+        <test-method signature="getProfileInformationwithInvalidDevice()[pri:0, instance:Profile.getProfileDetails@27462a88]" started-at="2025-06-30T11:32:14 NPT" name="getProfileInformationwithInvalidDevice" finished-at="2025-06-30T11:32:14 NPT" duration-ms="213" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getProfileInformationwithInvalidDevice -->
+        <test-method signature="getProfileInformationwithInvalidLocation()[pri:0, instance:Profile.getProfileDetails@27462a88]" started-at="2025-06-30T11:32:14 NPT" name="getProfileInformationwithInvalidLocation" finished-at="2025-06-30T11:32:15 NPT" duration-ms="889" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getProfileInformationwithInvalidLocation -->
+        <test-method signature="getProfileInformationwithServerDown()[pri:0, instance:Profile.getProfileDetails@27462a88]" started-at="2025-06-30T11:32:15 NPT" name="getProfileInformationwithServerDown" finished-at="2025-06-30T11:32:17 NPT" duration-ms="1593" status="FAIL">
           <exception class="java.lang.AssertionError">
             <message>
               <![CDATA[1 expectation failed.
-Expected status code <200> but was <500>.
+Expected status code <500> but was <200>.
 ]]>
             </message>
             <full-stacktrace>
               <![CDATA[java.lang.AssertionError: 1 expectation failed.
-Expected status code <200> but was <500>.
+Expected status code <500> but was <200>.
 
 at java.base/jdk.internal.reflect.DirectConstructorHandleAccessor.newInstance(DirectConstructorHandleAccessor.java:62)
 at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:502)
@@ -44,7 +60,7 @@ at io.restassured.internal.ResponseSpecificationImpl.statusCode(ResponseSpecific
 at io.restassured.specification.ResponseSpecification$statusCode$0.callCurrent(Unknown Source)
 at io.restassured.internal.ResponseSpecificationImpl.statusCode(ResponseSpecificationImpl.groovy:143)
 at io.restassured.internal.ValidatableResponseOptionsImpl.statusCode(ValidatableResponseOptionsImpl.java:89)
-at Profile.selfie.uploadSelfiewithvalidCredentails(selfie.java:912)
+at Profile.getProfileDetails.getProfileInformationwithServerDown(getProfileDetails.java:350)
 at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
 at java.base/java.lang.reflect.Method.invoke(Method.java:580)
 at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:133)
@@ -76,12 +92,28 @@ at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:91)
           </exception> <!-- java.lang.AssertionError -->
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- uploadSelfiewithvalidCredentails -->
-        <test-method is-config="true" signature="logout()[pri:0, instance:Profile.selfie@428640fa]" started-at="2025-06-11T16:10:04 NPT" name="logout" finished-at="2025-06-11T16:10:04 NPT" duration-ms="458" status="PASS">
+        </test-method> <!-- getProfileInformationwithServerDown -->
+        <test-method signature="getProfileInformationwithoutAuth()[pri:0, instance:Profile.getProfileDetails@27462a88]" started-at="2025-06-30T11:32:17 NPT" name="getProfileInformationwithoutAuth" finished-at="2025-06-30T11:32:20 NPT" duration-ms="3084" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getProfileInformationwithoutAuth -->
+        <test-method signature="getProfileInformationwithoutDevice()[pri:0, instance:Profile.getProfileDetails@27462a88]" started-at="2025-06-30T11:32:20 NPT" name="getProfileInformationwithoutDevice" finished-at="2025-06-30T11:32:22 NPT" duration-ms="2342" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getProfileInformationwithoutDevice -->
+        <test-method signature="getProfileInformationwithoutGeo()[pri:0, instance:Profile.getProfileDetails@27462a88]" started-at="2025-06-30T11:32:22 NPT" name="getProfileInformationwithoutGeo" finished-at="2025-06-30T11:32:23 NPT" duration-ms="867" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getProfileInformationwithoutGeo -->
+        <test-method signature="getProfileInformationwithoutUserAgent()[pri:0, instance:Profile.getProfileDetails@27462a88]" started-at="2025-06-30T11:32:23 NPT" name="getProfileInformationwithoutUserAgent" finished-at="2025-06-30T11:32:26 NPT" duration-ms="2948" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getProfileInformationwithoutUserAgent -->
+        <test-method is-config="true" signature="logout()[pri:0, instance:Profile.getProfileDetails@27462a88]" started-at="2025-06-30T11:32:26 NPT" name="logout" finished-at="2025-06-30T11:32:26 NPT" duration-ms="203" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- logout -->
-      </class> <!-- Profile.selfie -->
+      </class> <!-- Profile.getProfileDetails -->
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->
 </testng-results>
