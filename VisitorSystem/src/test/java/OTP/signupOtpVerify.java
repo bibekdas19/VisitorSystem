@@ -15,13 +15,14 @@ import java.util.*;
 
 public class signupOtpVerify {
 	String baseURI = "https://visitor0.moco.com.np/visitor";
-    String secretKey = "fb53dccfdb44967a8c2d4497e01867aa6ee53d7d267c3a095602dbef82b750c0";
+    String secretKey = "ef11fd79c4131fee2bac4edd1873833ac8c0a2ea83d69e13f45f83107ec5eb96";
     String token = "Xdn5K2T0y_xnuVTBEJnCFg_b5o71UioitUuvkdlp79Y";
     String email = "vivek@moco.com.np";
     String requestTimestamp = signatureCreate.generateTimestamp();
     String plain_pin = "123654";
-    String plain_otp = "948191";
+    String plain_otp = "837926";
     String requestdevice = "visitor-app-device";
+    String pushToken = "abcdefg:7^";
 
     @Test
     public void verifySignUpOtpwithoutDeviceId() throws Exception {
@@ -37,6 +38,7 @@ public class signupOtpVerify {
         jsonBody.put("otp", otp);
         String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
         jsonBody.put("pin", pin);
+        jsonBody.put("pushToken",pushToken);
         
         //placing token from signup API
         jsonBody.put("token", token);
@@ -94,6 +96,7 @@ public class signupOtpVerify {
         jsonBody.put("otp", otp);
         String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
         jsonBody.put("pin", pin);
+        jsonBody.put("pushToken",pushToken);
         
         //placing token from signup API
         jsonBody.put("token", token);
@@ -151,6 +154,7 @@ public class signupOtpVerify {
         jsonBody.put("otp", otp);
         String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
         jsonBody.put("pin", pin);
+        jsonBody.put("pushToken",pushToken);
         
         //placing token from signup API
         jsonBody.put("token", token);
@@ -214,6 +218,7 @@ public class signupOtpVerify {
         jsonBody.put("otp", otp);
         String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
         jsonBody.put("pin", pin);
+        jsonBody.put("pushToken",pushToken);
         
         //placing token from signup API
         jsonBody.put("token", token);
@@ -275,6 +280,7 @@ public class signupOtpVerify {
       jsonBody.put("otp", otp);
       String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
       jsonBody.put("pin", pin);
+      jsonBody.put("pushToken",pushToken);
       
       //placing token from signup API
       jsonBody.put("token", token);
@@ -336,6 +342,7 @@ public class signupOtpVerify {
      jsonBody.put("otp", otp);
      String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
      jsonBody.put("pin", pin);
+     jsonBody.put("pushToken",pushToken);
      
      //placing token from signup API
      jsonBody.put("token", token);
@@ -397,6 +404,7 @@ public class signupOtpVerify {
     jsonBody.put("otp", otp);
     String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
     jsonBody.put("pin", pin);
+    jsonBody.put("pushToken",pushToken);
     
     //placing token from signup API
     jsonBody.put("token", token);
@@ -459,6 +467,7 @@ public class signupOtpVerify {
      jsonBody.put("otp", otp);
      String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
      jsonBody.put("pin", pin);
+     jsonBody.put("pushToken",pushToken);
      
      //placing token from signup API
      jsonBody.put("token", "");
@@ -520,6 +529,7 @@ public class signupOtpVerify {
      jsonBody.put("otp", otp);
      String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
      jsonBody.put("pin", pin);
+     jsonBody.put("pushToken",pushToken);
      
      //placing token from signup API
      jsonBody.put("token", token);
@@ -581,6 +591,7 @@ public class signupOtpVerify {
      jsonBody.put("otp", plain_otp);
      String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
      jsonBody.put("pin", pin);
+     jsonBody.put("pushToken",pushToken);
      
      //placing token from signup API
      jsonBody.put("token", token);
@@ -643,6 +654,7 @@ public class signupOtpVerify {
      jsonBody.put("otp", plain_otp);
      String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
      jsonBody.put("pin", pin);
+     jsonBody.put("pushToken",pushToken);
      
      //placing token from signup API
      jsonBody.put("token", token);
@@ -707,6 +719,7 @@ public void VerifySignUpwithInvalidOtp() throws Exception {
     jsonBody.put("otp", otp);
     String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
     jsonBody.put("pin", pin);
+    jsonBody.put("pushToken",pushToken);
     
     //placing token from signup API
     jsonBody.put("token", token);
@@ -769,6 +782,7 @@ public void VerifySignUpwithInvalidPin() throws Exception {
     jsonBody.put("otp", otp);
     String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
     jsonBody.put("pin", pin);
+    jsonBody.put("pushToken",pushToken);
     
     //placing token from signup API
     jsonBody.put("token", token);
@@ -829,6 +843,7 @@ public void VerifySignUpwithInvalidPin() throws Exception {
      jsonBody.put("otp", otp);
      String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
      jsonBody.put("pin", pin);
+     jsonBody.put("pushToken",pushToken);
      
      //placing token from signup API
      jsonBody.put("token", "lo$5==");
@@ -890,6 +905,7 @@ public void VerifySignUpwithInvalidPin() throws Exception {
      jsonBody.put("otp", otp);
      String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
      jsonBody.put("pin", pin);
+     jsonBody.put("pushToken",pushToken);
      
      //placing token from signup API
      jsonBody.put("token", token);
@@ -942,6 +958,7 @@ public void VerifySignUpwithInvalidPin() throws Exception {
      jsonBody.put("otp", plain_otp);
      String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
      jsonBody.put("pin",pin);
+     jsonBody.put("pushToken",pushToken);
      
      //placing token from signup API
      jsonBody.put("token", token);
@@ -1008,6 +1025,66 @@ public void VerifySignUpwithInvalidPin() throws Exception {
      
     // assertTrue(response.getHeaders().hasHeaderWithName("X-AUTH-TOKEN"), "Missing X-AUTH-TOKEN header");
      System.out.println("Request ID: " + response.getHeaders().hasHeaderWithName("X-AUTH-TOKEN"));
+     
+ }
+ 
+ @Test
+ public void VerifyOtpwithEmptyPushToken() throws Exception{
+	 ObjectMapper objectMapper = new ObjectMapper();
+     Map<String, Object> jsonBody = new LinkedHashMap<>();
+     jsonBody.put("email", email);
+     jsonBody.put("requestTimestamp", requestTimestamp);
+     jsonBody.put("otp", plain_otp);
+     String pin = signatureCreate.encryptAES256(plain_pin, secretKey);
+     jsonBody.put("pin",pin);
+     jsonBody.put("pushToken",pushToken);
+     
+     //placing token from signup API
+     jsonBody.put("token", token);
+    // System.out.println(jsonBody);
+
+  // Generate signature
+     String data = objectMapper.writeValueAsString(jsonBody);
+     String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
+     
+  // Add signature
+     jsonBody.put("signature", requestSignature);
+    
+     Response response = given()
+             .baseUri(baseURI)
+             .header("X-GEO-Location", "12,12")
+             .header("X-Device-Id",requestdevice)
+             .header("User-Agent", "NepalTravelApp/1.0.0 android")
+             .contentType("application/json")
+             .body(jsonBody)
+         .when()
+             .post("/signup/otp/verify")
+         .then()
+             .statusCode(400)
+             .log().all()
+             .extract().response();
+     response.prettyPrint();
+     
+
+     // Extracting and asserting response values
+     String responseEmail = response.jsonPath().getString("email");
+     String sessionKey = response.jsonPath().getString("sessionKey");
+     String deviceId = response.jsonPath().getString("deviceId");
+     String signature = response.jsonPath().getString("signature");
+
+     assertNotNull(signature, "Signature is missing");
+     assertNotNull(sessionKey, "sessionkey is missing from the response");
+     assertNotNull(deviceId, "deviceid is missing from the response");
+     assertNotNull(responseEmail, "email in reponse is missing");
+
+     assertFalse(signature.isEmpty(), "Signature is empty");
+     assertFalse(deviceId.isEmpty(), "Device ID is empty");
+     assertFalse(sessionKey.isEmpty(), "session key is empty");
+     assertFalse(responseEmail.isEmpty(), "email is empty");
+     
+     //assert device and email is equal with request
+     assertEquals(requestdevice,deviceId);
+     assertEquals(email,responseEmail);
      
  }
  
