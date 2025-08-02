@@ -1,0 +1,34 @@
+# Maven output 
+/target/ 
+!.mvn/wrapper/maven-wrapper.jar 
+# IntelliJ / Eclipse / VSCode IDEs 
+*.iml 
+.idea/ 
+.project 
+.classpath 
+.settings/ 
+.vscode/ 
+# Logs 
+*.log 
+# OS-specific files 
+.DS_Store 
+Thumbs.db 
+# Temporary files 
+*.swp 
+*.swo 
+*~ 
+# Environment / Credential files (if used) 
+.env 
+*.local 
+# Test reports 
+/surefire-reports/ 
+/failsafe-reports/ 
+# Generated REST-assured reports (if any) 
+rest-assured-report.html 
+rest-assured.log 
+# Coverage / Analysis tools 
+/coverage/ 
+/jacoco.exec 
+/test-output/ 
+# Git-specific 
+*.orig
