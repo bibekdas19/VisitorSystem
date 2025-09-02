@@ -1,1091 +1,1571 @@
 package Device;
-
+//import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import io.restassured.response.Response;
-
-import static io.restassured.RestAssured.*;
-import static org.testng.Assert.*;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
+//import com.fasterxml.jackson.databind.SerializationFeature;
+//import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+//import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import OTP.signatureCreate;
+import io.restassured.response.Response;
+import static io.restassured.RestAssured.*;
+import static org.testng.Assert.*;
 
 import java.util.*;
 
 public class deviceRegister {
 	String baseURI = "https://visitor0.moco.com.np/visitor";
-	String secretKey = "c3fccc2fbae9252d377335148d3ee92bcf185f4b505b5527a8a794e312a1fdb3";
-	String Token = "tfH165amRNA1V9lb0ASX--77kFN-p0QwSB4NVB20Lgo";
-	String Otp = "341457";
-	String pushToken = "12TrYu";
-	String requestDeviceId = "samwek-device";
-	
-	
-	@Test
-	public void registerDevicewithValidParameters() throws Exception {
-		ObjectMapper objectMapper = new ObjectMapper();
-        String email = "samwekshakya65@gmail.com";
-        Map<String, Object> credentials = new HashMap<>();
-        credentials.put("email", email);
+	String secretKey = "98f330286a4273faeae9a3ae95a524e84bb532bd2607f00a0cdd3d0d5913217d";
+    String token = "wcBrBjgLpKRp36bDkMs9mKmQd5msEuJY1dB-Gijn6jc";
+    String email = "vivek@moco.com.np";
+    String requestTimestamp = signatureCreate.generateTimestamp();
+   // String plain_pin = "123654";
+    String plain_otp = "375586";
+    String requestdevice = "vivek-device";
+    String pushToken = "abcdefg:7^";
+    int deviceScreenWidth = 325;
+    int deviceScreenHeight = 485;
+    int deviceColorDepth = 6;
+    String deviceModel = "CPH256";
 
-        Map<String, Object> jsonBody = new LinkedHashMap<>();
-        jsonBody.put("credentials", credentials);
-        jsonBody.put("requestTimestamp",signatureCreate.generateTimestamp());
-        jsonBody.put("otp", Otp);
-        jsonBody.put("token", Token);
-        jsonBody.put("pushToken",pushToken);
+    @Test
+    public void verifydeviceOtpwithoutDeviceId() throws Exception {
+    	ObjectMapper objectMapper = new ObjectMapper();
+        //String requestdevice = "3efe6bbeb55f4411";
         
-        // Generate signature
+        Map<String, Object> jsonBody = new HashMap<>();
+        jsonBody.put("email", email);
+        jsonBody.put("requestTimestamp", requestTimestamp);
+       
+        //encryption with AES256 algorithm0
+        String otp = signatureCreate.encryptAES256(plain_otp, secretKey);
+        jsonBody.put("otp", otp);
+        
+        
+        jsonBody.put("pushToken",pushToken);
+        jsonBody.put("deviceModel", deviceModel);
+        jsonBody.put("deviceColorDepth", deviceColorDepth);
+        jsonBody.put("deviceScreenHeight", deviceScreenHeight);
+        jsonBody.put("deviceScreenWidth", deviceScreenWidth);
+        
+        //placing token from device API
+        jsonBody.put("token", token);
+        
+
+     // Generate signature
         String data = objectMapper.writeValueAsString(jsonBody);
         String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
-        
+
      // Add signature
         jsonBody.put("signature", requestSignature);
-
+        
         System.out.println(jsonBody);
+
         Response response = given()
                 .baseUri(baseURI)
                 .header("X-GEO-Location", "12,12")
-                .header("X-Device-Id",requestDeviceId)
+                .header("X-Device-Id", "")
                 .header("User-Agent", "NepalTravelApp/1.0.0 android")
                 .contentType("application/json")
                 .body(jsonBody)
             .when()
                 .post("/device/otp/verify")
             .then()
-                .statusCode(200)
+                .statusCode(400)
                 .log().all()
                 .extract().response();
         
 
-        // Assertions
+        // Extracting and asserting response values
         String code = response.jsonPath().getString("code");
         String description = response.jsonPath().getString("description");
-        String responseSignature = response.jsonPath().getString("signature");
-
-        assertNotNull(responseSignature, "Signature is missing");
-        assertNotNull(description, "Description is missing from the response");
-        assertNotNull(code, "Code is missing");
-
-        assertFalse(responseSignature.isEmpty(), "Signature is empty");
-        assertFalse(description.isEmpty(), "Description is empty");
-        assertFalse(code.isEmpty(), "Code is empty");
+        // check if it is null
+        assertNotNull(code, "code is missing");
+        assertNotNull(description, "description is missing from the response");
         
-        assertEquals(code,"GNR_OK");
-        assertEquals(description,"OTP Verified and device registered successfully");     
-	}
-//	
-//	@Test
-//	public void registerDevicewithoutLocation() throws Exception {
-//		ObjectMapper objectMapper = new ObjectMapper();
-//        String email = "vivek@moco.com.np";
-//        Map<String, Object> credentials = new HashMap<>();
-//        credentials.put("email", email);
-//
-//        Map<String, Object> jsonBody = new LinkedHashMap<>();
-//        jsonBody.put("credentials", credentials);
-//        jsonBody.put("requestTimestamp",signatureCreate.generateTimestamp());
-//        jsonBody.put("otp",Otp);
-//        jsonBody.put("token", Token);jsonBody.put("pushToken",pushToken);
-//        
-//        // Generate signature
-//        String data = objectMapper.writeValueAsString(jsonBody);
-//        String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
-//        
-//     // Add signature
-//        jsonBody.put("signature", requestSignature);
-//        
-//        Response response = given()
-//                .baseUri(baseURI)
-//                .header("X-GEO-Location", "")
-//                .header("X-Device-Id",requestDeviceId)
-//                .header("User-Agent", "NepalTravelApp/1.0.0 android")
-//                .contentType("application/json")
-//                .body(jsonBody)
-//            .when()
-//                .post("/device/otp/verify")
-//            .then()
-//                .statusCode(400)
-//                .log().all()
-//                .extract().response();
-//        
-//        String code = response.jsonPath().getString("code");
-//        String description = response.jsonPath().getString("description");
-//        //String signature = response.jsonPath().getString("signature");
-//        
-//        assertNotNull(code, "code is missing from the response");
-//        assertFalse(code.isEmpty(), "code is empty in the response");
-//        assertNotNull(description, "description is missing from the response");
-//        assertFalse(description.isEmpty(), "description is empty in the response");
-//       
-//        
-//        assertEquals(code,"GNR_PARAM_MISSING");
-//        assertEquals(description,"Bad Request.");
-//	}
-//	
-//	@Test
-//	public void registerDevicewithoutDevice() throws Exception {
-//		ObjectMapper objectMapper = new ObjectMapper();
-//        String email = "vivek@moco.com.np";
-//        Map<String, Object> credentials = new HashMap<>();
-//        credentials.put("email", email);
-//
-//        Map<String, Object> jsonBody = new LinkedHashMap<>();
-//        jsonBody.put("credentials", credentials);
-//        jsonBody.put("requestTimestamp",signatureCreate.generateTimestamp());
-//        jsonBody.put("otp",Otp);
-//        jsonBody.put("token", Token);jsonBody.put("pushToken",pushToken);
-//        
-//        // Generate signature
-//        String data = objectMapper.writeValueAsString(jsonBody);
-//        String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
-//        
-//     // Add signature
-//        jsonBody.put("signature", requestSignature);
-//        
-//        Response response = given()
-//                .baseUri(baseURI)
-//                .header("X-GEO-Location", "12,12")
-//                .header("X-Device-Id","")
-//                .header("User-Agent", "NepalTravelApp/1.0.0 android")
-//                .contentType("application/json")
-//                .body(jsonBody)
-//            .when()
-//                .post("/device/otp/verify")
-//            .then()
-//                .statusCode(400)
-//                .log().all()
-//                .extract().response();
-//        
-//        String code = response.jsonPath().getString("code");
-//        String description = response.jsonPath().getString("description");
-//        //String signature = response.jsonPath().getString("signature");
-//        
-//        assertNotNull(code, "code is missing from the response");
-//        assertFalse(code.isEmpty(), "code is empty in the response");
-//        assertNotNull(description, "description is missing from the response");
-//        assertFalse(description.isEmpty(), "description is empty in the response");
-//       
-//        
-//        assertEquals(code,"GNR_PARAM_MISSING");
-//        assertEquals(description,"Bad Request.");
-//	}
-//    @Test
-//    public void registerDevicewithoutUserAgent() throws Exception {
-//    	ObjectMapper objectMapper = new ObjectMapper();
-//        String email = "vivek@moco.com.np";
-//        Map<String, Object> credentials = new HashMap<>();
-//        credentials.put("email", email);
-//
-//        Map<String, Object> jsonBody = new LinkedHashMap<>();
-//        jsonBody.put("credentials", credentials);
-//        jsonBody.put("requestTimestamp",signatureCreate.generateTimestamp());
-//        jsonBody.put("otp",Otp);
-//        jsonBody.put("token", Token);jsonBody.put("pushToken",pushToken);
-//        
-//        // Generate signature
-//        String data = objectMapper.writeValueAsString(jsonBody);
-//        String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
-//        
-//     // Add signature
-//        jsonBody.put("signature", requestSignature);
-//        
-//        Response response = given()
-//                .baseUri(baseURI)
-//                .header("X-GEO-Location", "12,12")
-//                .header("X-Device-Id",requestDeviceId)
-//                .header("User-Agent", "")
-//                .contentType("application/json")
-//                .body(jsonBody)
-//            .when()
-//                .post("/device/otp/verify")
-//            .then()
-//                .statusCode(400)
-//                .log().all()
-//                .extract().response();
-//        String code = response.jsonPath().getString("code");
-//        String description = response.jsonPath().getString("description");
-//        //String signature = response.jsonPath().getString("signature");
-//        
-//        assertNotNull(code, "code is missing from the response");
-//        assertFalse(code.isEmpty(), "code is empty in the response");
-//        assertNotNull(description, "description is missing from the response");
-//        assertFalse(description.isEmpty(), "description is empty in the response");
-//       
-//        
-//        assertEquals(code,"GNR_PARAM_MISSING");
-//        assertEquals(description,"Bad Request.");
-//    }
-//    
-//    @Test
-//    public void registerDevicewithInvalidLocation() throws Exception {
-//    	ObjectMapper objectMapper = new ObjectMapper();
-//        String email = "vivek@moco.com.np";
-//        Map<String, Object> credentials = new HashMap<>();
-//        credentials.put("email", email);
-//
-//        Map<String, Object> jsonBody = new LinkedHashMap<>();
-//        jsonBody.put("credentials", credentials);
-//        jsonBody.put("requestTimestamp",signatureCreate.generateTimestamp());
-//        jsonBody.put("otp",Otp);
-//        jsonBody.put("token", Token);jsonBody.put("pushToken",pushToken);
-//        
-//        // Generate signature
-//        String data = objectMapper.writeValueAsString(jsonBody);
-//        String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
-//        
-//     // Add signature
-//        jsonBody.put("signature", requestSignature);
-//        
-//        Response response = given()
-//                .baseUri(baseURI)
-//                .header("X-GEO-Location", "12@12")
-//                .header("X-Device-Id","moco-travel-app")
-//                .header("User-Agent", "NepalTravelApp/1.0.0 android")
-//                .contentType("application/json")
-//                .body(jsonBody)
-//            .when()
-//                .post("/device/otp/verify")
-//            .then()
-//                .statusCode(422)
-//                .log().all()
-//                .extract().response();
-//        
-//        String code = response.jsonPath().getString("code");
-//        String description = response.jsonPath().getString("description");
-//        //String signature = response.jsonPath().getString("signature");
-//        
-//        assertNotNull(code, "code is missing from the response");
-//        assertFalse(code.isEmpty(), "code is empty in the response");
-//        assertNotNull(description, "description is missing from the response");
-//        assertFalse(description.isEmpty(), "description is empty in the response");
-//       
-//        
-//        assertEquals(code,"GNR_INVALID_DATA");
-//        assertEquals(description,"Invalid Geo location found.");
-//    }
-//    @Test
-//    public void registerDevicewithInvalidDevice() throws Exception {
-//    	ObjectMapper objectMapper = new ObjectMapper();
-//        String email = "vivek@moco.com.np";
-//        Map<String, Object> credentials = new HashMap<>();
-//        credentials.put("email", email);
-//
-//        Map<String, Object> jsonBody = new LinkedHashMap<>();
-//        jsonBody.put("credentials", credentials);
-//        jsonBody.put("requestTimestamp",signatureCreate.generateTimestamp());
-//        jsonBody.put("otp",Otp);
-//        jsonBody.put("token", Token);jsonBody.put("pushToken",pushToken);
-//        
-//        // Generate signature
-//        String data = objectMapper.writeValueAsString(jsonBody);
-//        String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
-//        
-//     // Add signature
-//        jsonBody.put("signature", requestSignature);
-//        
-//        Response response = given()
-//                .baseUri(baseURI)
-//                .header("X-GEO-Location", "12,12")
-//                .header("X-Device-Id","$$")
-//                .header("User-Agent", "NepalTravelApp/1.0.0 android")
-//                .contentType("application/json")
-//                .body(jsonBody)
-//            .when()
-//                .post("/device/otp/verify")
-//            .then()
-//                .statusCode(422)
-//                .log().all()
-//                .extract().response();
-//        
-//        String code = response.jsonPath().getString("code");
-//        String description = response.jsonPath().getString("description");
-//        
-//        assertNotNull(code, "code is missing from the response");
-//        assertFalse(code.isEmpty(), "code is empty in the response");
-//        assertNotNull(description, "description is missing from the response");
-//        assertFalse(description.isEmpty(), "description is empty in the response");
-//       
-//        
-//        assertEquals(code,"GNR_INVALID_DATA");
-//        assertEquals(description,"Invalid device Id found.");
-//    }
-//    
-//    @Test
-//    public void registerDevicewithInvalidUserAgent() throws Exception {
-//    	ObjectMapper objectMapper = new ObjectMapper();
-//        String email = "vivek@moco.com.np";
-//        Map<String, Object> credentials = new HashMap<>();
-//        credentials.put("email", email);
-//
-//        Map<String, Object> jsonBody = new LinkedHashMap<>();
-//        jsonBody.put("credentials", credentials);
-//        jsonBody.put("requestTimestamp",signatureCreate.generateTimestamp());
-//        jsonBody.put("otp",Otp);
-//        jsonBody.put("token", Token);jsonBody.put("pushToken",pushToken);
-//        
-//        // Generate signature
-//        String data = objectMapper.writeValueAsString(jsonBody);
-//        String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
-//        
-//     // Add signature
-//        jsonBody.put("signature", requestSignature);
-//        
-//        Response response = given()
-//                .baseUri(baseURI)
-//                .header("X-GEO-Location", "12,12")
-//                .header("X-Device-Id",requestDeviceId)
-//                .header("User-Agent", "NepalTravelA.0.0 android")
-//                .contentType("application/json")
-//                .body(jsonBody)
-//            .when()
-//                .post("/device/otp/verify")
-//            .then()
-//                .statusCode(422)
-//                .log().all()
-//                .extract().response();
-//        
-//        String code = response.jsonPath().getString("code");
-//        String description = response.jsonPath().getString("description");
-//        
-//        assertNotNull(code, "code is missing from the response");
-//        assertFalse(code.isEmpty(), "code is empty in the response");
-//        assertNotNull(description, "description is missing from the response");
-//        assertFalse(description.isEmpty(), "description is empty in the response");
-//       
-//        
-//        assertEquals(code,"GNR_INVALID_DATA");
-//        assertEquals(description,"Invalid user agent found.");
-//    }
-//    
-//    @Test
-//    public void registerDevicewithInvalidEmailFormat() throws Exception {
-//    	ObjectMapper objectMapper = new ObjectMapper();
-//        String email = "vivekmoco.com.np";
-//        Map<String, Object> credentials = new HashMap<>();
-//        credentials.put("email", email);
-//
-//        Map<String, Object> jsonBody = new LinkedHashMap<>();
-//        jsonBody.put("credentials", credentials);
-//        jsonBody.put("requestTimestamp",signatureCreate.generateTimestamp());
-//        jsonBody.put("otp",Otp);
-//        jsonBody.put("token", Token);jsonBody.put("pushToken",pushToken);
-//        
-//        // Generate signature
-//        String data = objectMapper.writeValueAsString(jsonBody);
-//        String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
-//        
-//     // Add signature
-//        jsonBody.put("signature", requestSignature);
-//        
-//        Response response = given()
-//                .baseUri(baseURI)
-//                .header("X-GEO-Location", "12,12")
-//                .header("X-Device-Id","moco-travel-app")
-//                .header("User-Agent", "NepalTravelApp/1.0.0 android")
-//                .contentType("application/json")
-//                .body(jsonBody)
-//            .when()
-//                .post("/device/otp/verify")
-//            .then()
-//                .statusCode(422)
-//                .log().all()
-//                .extract().response();
-//        String code = response.jsonPath().getString("code");
-//        String description = response.jsonPath().getString("description");
-//        
-//        assertNotNull(code, "code is missing from the response");
-//        assertFalse(code.isEmpty(), "code is empty in the response");
-//        assertNotNull(description, "description is missing from the response");
-//        assertFalse(description.isEmpty(), "description is empty in the response");
-//       
-//        
-//        assertEquals(code,"GNR_INVALID_DATA");
-//        assertEquals(description,"Invalid Data.");
-//    }
-//    
-//    @Test
-//    public void registerDevicewithoutEmail() throws Exception {
-//    	ObjectMapper objectMapper = new ObjectMapper();
-//        String email = "vivek@moco.com.np";
-//        Map<String, Object> credentials = new HashMap<>();
-//        credentials.put("email", "");
-//
-//        Map<String, Object> jsonBody = new LinkedHashMap<>();
-//        jsonBody.put("credentials", credentials);
-//        jsonBody.put("requestTimestamp",signatureCreate.generateTimestamp());
-//        jsonBody.put("otp",Otp);
-//        jsonBody.put("token", Token);jsonBody.put("pushToken",pushToken);
-//        
-//        // Generate signature
-//        String data = objectMapper.writeValueAsString(jsonBody);
-//        String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
-//        
-//     // Add signature
-//        jsonBody.put("signature", requestSignature);
-//        
-//        Response response = given()
-//                .baseUri(baseURI)
-//                .header("X-GEO-Location", "12,12")
-//                .header("X-Device-Id",requestDeviceId)
-//                .header("User-Agent", "NepalTravelApp/1.0.0 android")
-//                .contentType("application/json")
-//                .body(jsonBody)
-//            .when()
-//                .post("/device/otp/verify")
-//            .then()
-//                .statusCode(400)
-//                .log().all()
-//                .extract().response();
-//        
-//        String code = response.jsonPath().getString("code");
-//        String description = response.jsonPath().getString("description");
-//        //String signature = response.jsonPath().getString("signature");
-//        
-//        assertNotNull(code, "code is missing from the response");
-//        assertFalse(code.isEmpty(), "code is empty in the response");
-//        assertNotNull(description, "description is missing from the response");
-//        assertFalse(description.isEmpty(), "description is empty in the response");
-//       
-//        
-//        assertEquals(code,"GNR_PARAM_MISSING");
-//        assertEquals(description,"Bad Request.");
-//    }
-//    @Test
-//    public void registerDevicewithnewEmail() throws Exception {
-//    	ObjectMapper objectMapper = new ObjectMapper();
-//        String email = "vivek@moco.com.np";
-//        Map<String, Object> credentials = new HashMap<>();
-//        credentials.put("email", email);
-//
-//        Map<String, Object> jsonBody = new LinkedHashMap<>();
-//        jsonBody.put("credentials", credentials);
-//        jsonBody.put("requestTimestamp",signatureCreate.generateTimestamp());
-//        jsonBody.put("otp",Otp);
-//        jsonBody.put("token", Token);jsonBody.put("pushToken",pushToken);
-//        
-//        // Generate signature
-//        String data = objectMapper.writeValueAsString(jsonBody);
-//        String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
-//        
-//     // Add signature
-//        jsonBody.put("signature", requestSignature);
-//        
-//        Response response = given()
-//                .baseUri(baseURI)
-//                .header("X-GEO-Location", "12,12")
-//                .header("X-Device-Id",requestDeviceId)
-//                .header("User-Agent", "NepalTravelApp/1.0.0 android")
-//                .contentType("application/json")
-//                .body(jsonBody)
-//            .when()
-//                .post("/device/otp/verify")
-//            .then()
-//                .statusCode(200)
-//                .log().all()
-//                .extract().response();
-//    }
-//    @Test
-//    public void registerDevicewithInvalidRequestTimestamp() throws Exception {
-//    	ObjectMapper objectMapper = new ObjectMapper();
-//        String email = "vivek@moco.com.np";
-//        Map<String, Object> credentials = new HashMap<>();
-//        credentials.put("email", email);
-//
-//        Map<String, Object> jsonBody = new LinkedHashMap<>();
-//        jsonBody.put("credentials", credentials);
-//        jsonBody.put("requestTimestamp",signatureCreate.generateTimestamp());
-//        jsonBody.put("otp",Otp);
-//        jsonBody.put("token", Token);jsonBody.put("pushToken",pushToken);
-//        
-//        // Generate signature
-//        String data = objectMapper.writeValueAsString(jsonBody);
-//        String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
-//        
-//     // Add signature
-//        jsonBody.put("signature", requestSignature);
-//        
-//        Response response = given()
-//                .baseUri(baseURI)
-//                .header("X-GEO-Location", "12,12")
-//                .header("X-Device-Id",requestDeviceId)
-//                .header("User-Agent", "NepalTravelApp/1.0.0 android")
-//                .contentType("application/json")
-//                .body(jsonBody)
-//            .when()
-//                .post("/device/otp/verify")
-//            .then()
-//                .statusCode(409)
-//                .log().all()
-//                .extract().response();
-//    }
-//    @Test
-//    public void registerDevicewithoutRequestTimestamp() throws Exception {
-//    	ObjectMapper objectMapper = new ObjectMapper();
-//        String email = "vivek@moco.com.np";
-//        Map<String, Object> credentials = new HashMap<>();
-//        credentials.put("email", email);
-//
-//        Map<String, Object> jsonBody = new LinkedHashMap<>();
-//        jsonBody.put("credentials", credentials);
-//        jsonBody.put("requestTimestamp","");
-//        jsonBody.put("otp",Otp);
-//        jsonBody.put("token", Token);jsonBody.put("pushToken",pushToken);
-//        
-//        // Generate signature
-//        String data = objectMapper.writeValueAsString(jsonBody);
-//        String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
-//        
-//     // Add signature
-//        jsonBody.put("signature", requestSignature);
-//        
-//        Response response = given()
-//                .baseUri(baseURI)
-//                .header("X-GEO-Location", "12,12")
-//                .header("X-Device-Id",requestDeviceId)
-//                .header("User-Agent", "NepalTravelApp/1.0.0 android")
-//                .contentType("application/json")
-//                .body(jsonBody)
-//            .when()
-//                .post("/device/otp/verify")
-//            .then()
-//                .statusCode(400)
-//                .log().all()
-//                .extract().response();
-//        
-//        String code = response.jsonPath().getString("code");
-//        String description = response.jsonPath().getString("description");
-//        //String signature = response.jsonPath().getString("signature");
-//        
-//        assertNotNull(code, "code is missing from the response");
-//        assertFalse(code.isEmpty(), "code is empty in the response");
-//        assertNotNull(description, "description is missing from the response");
-//        assertFalse(description.isEmpty(), "description is empty in the response");
-//       
-//        
-//        assertEquals(code,"GNR_PARAM_MISSING");
-//        assertEquals(description,"Bad Request.");
-//    }
-//    @Test
-//    public void registerDevicewithoutOtp() throws Exception {
-//    	ObjectMapper objectMapper = new ObjectMapper();
-//        String email = "vivek@moco.com.np";
-//        Map<String, Object> credentials = new HashMap<>();
-//        credentials.put("email", email);
-//
-//        Map<String, Object> jsonBody = new LinkedHashMap<>();
-//        jsonBody.put("credentials", credentials);
-//        jsonBody.put("requestTimestamp",signatureCreate.generateTimestamp());
-//        jsonBody.put("otp","");
-//        jsonBody.put("token", Token);jsonBody.put("pushToken",pushToken);
-//        
-//        // Generate signature
-//        String data = objectMapper.writeValueAsString(jsonBody);
-//        String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
-//        
-//     // Add signature
-//        jsonBody.put("signature", requestSignature);
-//        
-//        Response response = given()
-//                .baseUri(baseURI)
-//                .header("X-GEO-Location", "12,12")
-//                .header("X-Device-Id",requestDeviceId)
-//                .header("User-Agent", "NepalTravelApp/1.0.0 android")
-//                .contentType("application/json")
-//                .body(jsonBody)
-//            .when()
-//                .post("/device/otp/verify")
-//            .then()
-//                .statusCode(400)
-//                .log().all()
-//                .extract().response();
-//        
-//        String code = response.jsonPath().getString("code");
-//        String description = response.jsonPath().getString("description");
-//        //String signature = response.jsonPath().getString("signature");
-//        
-//        assertNotNull(code, "code is missing from the response");
-//        assertFalse(code.isEmpty(), "code is empty in the response");
-//        assertNotNull(description, "description is missing from the response");
-//        assertFalse(description.isEmpty(), "description is empty in the response");
-//       
-//        
-//        assertEquals(code,"GNR_PARAM_MISSING");
-//        assertEquals(description,"Bad Request.");
-//    }
-//    @Test
-//    public void registerDevicewithexpiredOtp() throws Exception {
-//    	ObjectMapper objectMapper = new ObjectMapper();
-//        String email = "vivek@moco.com.np";
-//        Map<String, Object> credentials = new HashMap<>();
-//        credentials.put("email", email);
-//
-//        Map<String, Object> jsonBody = new LinkedHashMap<>();
-//        jsonBody.put("credentials", credentials);
-//        jsonBody.put("requestTimestamp",signatureCreate.generateTimestamp());
-//        jsonBody.put("otp",Otp);
-//        jsonBody.put("token", Token);jsonBody.put("pushToken",pushToken);
-//        
-//        // Generate signature
-//        String data = objectMapper.writeValueAsString(jsonBody);
-//        String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
-//        
-//     // Add signature
-//        jsonBody.put("signature", requestSignature);
-//        
-//        Response response = given()
-//                .baseUri(baseURI)
-//                .header("X-GEO-Location", "12,12")
-//                .header("X-Device-Id",requestDeviceId)
-//                .header("User-Agent", "NepalTravelApp/1.0.0 android")
-//                .contentType("application/json")
-//                .body(jsonBody)
-//            .when()
-//                .post("/device/otp/verify")
-//            .then()
-//                .statusCode(200)
-//                .log().all()
-//                .extract().response();
-//        
-//        String code = response.jsonPath().getString("code");
-//        String description = response.jsonPath().getString("description");
-//        String status = response.jsonPath().getString("status");
-//        
-//        assertNotNull(code, "code is missing from the response");
-//        assertFalse(code.isEmpty(), "code is empty in the response");
-//        assertNotNull(description, "description is missing from the response");
-//        assertFalse(description.isEmpty(), "description is empty in the response");
-//       
-//        
-//        assertEquals(code,"VST_DEVICE_OTP_FAILED");
-//        assertEquals(description,"New device register failed due to invalid OTP.");
-//        assertEquals(status,"EXPIRED");
-//    }
-//    @Test
-//    public void registerDevicewithincorrectOtp() throws Exception {
-//    	ObjectMapper objectMapper = new ObjectMapper();
-//        String email = "vivek@moco.com.np";
-//        Map<String, Object> credentials = new HashMap<>();
-//        credentials.put("email", email);
-//
-//        Map<String, Object> jsonBody = new LinkedHashMap<>();
-//        jsonBody.put("credentials", credentials);
-//        jsonBody.put("requestTimestamp",signatureCreate.generateTimestamp());
-//        jsonBody.put("otp","1ll");
-//        jsonBody.put("token", Token);jsonBody.put("pushToken",pushToken);
-//        
-//        // Generate signature
-//        String data = objectMapper.writeValueAsString(jsonBody);
-//        String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
-//        
-//     // Add signature
-//        jsonBody.put("signature", requestSignature);
-//        
-//        Response response = given()
-//                .baseUri(baseURI)
-//                .header("X-GEO-Location", "12,12")
-//                .header("X-Device-Id",requestDeviceId)
-//                .header("User-Agent", "NepalTravelApp/1.0.0 android")
-//                .contentType("application/json")
-//                .body(jsonBody)
-//            .when()
-//                .post("/device/otp/verify")
-//            .then()
-//                .statusCode(409)
-//                .log().all()
-//                .extract().response();
-//        
-//        String code = response.jsonPath().getString("code");
-//      String description = response.jsonPath().getString("description");
-//    String status = response.jsonPath().getString("status");
-//      
-//      assertNotNull(code, "code is missing from the response");
-//      assertFalse(code.isEmpty(), "code is empty in the response");
-//      assertNotNull(description, "description is missing from the response");
-//      assertFalse(description.isEmpty(), "description is empty in the response");
-//     
-//      
-//      assertEquals(code,"VST_DEVICE_OTP_FAILED");
-//      assertEquals(description,"New device register failed due to invalid OTP.");
-//      assertEquals(status,"FAIL");
-//    }
-//    @Test
-//    public void registerDevicewithInvalidOtp() throws Exception {
-//    	ObjectMapper objectMapper = new ObjectMapper();
-//        String email = "vivek@moco.com.np";
-//        Map<String, Object> credentials = new HashMap<>();
-//        credentials.put("email", email);
-//
-//        Map<String, Object> jsonBody = new LinkedHashMap<>();
-//        jsonBody.put("credentials", credentials);
-//        jsonBody.put("requestTimestamp",signatureCreate.generateTimestamp());
-//        jsonBody.put("otp","112525");
-//        jsonBody.put("token", Token);jsonBody.put("pushToken",pushToken);
-//        
-//        // Generate signature
-//        String data = objectMapper.writeValueAsString(jsonBody);
-//        String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
-//        
-//     // Add signature
-//        jsonBody.put("signature", requestSignature);
-//        
-//        Response response = given()
-//                .baseUri(baseURI)
-//                .header("X-GEO-Location", "12,12")
-//                .header("X-Device-Id",requestDeviceId)
-//                .header("User-Agent", "NepalTravelApp/1.0.0 android")
-//                .contentType("application/json")
-//                .body(jsonBody)
-//            .when()
-//                .post("/device/otp/verify")
-//            .then()
-//                .statusCode(409)
-//                .log().all()
-//                .extract().response();
-//        
-//        String code = response.jsonPath().getString("code");
-//        String description = response.jsonPath().getString("description");
-//        //String signature = response.jsonPath().getString("signature");
-//        
-//        assertNotNull(code, "code is missing from the response");
-//        assertFalse(code.isEmpty(), "code is empty in the response");
-//        assertNotNull(description, "description is missing from the response");
-//        assertFalse(description.isEmpty(), "description is empty in the response");
-//       
-//        
-//        assertEquals(code,"VST_DEVICE_OTP_FAILED");
-//        assertEquals(description,"New device register failed due to invalid OTP.");
-//    }
-//    @Test
-//    public void registerDevicewithIncorrectToken() throws Exception {
-//    	ObjectMapper objectMapper = new ObjectMapper();
-//        String email = "vivek@moco.com.np";
-//        Map<String, Object> credentials = new HashMap<>();
-//        credentials.put("email", email);
-//
-//        Map<String, Object> jsonBody = new LinkedHashMap<>();
-//        jsonBody.put("credentials", credentials);
-//        jsonBody.put("requestTimestamp",signatureCreate.generateTimestamp());
-//        jsonBody.put("otp","398837");
-//        jsonBody.put("token", "aa");
-//        
-//        // Generate signature
-//        String data = objectMapper.writeValueAsString(jsonBody);
-//        String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
-//        
-//     // Add signature
-//        jsonBody.put("signature", requestSignature);
-//        
-//        Response response = given()
-//                .baseUri(baseURI)
-//                .header("X-GEO-Location", "12,12")
-//                .header("X-Device-Id",requestDeviceId)
-//                .header("User-Agent", "NepalTravelApp/1.0.0 android")
-//                .contentType("application/json")
-//                .body(jsonBody)
-//            .when()
-//                .post("/device/otp/verify")
-//            .then()
-//                .statusCode(409)
-//                .log().all()
-//                .extract().response();
-//        
-//        String code = response.jsonPath().getString("code");
-//        String description = response.jsonPath().getString("description");
-//        //String signature = response.jsonPath().getString("signature");
-//        
-//        assertNotNull(code, "code is missing from the response");
-//        assertFalse(code.isEmpty(), "code is empty in the response");
-//        assertNotNull(description, "description is missing from the response");
-//        assertFalse(description.isEmpty(), "description is empty in the response");
-//       
-//        
-//        assertEquals(code,"VST_DEVICE_VERIFICATION_DUPLICATE");
-//        assertEquals(description,"New device register failed due to invalid OTP.");
-//    }
-//    
-//    @Test
-//    public void registerDevicewithoutToken() throws Exception {
-//    	ObjectMapper objectMapper = new ObjectMapper();
-//        String email = "vivek@moco.com.np";
-//        Map<String, Object> credentials = new HashMap<>();
-//        credentials.put("email", email);
-//
-//        Map<String, Object> jsonBody = new LinkedHashMap<>();
-//        jsonBody.put("credentials", credentials);
-//        jsonBody.put("requestTimestamp",signatureCreate.generateTimestamp());
-//        jsonBody.put("otp",Otp);
-//        jsonBody.put("token", "");
-//        
-//        // Generate signature
-//        String data = objectMapper.writeValueAsString(jsonBody);
-//        String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
-//        
-//     // Add signature
-//        jsonBody.put("signature", requestSignature);
-//        
-//        Response response = given()
-//                .baseUri(baseURI)
-//                .header("X-GEO-Location", "12,12")
-//                .header("X-Device-Id",requestDeviceId)
-//                .header("User-Agent", "NepalTravelApp/1.0.0 android")
-//                .contentType("application/json")
-//                .body(jsonBody)
-//            .when()
-//                .post("/device/otp/verify")
-//            .then()
-//                .statusCode(400)
-//                .log().all()
-//                .extract().response();
-//        
-//        String code = response.jsonPath().getString("code");
-//        String description = response.jsonPath().getString("description");
-//        //String signature = response.jsonPath().getString("signature");
-//        
-//        assertNotNull(code, "code is missing from the response");
-//        assertFalse(code.isEmpty(), "code is empty in the response");
-//        assertNotNull(description, "description is missing from the response");
-//        assertFalse(description.isEmpty(), "description is empty in the response");
-//       
-//        
-//        assertEquals(code,"GNR_PARAM_MISSING");
-//        assertEquals(description,"Bad Request.");
-//    }
-//    @Test
-//    public void registerDevicewithoutSignature() throws Exception {
-//    	//ObjectMapper objectMapper = new ObjectMapper();
-//        String email = "vivek@moco.com.np";
-//        Map<String, Object> credentials = new HashMap<>();
-//        credentials.put("email", email);
-//
-//        Map<String, Object> jsonBody = new LinkedHashMap<>();
-//        jsonBody.put("credentials", credentials);
-//        jsonBody.put("requestTimestamp",signatureCreate.generateTimestamp());
-//        jsonBody.put("otp",Otp);
-//        jsonBody.put("token", Token);jsonBody.put("pushToken",pushToken);
-//        
-//        // Generate signature
-//       // String data = objectMapper.writeValueAsString(jsonBody);
-//       // String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
-//        
-//     // Add signature
-//        jsonBody.put("signature", "");
-//        
-//        Response response = given()
-//                .baseUri(baseURI)
-//                .header("X-GEO-Location", "12,12")
-//                .header("X-Device-Id",requestDeviceId)
-//                .header("User-Agent", "NepalTravelApp/1.0.0 android")
-//                .contentType("application/json")
-//                .body(jsonBody)
-//            .when()
-//                .post("/device/otp/verify")
-//            .then()
-//                .statusCode(400)
-//                .log().all()
-//                .extract().response();
-//        String code = response.jsonPath().getString("code");
-//        String description = response.jsonPath().getString("description");
-//        //String signature = response.jsonPath().getString("signature");
-//        
-//        assertNotNull(code, "code is missing from the response");
-//        assertFalse(code.isEmpty(), "code is empty in the response");
-//        assertNotNull(description, "description is missing from the response");
-//        assertFalse(description.isEmpty(), "description is empty in the response");
-//       
-//        
-//        assertEquals(code,"GNR_PARAM_MISSING");
-//        assertEquals(description,"Bad Request.");
-//    }
-//    @Test
-//    public void registerDevicewithInvalidSignature() throws Exception {
-//    	ObjectMapper objectMapper = new ObjectMapper();
-//        String email = "vivek@moco.com.np";
-//        Map<String, Object> credentials = new HashMap<>();
-//        credentials.put("email", email);
-//
-//        Map<String, Object> jsonBody = new LinkedHashMap<>();
-//        jsonBody.put("credentials", credentials);
-//        jsonBody.put("requestTimestamp",signatureCreate.generateTimestamp());
-//        jsonBody.put("otp",Otp);
-//        jsonBody.put("token", Token);jsonBody.put("pushToken",pushToken);
-//        
-//        // Generate signature
-//        String data = objectMapper.writeValueAsString(jsonBody);
-//        String requestSignature = signatureCreate.generateHMACSHA256(data,"kk");
-//        
-//     // Add signature
-//        jsonBody.put("signature", requestSignature);
-//        
-//        Response response = given()
-//                .baseUri(baseURI)
-//                .header("X-GEO-Location", "12,12")
-//                .header("X-Device-Id",requestDeviceId)
-//                .header("User-Agent", "NepalTravelApp/1.0.0 android")
-//                .contentType("application/json")
-//                .body(jsonBody)
-//            .when()
-//                .post("/device/otp/verify")
-//            .then()
-//                .statusCode(401)
-//                .log().all()
-//                .extract().response();
-//        
-//        String code = response.jsonPath().getString("code");
-//        String description = response.jsonPath().getString("description");
-//        //String signature = response.jsonPath().getString("signature");
-//        
-//        assertNotNull(code, "code is missing from the response");
-//        assertFalse(code.isEmpty(), "code is empty in the response");
-//        assertNotNull(description, "description is missing from the response");
-//        assertFalse(description.isEmpty(), "description is empty in the response");
-//       
-//        
-//        assertEquals(code,"GNR_AUTHENTICATION_FAIL");
-//        assertEquals(description,"Authentication failed.");
-//    }
-//    @Test
-//    public void registerDevicewithExistingDevice() throws Exception {
-//    	ObjectMapper objectMapper = new ObjectMapper();
-//        String email = "vivek@moco.com.np";
-//        Map<String, Object> credentials = new HashMap<>();
-//        credentials.put("email", email);
-//
-//        Map<String, Object> jsonBody = new LinkedHashMap<>();
-//        jsonBody.put("credentials", credentials);
-//        jsonBody.put("requestTimestamp",signatureCreate.generateTimestamp());
-//        jsonBody.put("otp",Otp);
-//        jsonBody.put("token", Token);jsonBody.put("pushToken",pushToken);
-//        
-//        // Generate signature
-//        String data = objectMapper.writeValueAsString(jsonBody);
-//        String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
-//        
-//     // Add signature
-//        jsonBody.put("signature", requestSignature);
-//        
-//        Response response = given()
-//                .baseUri(baseURI)
-//                .header("X-GEO-Location", "12,12")
-//                .header("X-Device-Id","sandesh-thapa-app")
-//                .header("User-Agent", "NepalTravelApp/1.0.0 android")
-//                .contentType("application/json")
-//                .body(jsonBody)
-//            .when()
-//                .post("/device/otp/verify")
-//            .then()
-//                .statusCode(409)
-//                .log().all()
-//                .extract().response();
-//        
-//        String code = response.jsonPath().getString("code");
-//        String description = response.jsonPath().getString("description");
-//        //String signature = response.jsonPath().getString("signature");
-//        
-//        assertNotNull(code, "code is missing from the response");
-//        assertFalse(code.isEmpty(), "code is empty in the response");
-//        assertNotNull(description, "description is missing from the response");
-//        assertFalse(description.isEmpty(), "description is empty in the response");
-//       
-//        
-//        assertEquals(code,"VST_DEVICE_VERIFICATION_DUPLICATE");
-//        assertEquals(description,"Device already exists.");
-//    }
-//    @Test
-//    public void registerDevicewithInactiveDevice() throws Exception {
-//    	ObjectMapper objectMapper = new ObjectMapper();
-//        String email = "vivek@moco.com.np";
-//        Map<String, Object> credentials = new HashMap<>();
-//        credentials.put("email", email);
-//
-//        Map<String, Object> jsonBody = new LinkedHashMap<>();
-//        jsonBody.put("credentials", credentials);
-//        jsonBody.put("requestTimestamp",signatureCreate.generateTimestamp());
-//        jsonBody.put("otp",Otp);
-//        jsonBody.put("token", Token);jsonBody.put("pushToken",pushToken);
-//        
-//        // Generate signature
-//        String data = objectMapper.writeValueAsString(jsonBody);
-//        String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
-//        
-//     // Add signature
-//        jsonBody.put("signature", requestSignature);
-//        
-//        Response response = given()
-//                .baseUri(baseURI)
-//                .header("X-GEO-Location", "12,12")
-//                .header("X-Device-Id","visitor-app-device")
-//                .header("User-Agent", "NepalTravelApp/1.0.0 android")
-//                .contentType("application/json")
-//                .body(jsonBody)
-//            .when()
-//                .post("/device/otp/verify")
-//            .then()
-//                .statusCode(409)
-//                .log().all()
-//                .extract().response();
-//        
-//        String code = response.jsonPath().getString("code");
-//        String description = response.jsonPath().getString("description");
-//        //String signature = response.jsonPath().getString("signature");
-//        
-//        assertNotNull(code, "code is missing from the response");
-//        assertFalse(code.isEmpty(), "code is empty in the response");
-//        assertNotNull(description, "description is missing from the response");
-//        assertFalse(description.isEmpty(), "description is empty in the response");
-//       
-//        
-//        assertEquals(code,"VST_DEVICE_VERIFICATION_DUPLICATE");
-//        assertEquals(description,"Device already exists.");
-//    }
-//    @Test
-//    public void registerDevicewithoutPushToken() throws Exception {
-//    	ObjectMapper objectMapper = new ObjectMapper();
-//        String email = "vivek@moco.com.np";
-//        Map<String, Object> credentials = new HashMap<>();
-//        credentials.put("email", email);
-//
-//        Map<String, Object> jsonBody = new LinkedHashMap<>();
-//        jsonBody.put("credentials", credentials);
-//        jsonBody.put("requestTimestamp",signatureCreate.generateTimestamp());
-//        jsonBody.put("otp",Otp);
-//        jsonBody.put("token", Token);jsonBody.put("pushToken","");
-//        
-//        // Generate signature
-//        String data = objectMapper.writeValueAsString(jsonBody);
-//        String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
-//        
-//     // Add signature
-//        jsonBody.put("signature", requestSignature);
-//        
-//        Response response = given()
-//                .baseUri(baseURI)
-//                .header("X-GEO-Location", "12,12")
-//                .header("X-Device-Id","visitor-app-device")
-//                .header("User-Agent", "NepalTravelApp/1.0.0 android")
-//                .contentType("application/json")
-//                .body(jsonBody)
-//            .when()
-//                .post("/device/otp/verify")
-//            .then()
-//                .statusCode(400)
-//                .log().all()
-//                .extract().response();
-//        
-//        String code = response.jsonPath().getString("code");
-//        String description = response.jsonPath().getString("description");
-//        //String signature = response.jsonPath().getString("signature");
-//        
-//        assertNotNull(code, "code is missing from the response");
-//        assertFalse(code.isEmpty(), "code is empty in the response");
-//        assertNotNull(description, "description is missing from the response");
-//        assertFalse(description.isEmpty(), "description is empty in the response");
-//       
-//        
-//        assertEquals(code,"GNR_PARAM_MISSING");
-//        assertEquals(description,"Bad Request.");
-//    }
+        //check if it is empty
+        assertFalse(code.isEmpty(), "code is empty");
+        assertFalse(description.isEmpty(), "description is empty");
+        
+        //assert code and description
+        assertEquals(code,"GNR_PARAM_MISSING");
+        assertEquals(description,"Bad Request.");
+    	
+    }
     
-	}
+    @Test
+    public void verifydeviceOtpwithoutLocation() throws Exception{
+    	ObjectMapper objectMapper = new ObjectMapper();
+        
+        Map<String, Object> jsonBody = new HashMap<>();
+        jsonBody.put("email", email);
+        jsonBody.put("requestTimestamp", requestTimestamp);
+       
+        //encryption with AES256 algorithm0
+        String otp = signatureCreate.encryptAES256(plain_otp, secretKey);
+        jsonBody.put("otp", otp);
+        
+        
+        jsonBody.put("pushToken",pushToken);
+        jsonBody.put("deviceModel", deviceModel);
+        jsonBody.put("deviceColorDepth", deviceColorDepth);
+        jsonBody.put("deviceScreenHeight", deviceScreenHeight);
+        jsonBody.put("deviceScreenWidth", deviceScreenWidth);
+        
+        //placing token from device API
+        jsonBody.put("token", token);
+        
 
+     // Generate signature
+        String data = objectMapper.writeValueAsString(jsonBody);
+        String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
+
+     // Add signature
+        jsonBody.put("signature", requestSignature);
+
+        Response response = given()
+                .baseUri(baseURI)
+                .header("X-GEO-Location", "")
+                .header("X-Device-Id",requestdevice)
+                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+                .contentType("application/json")
+                .body(jsonBody)
+            .when()
+                .post("/device/otp/verify")
+            .then()
+                .statusCode(400)
+                .log().all()
+                .extract().response();
+        
+
+        // Extracting and asserting response values
+        String code = response.jsonPath().getString("code");
+        String description = response.jsonPath().getString("description");
+        // check if it is null
+        assertNotNull(code, "code is missing");
+        assertNotNull(description, "description is missing from the response");
+        
+        //check if it is empty
+        assertFalse(code.isEmpty(), "code is empty");
+        assertFalse(description.isEmpty(), "description is empty");
+        
+        //assert code and description
+        assertEquals(code,"GNR_PARAM_MISSING");
+        assertEquals(description,"Bad Request.");
+
+    }
+    
+    @Test
+    public void verifydevicewithoutUserAgent() throws Exception {
+    	ObjectMapper objectMapper = new ObjectMapper();
+    	
+        Map<String, Object> jsonBody = new HashMap<>();
+        jsonBody.put("email", email);
+        jsonBody.put("requestTimestamp", requestTimestamp);
+       
+        //encryption with AES256 algorithm0
+        String otp = signatureCreate.encryptAES256(plain_otp, secretKey);
+        jsonBody.put("otp", otp);
+        
+        
+        jsonBody.put("pushToken",pushToken);
+        jsonBody.put("deviceModel", deviceModel);
+        jsonBody.put("deviceColorDepth", deviceColorDepth);
+        jsonBody.put("deviceScreenHeight", deviceScreenHeight);
+        jsonBody.put("deviceScreenWidth", deviceScreenWidth);
+        
+        //placing token from device API
+        jsonBody.put("token", token);
+        
+
+     // Generate signature
+        String data = objectMapper.writeValueAsString(jsonBody);
+        String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
+
+     // Add signature
+        jsonBody.put("signature", requestSignature);
+
+        Response response = given()
+                .baseUri(baseURI)
+                .header("X-GEO-Location", "12,12")
+                .header("X-Device-Id",requestdevice)
+                .header("User-Agent", "")
+                .contentType("application/json")
+                .body(jsonBody)
+            .when()
+                .post("/device/otp/verify")
+            .then()
+                .statusCode(400)
+                .log().all()
+                .extract().response();
+        
+
+        // Extracting and asserting response values
+        String code = response.jsonPath().getString("code");
+        String description = response.jsonPath().getString("description");
+        // check if it is null
+        assertNotNull(code, "code is missing");
+        assertNotNull(description, "description is missing from the response");
+        
+        //check if it is empty
+        assertFalse(code.isEmpty(), "code is empty");
+        assertFalse(description.isEmpty(), "description is empty");
+        
+        //assert code and description
+        assertEquals(code,"GNR_PARAM_MISSING");
+        assertEquals(description,"Bad Request.");
+        
+
+    }
+    
+    @Test
+    public void VerifydeviceOtpwithoutemail() throws Exception{
+    	ObjectMapper objectMapper = new ObjectMapper();
+    	String email = "";
+        
+        
+        String plain_otp = "443062";
+        String requestdevice = "3efe6bbeb55f4411";
+        
+        Map<String, Object> jsonBody = new HashMap<>();
+        jsonBody.put("email", email);
+        jsonBody.put("requestTimestamp", requestTimestamp);
+       
+        //encryption with AES256 algorithm0
+        String otp = signatureCreate.encryptAES256(plain_otp, secretKey);
+        jsonBody.put("otp", otp);
+        
+        
+        jsonBody.put("pushToken",pushToken);
+        jsonBody.put("deviceModel", deviceModel);
+        jsonBody.put("deviceColorDepth", deviceColorDepth);
+        jsonBody.put("deviceScreenHeight", deviceScreenHeight);
+        jsonBody.put("deviceScreenWidth", deviceScreenWidth);
+        
+        //placing token from device API
+        jsonBody.put("token", token);
+        
+
+     // Generate signature
+        String data = objectMapper.writeValueAsString(jsonBody);
+        String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
+
+     // Add signature
+        jsonBody.put("signature", requestSignature);
+
+        Response response = given()
+                .baseUri(baseURI)
+                .header("X-GEO-Location", "12,12")
+                .header("X-Device-Id",requestdevice)
+                .header("User-Agent", "")
+                .contentType("application/json")
+                .body(jsonBody)
+            .when()
+                .post("/device/otp/verify")
+            .then()
+                .statusCode(400)
+                .log().all()
+                .extract().response();
+        
+
+        // Extracting and asserting response values
+        String code = response.jsonPath().getString("code");
+        String description = response.jsonPath().getString("description");
+        // check if it is null
+        assertNotNull(code, "code is missing");
+        assertNotNull(description, "description is missing from the response");
+        
+        //check if it is empty
+        assertFalse(code.isEmpty(), "code is empty");
+        assertFalse(description.isEmpty(), "description is empty");
+        
+        //assert code and description
+        assertEquals(code,"GNR_PARAM_MISSING");
+        assertEquals(description,"Bad Request.");
+    }
+//    
+  @Test
+  public void VerifydeviceOtpwithoutTimestamp() throws Exception{
+	  ObjectMapper objectMapper = new ObjectMapper();
+  	
+      String requestTimestamp = "";
+      
+      String plain_otp = "443062";
+      String requestdevice = "3efe6bbeb55f4411";
+      
+      Map<String, Object> jsonBody = new HashMap<>();
+      jsonBody.put("email", email);
+      jsonBody.put("requestTimestamp", requestTimestamp);
+     
+      //encryption with AES256 algorithm0
+      String otp = signatureCreate.encryptAES256(plain_otp, secretKey);
+      jsonBody.put("otp", otp);
+      
+      
+      jsonBody.put("pushToken",pushToken);
+      jsonBody.put("deviceModel", deviceModel);
+      jsonBody.put("deviceColorDepth", deviceColorDepth);
+      jsonBody.put("deviceScreenHeight", deviceScreenHeight);
+      jsonBody.put("deviceScreenWidth", deviceScreenWidth);
+      
+      //placing token from device API
+      jsonBody.put("token", token);
+      
+
+   // Generate signature
+      String data = objectMapper.writeValueAsString(jsonBody);
+      String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
+
+   // Add signature
+      jsonBody.put("signature", requestSignature);
+
+    Response response = given()
+            .baseUri(baseURI)
+            .header("X-GEO-Location", "12,12")
+            .header("X-Device-Id",requestdevice)
+            .header("User-Agent", "")
+            .contentType("application/json")
+            .body(jsonBody)
+        .when()
+            .post("/device/otp/verify")
+        .then()
+            .statusCode(400)
+            .log().all()
+            .extract().response();
+    
+
+    // Extracting and asserting response values
+    String code = response.jsonPath().getString("code");
+    String description = response.jsonPath().getString("description");
+    // check if it is null
+    assertNotNull(code, "code is missing");
+    assertNotNull(description, "description is missing from the response");
+    
+    //check if it is empty
+    assertFalse(code.isEmpty(), "code is empty");
+    assertFalse(description.isEmpty(), "description is empty");
+    
+    //assert code and description
+    assertEquals(code,"GNR_PARAM_MISSING");
+    assertEquals(description,"Bad Request.");
+  }
+//  
+ @Test
+ public void VerifydeviceOtpwithoutOtp() throws Exception {
+	 ObjectMapper objectMapper = new ObjectMapper();
+ 	
+     
+     
+     String plain_otp = "";
+     String requestdevice = "3efe6bbeb55f4411";
+     
+     Map<String, Object> jsonBody = new HashMap<>();
+     jsonBody.put("email", email);
+     jsonBody.put("requestTimestamp", requestTimestamp);
+    
+     //encryption with AES256 algorithm0
+     String otp = signatureCreate.encryptAES256(plain_otp, secretKey);
+     jsonBody.put("otp", otp);
+     
+     
+     jsonBody.put("pushToken",pushToken);
+     jsonBody.put("deviceModel", deviceModel);
+     jsonBody.put("deviceColorDepth", deviceColorDepth);
+     jsonBody.put("deviceScreenHeight", deviceScreenHeight);
+     jsonBody.put("deviceScreenWidth", deviceScreenWidth);
+     
+     //placing token from device API
+     jsonBody.put("token", token);
+     
+
+  // Generate signature
+     String data = objectMapper.writeValueAsString(jsonBody);
+     String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
+
+  // Add signature
+     jsonBody.put("signature", requestSignature);
+
+     Response response = given()
+             .baseUri(baseURI)
+             .header("X-GEO-Location", "12,12")
+             .header("X-Device-Id",requestdevice)
+             .header("User-Agent", "")
+             .contentType("application/json")
+             .body(jsonBody)
+         .when()
+             .post("/device/otp/verify")
+         .then()
+             .statusCode(400)
+             .log().all()
+             .extract().response();
+     
+
+     // Extracting and asserting response values
+     String code = response.jsonPath().getString("code");
+     String description = response.jsonPath().getString("description");
+     // check if it is null
+     assertNotNull(code, "code is missing");
+     assertNotNull(description, "description is missing from the response");
+     
+     //check if it is empty
+     assertFalse(code.isEmpty(), "code is empty");
+     assertFalse(description.isEmpty(), "description is empty");
+     
+     //assert code and description
+     assertEquals(code,"GNR_PARAM_MISSING");
+     assertEquals(description,"Bad Request.");
+ }
+// 
+ @Test
+ public void VerifydeviceOtpwithoutpin() throws Exception {
+	ObjectMapper objectMapper = new ObjectMapper();
+ 	
+    
+    
+    String plain_otp = "";
+    String requestdevice = "3efe6bbeb55f4411";
+    
+    Map<String, Object> jsonBody = new HashMap<>();
+    jsonBody.put("email", email);
+    jsonBody.put("requestTimestamp", requestTimestamp);
+   
+    //encryption with AES256 algorithm0
+    String otp = signatureCreate.encryptAES256(plain_otp, secretKey);
+    jsonBody.put("otp", otp);
+    
+    
+    jsonBody.put("pushToken",pushToken);
+    jsonBody.put("deviceModel", deviceModel);
+    jsonBody.put("deviceColorDepth", deviceColorDepth);
+    jsonBody.put("deviceScreenHeight", deviceScreenHeight);
+    jsonBody.put("deviceScreenWidth", deviceScreenWidth);
+    
+    //placing token from device API
+    jsonBody.put("token", token);
+    
+
+ // Generate signature
+    String data = objectMapper.writeValueAsString(jsonBody);
+    String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
+
+ // Add signature
+    jsonBody.put("signature", requestSignature);
+
+     Response response = given()
+             .baseUri(baseURI)
+             .header("X-GEO-Location", "12,12")
+             .header("X-Device-Id",requestdevice)
+             .header("User-Agent", "")
+             .contentType("application/json")
+             .body(jsonBody)
+         .when()
+             .post("/device/otp/verify")
+         .then()
+             .statusCode(400)
+             .log().all()
+             .extract().response();
+     
+
+     // Extracting and asserting response values
+     String code = response.jsonPath().getString("code");
+     String description = response.jsonPath().getString("description");
+     // check if it is null
+     assertNotNull(code, "code is missing");
+     assertNotNull(description, "description is missing from the response");
+     
+     //check if it is empty
+     assertFalse(code.isEmpty(), "code is empty");
+     assertFalse(description.isEmpty(), "description is empty");
+     
+     //assert code and description
+     assertEquals(code,"GNR_PARAM_MISSING");
+     assertEquals(description,"Bad Request.");
+	 
+ }
+// 
+ @Test
+ public void Verifydevicewithouttoken() throws Exception {
+	 ObjectMapper objectMapper = new ObjectMapper();
+ 	
+     
+     
+     String plain_otp = "443062";
+     String requestdevice = "3efe6bbeb55f4411";
+     
+     Map<String, Object> jsonBody = new HashMap<>();
+     jsonBody.put("email", email);
+     jsonBody.put("requestTimestamp", requestTimestamp);
+    
+     //encryption with AES256 algorithm0
+     String otp = signatureCreate.encryptAES256(plain_otp, secretKey);
+     jsonBody.put("otp", otp);
+     
+     
+     jsonBody.put("pushToken",pushToken);
+     jsonBody.put("deviceModel", deviceModel);
+     jsonBody.put("deviceColorDepth", deviceColorDepth);
+     jsonBody.put("deviceScreenHeight", deviceScreenHeight);
+     jsonBody.put("deviceScreenWidth", deviceScreenWidth);
+     
+     //placing token from device API
+     jsonBody.put("token", "");
+     
+
+  // Generate signature
+     String data = objectMapper.writeValueAsString(jsonBody);
+     String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
+
+  // Add signature
+     jsonBody.put("signature", requestSignature);
+
+     Response response = given()
+             .baseUri(baseURI)
+             .header("X-GEO-Location", "12,12")
+             .header("X-Device-Id",requestdevice)
+             .header("User-Agent", "")
+             .contentType("application/json")
+             .body(jsonBody)
+         .when()
+             .post("/device/otp/verify")
+         .then()
+             .statusCode(400)
+             .log().all()
+             .extract().response();
+     
+
+     // Extracting and asserting response values
+     String code = response.jsonPath().getString("code");
+     String description = response.jsonPath().getString("description");
+     // check if it is null
+     assertNotNull(code, "code is missing");
+     assertNotNull(description, "description is missing from the response");
+     
+     //check if it is empty
+     assertFalse(code.isEmpty(), "code is empty");
+     assertFalse(description.isEmpty(), "description is empty");
+     
+     //assert code and description
+     assertEquals(code,"GNR_PARAM_MISSING");
+     assertEquals(description,"Bad Request.");
+ }
+ 
+ @Test
+ public void VerifydevicewithoutSignature() throws Exception {
+	// ObjectMapper objectMapper = new ObjectMapper();
+ 	 
+     
+     
+     String plain_otp = "443062";
+     String requestdevice = "3efe6bbeb55f4411";
+     
+     Map<String, Object> jsonBody = new HashMap<>();
+     jsonBody.put("email", email);
+     jsonBody.put("requestTimestamp", requestTimestamp);
+    
+     //encryption with AES256 algorithm0
+     String otp = signatureCreate.encryptAES256(plain_otp, secretKey);
+     jsonBody.put("otp", otp);
+     
+     
+     jsonBody.put("pushToken",pushToken);
+     
+     //placing token from device API
+     jsonBody.put("token", token);
+     jsonBody.put("deviceModel", deviceModel);
+     jsonBody.put("deviceColorDepth", deviceColorDepth);
+     jsonBody.put("deviceScreenHeight", deviceScreenHeight);
+     jsonBody.put("deviceScreenWidth", deviceScreenWidth);
+     
+
+  // Generate signature
+     //String data = objectMapper.writeValueAsString(jsonBody);
+     //String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
+
+  // Add signature
+     jsonBody.put("signature", "");
+
+     Response response = given()
+             .baseUri(baseURI)
+             .header("X-GEO-Location", "12,12")
+             .header("X-Device-Id", requestdevice)
+             .header("User-Agent", "")
+             .contentType("application/json")
+             .body(jsonBody)
+         .when()
+             .post("/device/otp/verify")
+         .then()
+             .statusCode(400)
+             .log().all()
+             .extract().response();
+     
+
+     // Extracting and asserting response values
+     String code = response.jsonPath().getString("code");
+     String description = response.jsonPath().getString("description");
+     // check if it is null
+     assertNotNull(code, "code is missing");
+     assertNotNull(description, "description is missing from the response");
+     
+     //check if it is empty
+     assertFalse(code.isEmpty(), "code is empty");
+     assertFalse(description.isEmpty(), "description is empty");
+     
+     //assert code and description
+     assertEquals(code,"GNR_PARAM_MISSING");
+     assertEquals(description,"Bad Request.");
+ }
+// 
+ @Test
+ public void VerifydevicewithInvalidEmail() throws Exception {
+	 ObjectMapper objectMapper1 = new ObjectMapper();
+ 	String email = "vivekmoco.com.np";
+	 Map<String,Object> credentials = new LinkedHashMap<>();
+	 credentials.put("email", email);
+    Map<String, Object> jsonBody = new LinkedHashMap<>();
+    jsonBody.put("credentials",credentials);
+    jsonBody.put("requestTimestamp", requestTimestamp);
+    jsonBody.put("otp", plain_otp);
+    jsonBody.put("pushToken",pushToken);
+    jsonBody.put("deviceModel", deviceModel);
+    jsonBody.put("deviceColorDepth", deviceColorDepth);
+    jsonBody.put("deviceScreenHeight", deviceScreenHeight);
+    jsonBody.put("deviceScreenWidth", deviceScreenWidth);
+    //placing token from device API
+    jsonBody.put("token", token);
+     
+     //placing token from device API
+
+     
+
+  // Generate signature
+     String data = objectMapper1.writeValueAsString(jsonBody);
+     String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
+
+  // Add signature
+     jsonBody.put("signature", requestSignature);
+     
+     System.out.println(jsonBody);
+
+     Response response = given()
+             .baseUri(baseURI)
+             .header("X-GEO-Location", "12,12")
+             .header("X-Device-Id", requestdevice)
+             .header("User-Agent", "NepalTravelApp/1.0.0 android")
+             .contentType("application/json")
+             .body(jsonBody)
+         .when()
+             .post("/device/otp/verify")
+         .then()
+             .statusCode(422)
+             .log().all()
+             .extract().response();
+     
+
+     // Extracting and asserting response values
+     String code = response.jsonPath().getString("code");
+     String description = response.jsonPath().getString("description");
+     // check if it is null
+     assertNotNull(code, "code is missing");
+     assertNotNull(description, "description is missing from the response");
+     
+     //check if it is empty
+     assertFalse(code.isEmpty(), "code is empty");
+     assertFalse(description.isEmpty(), "description is empty");
+     
+     //assert code and description
+     assertEquals(code,"GNR_INVALID_DATA");
+     assertEquals(description,"Invalid email.");
+ }
+ @Test
+ public void VerifydevicewithInvalidTimestamp() throws Exception {
+	 ObjectMapper objectMapper = new ObjectMapper();
+ 	 
+     String requestTimestamp = "25:88:53";
+     
+     String plain_otp = "443062";
+     String requestdevice = "3efe6bbeb55f4411";
+     
+     Map<String, Object> jsonBody = new HashMap<>();
+     jsonBody.put("email", email);
+     jsonBody.put("requestTimestamp", requestTimestamp);
+    
+     //encryption with AES256 algorithm0
+     //String otp = signatureCreate.encryptAES256(plain_otp, secretKey);
+     jsonBody.put("otp", plain_otp);
+     
+     
+     jsonBody.put("pushToken",pushToken);
+     jsonBody.put("deviceModel", deviceModel);
+     jsonBody.put("deviceColorDepth", deviceColorDepth);
+     jsonBody.put("deviceScreenHeight", deviceScreenHeight);
+     jsonBody.put("deviceScreenWidth", deviceScreenWidth);
+     
+     //placing token from device API
+     jsonBody.put("token", token);
+     
+
+  // Generate signature
+     String data = objectMapper.writeValueAsString(jsonBody);
+     String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
+
+  // Add signature
+     jsonBody.put("signature", requestSignature);
+     
+     System.out.println(jsonBody);
+
+     Response response = given()
+             .baseUri(baseURI)
+             .header("X-GEO-Location", "12,12")
+             .header("X-Device-Id", requestdevice)
+             .header("User-Agent", "NepalTravelApp/1.0.0 android")
+             .contentType("application/json")
+             .body(jsonBody)
+         .when()
+             .post("/device/otp/verify")
+         .then()
+             .statusCode(422)
+             .log().all()
+             .extract().response();
+     
+
+     // Extracting and asserting response values
+     String code = response.jsonPath().getString("code");
+     String description = response.jsonPath().getString("description");
+     // check if it is null
+     assertNotNull(code, "code is missing");
+     assertNotNull(description, "description is missing from the response");
+     
+     //check if it is empty
+     assertFalse(code.isEmpty(), "code is empty");
+     assertFalse(description.isEmpty(), "description is empty");
+     
+     //assert code and description
+     assertEquals(code,"GNR_INVALID_DATA");
+     assertEquals(description,"Invalid Request timestamp.");
+	 
+ }
+// 
+@Test
+public void VerifydevicewithInvalidOtp() throws Exception {
+	ObjectMapper objectMapper = new ObjectMapper();
+	
+    
+    
+    String plain_otp = "5$543";
+    String requestdevice = "3efe6bbeb55f4411";
+    
+    Map<String, Object> jsonBody = new HashMap<>();
+    jsonBody.put("email", email);
+    jsonBody.put("requestTimestamp", requestTimestamp);
+   
+    //encryption with AES256 algorithm0
+    String otp = signatureCreate.encryptAES256(plain_otp, secretKey);
+    jsonBody.put("otp", otp);
+    
+    
+    jsonBody.put("pushToken",pushToken);
+    jsonBody.put("deviceModel", deviceModel);
+    jsonBody.put("deviceColorDepth", deviceColorDepth);
+    jsonBody.put("deviceScreenHeight", deviceScreenHeight);
+    jsonBody.put("deviceScreenWidth", deviceScreenWidth);
+    
+    //placing token from device API
+    jsonBody.put("token", token);
+    
+
+ // Generate signature
+    String data = objectMapper.writeValueAsString(jsonBody);
+    String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
+
+ // Add signature
+    jsonBody.put("signature", requestSignature);
+
+    Response response = given()
+            .baseUri(baseURI)
+            .header("X-GEO-Location", "12,12")
+            .header("X-Device-Id", requestdevice)
+            .header("User-Agent", "")
+            .contentType("application/json")
+            .body(jsonBody)
+        .when()
+            .post("/device/otp/verify")
+        .then()
+            .statusCode(400)
+            .log().all()
+            .extract().response();
+    
+
+    // Extracting and asserting response values
+    String code = response.jsonPath().getString("code");
+    String description = response.jsonPath().getString("description");
+    // check if it is null
+    assertNotNull(code, "code is missing");
+    assertNotNull(description, "description is missing from the response");
+    
+    //check if it is empty
+    assertFalse(code.isEmpty(), "code is empty");
+    assertFalse(description.isEmpty(), "description is empty");
+    
+    //assert code and description
+    assertEquals(code,"GNR_PARAM_MISSING");
+    assertEquals(description,"Bad Request.");
+	
+}
+//
+@Test
+public void VerifydevicewithInvalidPin() throws Exception {
+	ObjectMapper objectMapper = new ObjectMapper();
+	
+    
+    String plain_pin = "89*7";
+    String plain_otp = "443062";
+    String requestdevice = "3efe6bbeb55f4411";
+    
+    Map<String, Object> jsonBody = new HashMap<>();
+    jsonBody.put("email", email);
+    jsonBody.put("requestTimestamp", requestTimestamp);
+   
+    //encryption with AES256 algorithm0
+    String otp = signatureCreate.encryptAES256(plain_otp, secretKey);
+    jsonBody.put("otp", otp);
+    
+    
+    jsonBody.put("pushToken",pushToken);
+    jsonBody.put("deviceModel", deviceModel);
+    jsonBody.put("deviceColorDepth", deviceColorDepth);
+    jsonBody.put("deviceScreenHeight", deviceScreenHeight);
+    jsonBody.put("deviceScreenWidth", deviceScreenWidth);
+    
+    //placing token from device API
+    jsonBody.put("token", token);
+    
+
+ // Generate signature
+    String data = objectMapper.writeValueAsString(jsonBody);
+    String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
+
+ // Add signature
+    jsonBody.put("signature", requestSignature);
+
+    Response response = given()
+            .baseUri(baseURI)
+            .header("X-GEO-Location", "12,12")
+            .header("X-Device-Id", requestdevice)
+            .header("User-Agent", "")
+            .contentType("application/json")
+            .body(jsonBody)
+        .when()
+            .post("/device/otp/verify")
+        .then()
+            .statusCode(400)
+            .log().all()
+            .extract().response();
+    
+
+    // Extracting and asserting response values
+    String code = response.jsonPath().getString("code");
+    String description = response.jsonPath().getString("description");
+    // check if it is null
+    assertNotNull(code, "code is missing");
+    assertNotNull(description, "description is missing from the response");
+    
+    //check if it is empty
+    assertFalse(code.isEmpty(), "code is empty");
+    assertFalse(description.isEmpty(), "description is empty");
+    
+    //assert code and description
+    assertEquals(code,"GNR_PARAM_MISSING");
+    assertEquals(description,"Bad Request.");
+}
+ @Test
+ public void VerifydevicewithInvalidToken() throws Exception {
+	 ObjectMapper objectMapper = new ObjectMapper();
+ 	
+     
+     
+     String plain_otp = "443062";
+     String requestdevice = "3efe6bbeb55f4411";
+     
+     Map<String, Object> jsonBody = new HashMap<>();
+     jsonBody.put("email", email);
+     jsonBody.put("requestTimestamp", requestTimestamp);
+    
+     //encryption with AES256 algorithm0
+     String otp = signatureCreate.encryptAES256(plain_otp, secretKey);
+     jsonBody.put("otp", otp);
+     
+     
+     jsonBody.put("pushToken",pushToken);
+     jsonBody.put("deviceModel", deviceModel);
+     jsonBody.put("deviceColorDepth", deviceColorDepth);
+     jsonBody.put("deviceScreenHeight", deviceScreenHeight);
+     jsonBody.put("deviceScreenWidth", deviceScreenWidth);
+     
+     //placing token from device API
+     jsonBody.put("token", "lo$5==");
+     
+
+  // Generate signature
+     String data = objectMapper.writeValueAsString(jsonBody);
+     String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
+
+  // Add signature
+     jsonBody.put("signature", requestSignature);
+
+     Response response = given()
+             .baseUri(baseURI)
+             .header("X-GEO-Location", "12,12")
+             .header("X-Device-Id", requestdevice)
+             .header("User-Agent", "")
+             .contentType("application/json")
+             .body(jsonBody)
+         .when()
+             .post("/device/otp/verify")
+         .then()
+             .statusCode(400)
+             .log().all()
+             .extract().response();
+     
+
+     // Extracting and asserting response values
+     String code = response.jsonPath().getString("code");
+     String description = response.jsonPath().getString("description");
+     // check if it is null
+     assertNotNull(code, "code is missing");
+     assertNotNull(description, "description is missing from the response");
+     
+     //check if it is empty
+     assertFalse(code.isEmpty(), "code is empty");
+     assertFalse(description.isEmpty(), "description is empty");
+     
+     //assert code and description
+     assertEquals(code,"GNR_PARAM_MISSING");
+     assertEquals(description,"Bad Request.");
+ }
+// 
+ @Test
+ public void VerifydevicewithWrongSignature() throws Exception {
+	 //ObjectMapper objectMapper = new ObjectMapper();
+ 	
+     
+     
+     String plain_otp = "443062";
+     String requestdevice = "3efe6bbeb55f4411";
+     
+     Map<String, Object> jsonBody = new HashMap<>();
+     jsonBody.put("email", email);
+     jsonBody.put("requestTimestamp", requestTimestamp);
+    
+     //encryption with AES256 algorithm0
+     String otp = signatureCreate.encryptAES256(plain_otp, secretKey);
+     jsonBody.put("otp", otp);
+     
+     
+     jsonBody.put("pushToken",pushToken);
+     jsonBody.put("deviceModel", deviceModel);
+     jsonBody.put("deviceColorDepth", deviceColorDepth);
+     jsonBody.put("deviceScreenHeight", deviceScreenHeight);
+     jsonBody.put("deviceScreenWidth", deviceScreenWidth);
+     
+     //placing token from device API
+     jsonBody.put("token", token);
+     
+
+  // Generate signature
+     //String data = objectMapper.writeValueAsString(jsonBody);
+     //String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
+
+  // Add signature
+     jsonBody.put("signature", "3edrHytu&6544-===");
+
+     Response response = given()
+             .baseUri(baseURI)
+             .header("X-GEO-Location", "12,12")
+             .header("X-Device-Id", requestdevice)
+             .header("User-Agent", "")
+             .contentType("application/json")
+             .body(jsonBody)
+         .when()
+             .post("/device/otp/verify")
+         .then()
+             .statusCode(400)
+             .log().all()
+             .extract().response();
+     
+
+     // Extracting and asserting response values
+     String code = response.jsonPath().getString("code");
+     String description = response.jsonPath().getString("description");
+     // check if it is null
+     assertNotNull(code, "code is missing");
+     assertNotNull(description, "description is missing from the response");
+     
+     //check if it is empty
+     assertFalse(code.isEmpty(), "code is empty");
+     assertFalse(description.isEmpty(), "description is empty");
+     
+     //assert code and description
+     assertEquals(code,"GNR_PARAM_MISSING");
+     assertEquals(description,"Bad Request.");
+ }
+ 
+// @Test
+// public void VerifyOtpwithValidCredentials() throws Exception {
+//	 ObjectMapper objectMapper = new ObjectMapper();
+//     Map<String, Object> jsonBody = new LinkedHashMap<>();
+//     jsonBody.put("email", email);
+//     jsonBody.put("requestTimestamp", requestTimestamp);
+//     jsonBody.put("otp", plain_otp);
+//     
+//     
+//     jsonBody.put("pushToken",pushToken);
+//     jsonBody.put("deviceModel", deviceModel);
+//     jsonBody.put("deviceColorDepth", deviceColorDepth);
+//     jsonBody.put("deviceScreenHeight", deviceScreenHeight);
+//     jsonBody.put("deviceScreenWidth", deviceScreenWidth);
+//     //placing token from device API
+//     jsonBody.put("token", token);
+//    // System.out.println(jsonBody);
+//
+//  // Generate signature
+//     String data = objectMapper.writeValueAsString(jsonBody);
+//     String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
+//     
+//  // Add signature
+//     jsonBody.put("signature", requestSignature);
+//     System.out.println("the json"+jsonBody); 
+//  
+//     Response response = given()
+//             .baseUri(baseURI)
+//             .header("X-GEO-Location", "12,12")
+//             .header("X-Device-Id",requestdevice)
+//             .header("User-Agent", "NepalTravelApp/1.0.0 android")
+//             .contentType("application/json")
+//             .body(jsonBody)
+//         .when()
+//             .post("/device/otp/verify")
+//         .then()
+//             .statusCode(201)
+//             .log().all()
+//             .extract().response();
+//     response.prettyPrint();
+//     
+//
+//     // Extracting and asserting response values
+//     String responseEmail = response.jsonPath().getString("email");
+//     String sessionKey = response.jsonPath().getString("sessionKey");
+//     String deviceId = response.jsonPath().getString("deviceId");
+//     String signature = response.jsonPath().getString("signature");
+//
+//     assertNotNull(signature, "Signature is missing");
+//     assertNotNull(sessionKey, "sessionkey is missing from the response");
+//     assertNotNull(deviceId, "deviceid is missing from the response");
+//     assertNotNull(responseEmail, "email in reponse is missing");
+//
+//     assertFalse(signature.isEmpty(), "Signature is empty");
+//     assertFalse(deviceId.isEmpty(), "Device ID is empty");
+//     assertFalse(sessionKey.isEmpty(), "session key is empty");
+//     assertFalse(responseEmail.isEmpty(), "email is empty");
+//     
+//     //assert device and email is equal with request
+//     assertEquals(requestdevice,deviceId);
+//     assertEquals(email,responseEmail);
+//     
+//     
+//     
+//     //verify signature
+//     //matching response signature with calculated hash
+//     Map<String, Object> fields = new LinkedHashMap<>();
+//     fields.put("deviceId", deviceId);
+//     fields.put("sessionKey", sessionKey);
+//     fields.put("email", responseEmail);
+//     
+//
+//     String partialJson = objectMapper.writeValueAsString(fields);
+//     String partialSignature = signatureCreate.generateHMACSHA256(partialJson, secretKey);
+//     assertEquals(signature, partialSignature);
+//     
+//     
+//     
+////    // assertTrue(response.getHeaders().hasHeaderWithName("X-AUTH-TOKEN"), "Missing X-AUTH-TOKEN header");
+//    System.out.println("Request ID: " + response.getHeaders().hasHeaderWithName("X-AUTH-TOKEN"));
+//     
+// }
+ 
+ @Test
+ public void VerifyOtpwithEmptyPushToken() throws Exception{
+	 ObjectMapper objectMapper = new ObjectMapper();
+     Map<String, Object> jsonBody = new LinkedHashMap<>();
+     jsonBody.put("email", email);
+     jsonBody.put("requestTimestamp", requestTimestamp);
+     jsonBody.put("otp", plain_otp);
+     
+     
+     jsonBody.put("pushToken","");
+     jsonBody.put("deviceModel", deviceModel);
+     jsonBody.put("deviceColorDepth", deviceColorDepth);
+     jsonBody.put("deviceScreenHeight", deviceScreenHeight);
+     jsonBody.put("deviceScreenWidth", deviceScreenWidth);
+     
+     //placing token from device API
+     jsonBody.put("token", token);
+    // System.out.println(jsonBody);
+
+  // Generate signature
+     String data = objectMapper.writeValueAsString(jsonBody);
+     String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
+     
+  // Add signature
+     jsonBody.put("signature", requestSignature);
+    
+     Response response = given()
+             .baseUri(baseURI)
+             .header("X-GEO-Location", "12,12")
+             .header("X-Device-Id",requestdevice)
+             .header("User-Agent", "NepalTravelApp/1.0.0 android")
+             .contentType("application/json")
+             .body(jsonBody)
+         .when()
+             .post("/device/otp/verify")
+         .then()
+             .statusCode(400)
+             .log().all()
+             .extract().response();
+     response.prettyPrint();
+     
+
+     // Extracting and asserting response values
+     String code = response.jsonPath().getString("code");
+     String description = response.jsonPath().getString("description");
+     // check if it is null
+     assertNotNull(code, "code is missing");
+     assertNotNull(description, "description is missing from the response");
+     
+     //check if it is empty
+     assertFalse(code.isEmpty(), "code is empty");
+     assertFalse(description.isEmpty(), "description is empty");
+     
+     //assert code and description
+     assertEquals(code,"GNR_PARAM_MISSING");
+     assertEquals(description,"Push Token cannot be blank.");
+     
+ }
+ 
+// @Test
+// public void VerifyOtpwithexpiredOtp() throws Exception {
+//	 ObjectMapper objectMapper = new ObjectMapper();
+//	 //ObjectNode jsonBody = JsonNodeFactory.instance.objectNode();
+//	// Optional: Don't sort keys alphabetically unless backend expects it
+//	 //objectMapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, false);
+// 	 
+//     
+//     
+//     
+//     
+//     
+//     Map<String, Object> jsonBody = new LinkedHashMap<>();
+//     jsonBody.put("email", email);
+//     jsonBody.put("requestTimestamp", requestTimestamp);
+//     jsonBody.put("otp", plain_otp);
+//     
+//     
+//     
+//     //placing token from device API
+//     jsonBody.put("token", token);
+//    // System.out.println(jsonBody);
+//
+//  // Generate signature
+//     String data = objectMapper.writeValueAsString(jsonBody);
+//     String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
+//     
+//  // Add signature
+//     jsonBody.put("signature", requestSignature);
+//     
+//
+//     
+//     //System.out.println(signatureCreate.decryptAES256(otp,secretKey));
+//     //System.out.println(signatureCreate.decryptAES256(pin,secretKey));
+//    
+//     Response response = given()
+//             .baseUri(baseURI)
+//             .header("X-GEO-Location", "12,12")
+//             .header("X-Device-Id",requestdevice)
+//             .header("User-Agent", "NepalTravelApp/1.0.0 android")
+//             .contentType("application/json")
+//             .body(jsonBody)
+//         .when()
+//             .post("/device/otp/verify")
+//         .then()
+//             .statusCode(200)
+//             .log().all()
+//             .extract().response();
+//     response.prettyPrint();
+//     
+//
+//     // Extracting and asserting response values
+//     String code = response.jsonPath().getString("code");
+//     String status = response.jsonPath().getString("status");
+//     String description = response.jsonPath().getString("description");
+//     String signature = response.jsonPath().getString("signature");
+//
+//     assertNotNull(signature, "Signature is missing");
+//     assertNotNull(code, "code is missing from the response");
+//     assertNotNull(status, "status is missing from the response");
+//     assertNotNull(description, "description in response is missing");
+//
+//     assertFalse(signature.isEmpty(), "Signature is empty");
+//     assertFalse(code.isEmpty(), "code is empty");
+//     assertFalse(status.isEmpty(), "status is empty");
+//     assertFalse(description.isEmpty(), "description is empty");
+//     
+//     //assert device and email is equal with request
+//     assertEquals(code,"VST_device_OTP_FAILED");
+//     assertEquals(status,"FAIL");
+//     
+//    // assertTrue(response.getHeaders().hasHeaderWithName("X-AUTH-TOKEN"), "Missing X-AUTH-TOKEN header");
+//     //ystem.out.println("Request ID: " + response.getHeaders().hasHeaderWithName("X-AUTH-TOKEN"));
+// }
+// 
+ 
+@Test
+public void VerifyOtpwithMissingdeviceModel() throws Exception{
+	ObjectMapper objectMapper = new ObjectMapper();
+    Map<String, Object> jsonBody = new LinkedHashMap<>();
+    jsonBody.put("email", email);
+    jsonBody.put("requestTimestamp", requestTimestamp);
+    jsonBody.put("otp", plain_otp);
+    
+    
+    jsonBody.put("pushToken",pushToken);
+    jsonBody.put("deviceModel", "");
+    jsonBody.put("deviceColorDepth", deviceColorDepth);
+    jsonBody.put("deviceScreenHeight", deviceScreenHeight);
+    jsonBody.put("deviceScreenWidth", deviceScreenWidth);
+    //placing token from device API
+    jsonBody.put("token", token);
+   // System.out.println(jsonBody);
+
+ // Generate signature
+    String data = objectMapper.writeValueAsString(jsonBody);
+    String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
+    
+ // Add signature
+    jsonBody.put("signature", requestSignature);
+ System.out.println(jsonBody);  
+    Response response = given()
+            .baseUri(baseURI)
+            .header("X-GEO-Location", "12,12")
+            .header("X-Device-Id",requestdevice)
+            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+            .contentType("application/json")
+            .body(jsonBody)
+        .when()
+            .post("/device/otp/verify")
+        .then()
+            .statusCode(400)
+            .log().all()
+            .extract().response();
+    response.prettyPrint();
+    
+ // Extracting and asserting response values
+    String code = response.jsonPath().getString("code");
+    String description = response.jsonPath().getString("description");
+    // check if it is null
+    assertNotNull(code, "code is missing");
+    assertNotNull(description, "description is missing from the response");
+    
+    //check if it is empty
+    assertFalse(code.isEmpty(), "code is empty");
+    assertFalse(description.isEmpty(), "description is empty");
+    
+    //assert code and description
+    assertEquals(code,"GNR_PARAM_MISSING");
+    assertEquals(description,"Device Model cannot be blank.");
+    
+}
+
+@Test
+public void VerifyOtpwithEmptyDeviceDetails() throws Exception {
+	ObjectMapper objectMapper = new ObjectMapper();
+    Map<String, Object> jsonBody = new LinkedHashMap<>();
+    jsonBody.put("email", email);
+    jsonBody.put("requestTimestamp", requestTimestamp);
+    jsonBody.put("otp", plain_otp);
+    
+    
+    jsonBody.put("pushToken",pushToken);
+    jsonBody.put("deviceModel", deviceModel);
+    jsonBody.put("deviceColorDepth", "");
+    jsonBody.put("deviceScreenHeight", "");
+    jsonBody.put("deviceScreenWidth", "");
+    //placing token from device API
+    jsonBody.put("token", token);
+   // System.out.println(jsonBody);
+
+ // Generate signature
+    String data = objectMapper.writeValueAsString(jsonBody);
+    String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
+    
+ // Add signature
+    jsonBody.put("signature", requestSignature);
+ System.out.println(jsonBody);  
+    Response response = given()
+            .baseUri(baseURI)
+            .header("X-GEO-Location", "12,12")
+            .header("X-Device-Id",requestdevice)
+            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+            .contentType("application/json")
+            .body(jsonBody)
+        .when()
+            .post("/device/otp/verify")
+        .then()
+            .statusCode(422)
+            .log().all()
+            .extract().response();
+    response.prettyPrint();
+    
+ // Extracting and asserting response values
+    String code = response.jsonPath().getString("code");
+    String description = response.jsonPath().getString("description");
+    // check if it is null
+    assertNotNull(code, "code is missing");
+    assertNotNull(description, "description is missing from the response");
+    
+    //check if it is empty
+    assertFalse(code.isEmpty(), "code is empty");
+    assertFalse(description.isEmpty(), "description is empty");
+    
+    //assert code and description
+    assertEquals(code,"GNR_INVALID_DATA");
+    assertEquals(description,"Invalid Request.");
+	
+}
+
+@Test
+public void VerifyOtpwithInvalidDeviceModel() throws Exception {
+	ObjectMapper objectMapper = new ObjectMapper();
+    Map<String, Object> jsonBody = new LinkedHashMap<>();
+    jsonBody.put("email", email);
+    jsonBody.put("requestTimestamp", requestTimestamp);
+    jsonBody.put("otp", plain_otp);
+    
+    
+    jsonBody.put("pushToken",pushToken);
+    jsonBody.put("deviceModel", 6);
+    jsonBody.put("deviceColorDepth", deviceColorDepth);
+    jsonBody.put("deviceScreenHeight", deviceScreenHeight);
+    jsonBody.put("deviceScreenWidth", deviceScreenWidth);
+    //placing token from device API
+    jsonBody.put("token", token);
+   // System.out.println(jsonBody);
+
+ // Generate signature
+    String data = objectMapper.writeValueAsString(jsonBody);
+    String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
+    
+ // Add signature
+    jsonBody.put("signature", requestSignature);
+ System.out.println(jsonBody);  
+    Response response = given()
+            .baseUri(baseURI)
+            .header("X-GEO-Location", "12,12")
+            .header("X-Device-Id",requestdevice)
+            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+            .contentType("application/json")
+            .body(jsonBody)
+        .when()
+            .post("/device/otp/verify")
+        .then()
+            .statusCode(422)
+            .log().all()
+            .extract().response();
+    response.prettyPrint();
+    
+ // Extracting and asserting response values
+    String code = response.jsonPath().getString("code");
+    String description = response.jsonPath().getString("description");
+    // check if it is null
+    assertNotNull(code, "code is missing");
+    assertNotNull(description, "description is missing from the response");
+    
+    //check if it is empty
+    assertFalse(code.isEmpty(), "code is empty");
+    assertFalse(description.isEmpty(), "description is empty");
+    
+    //assert code and description
+    assertEquals(code,"GNR_INVALID_DATA");
+    assertEquals(description,"Invalid Device Model.");
+	
+}
+
+@Test
+public void VerifyOtpwithInvalidColorDepth() throws Exception {
+	ObjectMapper objectMapper = new ObjectMapper();
+    Map<String, Object> jsonBody = new LinkedHashMap<>();
+    jsonBody.put("email", email);
+    jsonBody.put("requestTimestamp", requestTimestamp);
+    jsonBody.put("otp", plain_otp);
+    
+    
+    jsonBody.put("pushToken",pushToken);
+    jsonBody.put("deviceModel",deviceModel);
+    jsonBody.put("deviceColorDepth", -1);
+    jsonBody.put("deviceScreenHeight", deviceScreenHeight);
+    jsonBody.put("deviceScreenWidth", deviceScreenWidth);
+    //placing token from device API
+    jsonBody.put("token", token);
+   // System.out.println(jsonBody);
+
+ // Generate signature
+    String data = objectMapper.writeValueAsString(jsonBody);
+    String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
+    
+ // Add signature
+    jsonBody.put("signature", requestSignature);
+ System.out.println(jsonBody);  
+    Response response = given()
+            .baseUri(baseURI)
+            .header("X-GEO-Location", "12,12")
+            .header("X-Device-Id",requestdevice)
+            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+            .contentType("application/json")
+            .body(jsonBody)
+        .when()
+            .post("/device/otp/verify")
+        .then()
+            .statusCode(422)
+            .log().all()
+            .extract().response();
+    response.prettyPrint();
+    
+ // Extracting and asserting response values
+    String code = response.jsonPath().getString("code");
+    String description = response.jsonPath().getString("description");
+    // check if it is null
+    assertNotNull(code, "code is missing");
+    assertNotNull(description, "description is missing from the response");
+    
+    //check if it is empty
+    assertFalse(code.isEmpty(), "code is empty");
+    assertFalse(description.isEmpty(), "description is empty");
+    
+    //assert code and description
+    assertEquals(code,"GNR_INVALID_DATA");
+    assertEquals(description,"Invalid color depth.");
+	
+}
+@Test
+public void VerifyOtpwithInvalidScreenHeight() throws Exception {
+	ObjectMapper objectMapper = new ObjectMapper();
+    Map<String, Object> jsonBody = new LinkedHashMap<>();
+    jsonBody.put("email", email);
+    jsonBody.put("requestTimestamp", requestTimestamp);
+    jsonBody.put("otp", plain_otp);
+    
+    
+    jsonBody.put("pushToken",pushToken);
+    jsonBody.put("deviceModel", deviceModel);
+    jsonBody.put("deviceColorDepth", deviceColorDepth);
+    jsonBody.put("deviceScreenHeight", 5);
+    jsonBody.put("deviceScreenWidth", deviceScreenWidth);
+    //placing token from device API
+    jsonBody.put("token", token);
+   // System.out.println(jsonBody);
+
+ // Generate signature
+    String data = objectMapper.writeValueAsString(jsonBody);
+    String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
+    
+ // Add signature
+    jsonBody.put("signature", requestSignature);
+ System.out.println(jsonBody);  
+    Response response = given()
+            .baseUri(baseURI)
+            .header("X-GEO-Location", "12,12")
+            .header("X-Device-Id",requestdevice)
+            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+            .contentType("application/json")
+            .body(jsonBody)
+        .when()
+            .post("/device/otp/verify")
+        .then()
+            .statusCode(422)
+            .log().all()
+            .extract().response();
+    response.prettyPrint();
+    
+ // Extracting and asserting response values
+    String code = response.jsonPath().getString("code");
+    String description = response.jsonPath().getString("description");
+    // check if it is null
+    assertNotNull(code, "code is missing");
+    assertNotNull(description, "description is missing from the response");
+    
+    //check if it is empty
+    assertFalse(code.isEmpty(), "code is empty");
+    assertFalse(description.isEmpty(), "description is empty");
+    
+    //assert code and description
+    assertEquals(code,"GNR_INVALID_DATA");
+    assertEquals(description,"Invalid screen height.");
+	
+}
+
+@Test
+public void VerifyOtpwithInvalidScreenWidth() throws Exception {
+	ObjectMapper objectMapper = new ObjectMapper();
+    Map<String, Object> jsonBody = new LinkedHashMap<>();
+    jsonBody.put("email", email);
+    jsonBody.put("requestTimestamp", requestTimestamp);
+    jsonBody.put("otp", plain_otp);
+    
+    
+    jsonBody.put("pushToken",pushToken);
+    jsonBody.put("deviceModel", deviceModel);
+    jsonBody.put("deviceColorDepth", deviceColorDepth);
+    jsonBody.put("deviceScreenHeight", deviceScreenHeight);
+    jsonBody.put("deviceScreenWidth", 7);
+    //placing token from device API
+    jsonBody.put("token", token);
+   // System.out.println(jsonBody);
+
+ // Generate signature
+    String data = objectMapper.writeValueAsString(jsonBody);
+    String requestSignature = signatureCreate.generateHMACSHA256(data,secretKey);
+    
+ // Add signature
+    jsonBody.put("signature", requestSignature);
+ System.out.println(jsonBody);  
+    Response response = given()
+            .baseUri(baseURI)
+            .header("X-GEO-Location", "12,12")
+            .header("X-Device-Id",requestdevice)
+            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+            .contentType("application/json")
+            .body(jsonBody)
+        .when()
+            .post("/device/otp/verify")
+        .then()
+            .statusCode(422)
+            .log().all()
+            .extract().response();
+    response.prettyPrint();
+    
+ // Extracting and asserting response values
+    String code = response.jsonPath().getString("code");
+    String description = response.jsonPath().getString("description");
+    // check if it is null
+    assertNotNull(code, "code is missing");
+    assertNotNull(description, "description is missing from the response");
+    
+    //check if it is empty
+    assertFalse(code.isEmpty(), "code is empty");
+    assertFalse(description.isEmpty(), "description is empty");
+    
+    //assert code and description
+    assertEquals(code,"GNR_INVALID_DATA");
+    assertEquals(description,"Invalid screen width.");
+	
+}
+}

@@ -1325,7 +1325,7 @@ public void VerifyOtpwithEmptyDeviceDetails() throws Exception {
         .when()
             .post("/signup/otp/verify")
         .then()
-            .statusCode(400)
+            .statusCode(422)
             .log().all()
             .extract().response();
     response.prettyPrint();
@@ -1342,7 +1342,7 @@ public void VerifyOtpwithEmptyDeviceDetails() throws Exception {
     assertFalse(description.isEmpty(), "description is empty");
     
     //assert code and description
-    assertEquals(code,"GNR_PARAM_MISSING");
+    assertEquals(code,"GNR_INVALID_DATA");
     assertEquals(description,"Push Token cannot be blank.");
 	
 }

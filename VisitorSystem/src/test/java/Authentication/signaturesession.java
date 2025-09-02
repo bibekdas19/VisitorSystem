@@ -14,11 +14,11 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 
 public class signaturesession {
-	String requestDeviceId = "793d1ae9c317736b";
+	String requestDeviceId = "visitor-app-device";
 	String secretKey = "ABC123XYZ";
 	String AuthToken;
-	String input_email = "sharad@moco.com.np";
-	String input_pin = "147258";
+	String input_email = "vivek@moco.com.np";
+	String input_pin = "123654";
 	@BeforeClass
 	public void getToken() throws Exception{
 		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
