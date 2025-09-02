@@ -17,9 +17,9 @@ import java.util.Map;
 public class logOut {
 	String secretKey;
 	String AuthToken;
-	String requestDeviceId = "visitor-app-device"; 
-	String email = "vivek@moco.com.np";
-	String plain_pin = "123653";
+	String requestDeviceId = "samwek-device"; 
+	String email = "samwekshaky65a@gmail.com";
+	String plain_pin = "123456";
 	@BeforeClass
 	public void setup() throws Exception {
         RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";

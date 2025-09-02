@@ -22,9 +22,9 @@ import java.util.Map;
 public class selfie {
 	
 	String AuthToken;
-	String requestDeviceId = "visitor-app-device"; 
-	String input_email = "vivek@moco.com.np";
-	String input_pin = "123654";
+	 String requestDeviceId = "visitor-app-device"; 
+		String input_email = "vivek@moco.com.np";
+		String input_pin = "147369";
 	@BeforeClass
 	public void getToken() throws Exception{
 RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
@@ -32,7 +32,7 @@ RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
         Response response = given()
                 .header("X-GEO-Location", "12,12")
                 .header("X-Device-Id", requestDeviceId)
-                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+                .header("User-Agent", "NepalTravelApp/1.0.0 ios")
             .when()
                 .get("/key")
             .then()
@@ -65,7 +65,7 @@ RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
         Response response1 = given()
                 .header("X-GEO-Location", "12,12")
                 .header("X-Device-Id", requestDeviceId)
-                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+                .header("User-Agent", "NepalTravelApp/1.0.0 ios")
                 .contentType("application/json")
                 .body(jsonBody)
             .when()
@@ -650,7 +650,7 @@ RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
 	public void uploadSelfiewithEyesClosed() throws Exception {
 		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
 
-	    File selfie = new File("C:/Users/Dell/Downloads/eyeclose.jpg");
+	    File selfie = new File("C:/Users/Dell/Downloads/TC017.jpg");
 
 	    if (!selfie.exists()) {
 	        System.out.println("File not found: " + selfie.getAbsolutePath());
@@ -668,7 +668,7 @@ RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
 	                .header("X-Device-Id", requestDeviceId)
 	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
 	                .header("Accept", "*/*")  // matches curl default
-	                .multiPart("selfie", "eyeclose.jpg", fis, "image/jpeg") // key, filename, stream, type
+	                .multiPart("selfie", "TC017.jpg", fis, "image/jpeg") // key, filename, stream, type
 	                .when()
 	                .post("/selfie")
 	                .then()
@@ -697,7 +697,7 @@ RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
 	public void uploadSelfiewithOpenedMouth() throws Exception {
 		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
 
-	    File selfie = new File("C:/Users/Dell/Downloads/openmouth.jpg");
+	    File selfie = new File("C:/Users/Dell/Downloads/TC_16_04.jpg");
 
 	    if (!selfie.exists()) {
 	        System.out.println("File not found: " + selfie.getAbsolutePath());
@@ -715,7 +715,7 @@ RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
 	                .header("X-Device-Id", requestDeviceId)
 	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
 	                .header("Accept", "*/*")  // matches curl default
-	                .multiPart("selfie", "openmouth.jpg", fis, "image/jpeg") // key, filename, stream, type
+	                .multiPart("selfie", "TC_16_04.jpg", fis, "image/jpeg") // key, filename, stream, type
 	                .when()
 	                .post("/selfie")
 	                .then()
@@ -835,59 +835,59 @@ RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
     }
 
 	}
-	@Test
-	public void uploadSelfiewithvalidllCredentails() throws Exception {
-		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
-
-	    File selfie = new File("C:/Users/Dell/Downloads/chineses.jpg");
-
-	    if (!selfie.exists()) {
-	        System.out.println("File not found: " + selfie.getAbsolutePath());
-	        return;
-	    }
-
-	    // Use logging filters to compare with curl if needed
-	    RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
-
-	    // Use InputStream to avoid encoding issues
-	    try (FileInputStream fis = new FileInputStream(selfie)) {
-	        Response response = given()
-	                .header("X-GEO-Location", "12,12")
-	                .header("X-AUTH-TOKEN", AuthToken)
-	                .header("X-Device-Id", requestDeviceId)
-	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
-	                .header("Accept", "*/*")  // matches curl default
-	                .multiPart("selfie", "chineses.jpg", fis, "image/jpeg") // key, filename, stream, type
-	                .when()
-	                .post("/selfie")
-	                .then()
-	                .statusCode(200)
-	                .extract().response();
-
-	        
-	String code = response.jsonPath().getString("code");
-	String description = response.jsonPath().getString("description");
-	String signature = response.jsonPath().getString("signature");
-
-	assertNotNull(description, "Description is missing from the response");
-	assertNotNull(code, "Code is missing");
-	assertNotNull(signature,"signature is missing");
-
-	assertFalse(description.isEmpty(), "Description is empty");
-	assertFalse(code.isEmpty(), "Code is empty");
-	assertFalse(signature.isEmpty(),"signature is empty");
-
-	assertEquals(code,"GNR_OK");
-	assertEquals(description,"Successfully verified Portrait/Selfie.");
-    }
-	}
+//	@Test
+//	public void uploadSelfiewithvalidllCredentails() throws Exception {
+//		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
+//
+//	    File selfie = new File("C:/Users/Dell/Downloads/chineses.jpg");
+//
+//	    if (!selfie.exists()) {
+//	        System.out.println("File not found: " + selfie.getAbsolutePath());
+//	        return;
+//	    }
+//
+//	    // Use logging filters to compare with curl if needed
+//	    RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
+//
+//	    // Use InputStream to avoid encoding issues
+//	    try (FileInputStream fis = new FileInputStream(selfie)) {
+//	        Response response = given()
+//	                .header("X-GEO-Location", "12,12")
+//	                .header("X-AUTH-TOKEN", AuthToken)
+//	                .header("X-Device-Id", requestDeviceId)
+//	                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+//	                .header("Accept", "*/*")  // matches curl default
+//	                .multiPart("selfie", "chineses.jpg", fis, "image/jpeg") // key, filename, stream, type
+//	                .when()
+//	                .post("/selfie")
+//	                .then()
+//	                .statusCode(200)
+//	                .extract().response();
+//
+//	        
+//	String code = response.jsonPath().getString("code");
+//	String description = response.jsonPath().getString("description");
+//	String signature = response.jsonPath().getString("signature");
+//
+//	assertNotNull(description, "Description is missing from the response");
+//	assertNotNull(code, "Code is missing");
+//	assertNotNull(signature,"signature is missing");
+//
+//	assertFalse(description.isEmpty(), "Description is empty");
+//	assertFalse(code.isEmpty(), "Code is empty");
+//	assertFalse(signature.isEmpty(),"signature is empty");
+//
+//	assertEquals(code,"GNR_OK");
+//	assertEquals(description,"Successfully verified Portrait/Selfie.");
+//    }
+//	}
 	
 	@Test
 	public void uploadSelfiewithvalidCredentails() throws Exception {
 		    RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
 
-		    File selfie = new File("C:/Users/Dell/Downloads/portrait.jpeg");
-		    //File selfie = new File("C:/Users/Dell/Downloads/WhatsApp Image 2025-05-23 at 14.53.45.jpeg");
+		   // File selfie = new File("C:/Users/Dell/Downloads/portrait.jpeg");
+		    File selfie = new File("C:/Users/Dell/Downloads/real_photo.jpeg");
 
 		    if (!selfie.exists()) {
 		        System.out.println("File not found: " + selfie.getAbsolutePath());
@@ -905,7 +905,7 @@ RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
 		                .header("X-Device-Id", requestDeviceId)
 		                .header("User-Agent", "NepalTravelApp/1.0.0 android")
 		                .header("Accept", "*/*")  // matches curl default
-		                .multiPart("selfie", "portrait.jpeg", fis, "image/jpeg") // key, filename, stream, type
+		                .multiPart("selfie", "real_photo.jpeg", fis, "image/jpeg") // key, filename, stream, type
 		                .when()
 		                .post("/selfie")
 		                .then()

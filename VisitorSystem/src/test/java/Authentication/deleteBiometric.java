@@ -19,7 +19,7 @@ public class deleteBiometric {
 	String secretKey;
 	String requestDeviceId = "visitor-app-device"; 
 	String input_email = "vivek@moco.com.np";
-	String input_pin = "123654";
+	String input_pin = "147369";
 	@BeforeClass
 	public void getToken() throws Exception{
 		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";

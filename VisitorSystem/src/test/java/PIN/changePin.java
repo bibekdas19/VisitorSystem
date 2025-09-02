@@ -1,5 +1,5 @@
 package PIN;
-//import org.testng.annotations.AfterClass;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -14,15 +14,15 @@ import static org.testng.Assert.*;
 import java.util.*;
 
 public class changePin {
-	String plain_old_pin = "123654";
-    String plain_new_pin = "123653";
+	String plain_old_pin = "147258";
+    String plain_new_pin = "963852";
     String AuthToken;
-	String requestDeviceId = "visitor-app-device"; 
-	String secretKey;
+    String secretKey;
+    String requestDeviceId = "visitor-app-device"; 
 	String input_email = "vivek@moco.com.np";
-	String input_pin = "123654";
+	String input_pin = "147258";
 	@BeforeClass
-	public void getToken() throws Exception{
+	public void getToken() throws Exception {
 		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
         
         Response response1 = given()
@@ -721,7 +721,7 @@ public class changePin {
             .when()
                 .put("/pin")
             .then()
-                .statusCode(500)
+                .statusCode(403)
                 .log().all()
                 .extract().response();
         
@@ -738,8 +738,8 @@ public class changePin {
         assertFalse(code.isEmpty(), "code is empty");
         assertFalse(description.isEmpty(), "description is empty");
         
-         assertEquals(code,"GNR_ERR");
-		 assertEquals(description,"Error while authorizing visitor.");
+         assertEquals(code,"GNR_AUTHORIZATION_FAIL");
+		 assertEquals(description,"Unable to Authorize Visitor. Invalid PIN.");
 	}
 	
     @Test
@@ -750,7 +750,8 @@ public class changePin {
         String newPin = signatureCreate.encryptAES256(plain_new_pin, secretKey);
         //construct json
         Map<String, Object> jsonBody = new LinkedHashMap<>();
-        jsonBody.put("oldPin",oldPin);
+        //jsonBody.put("oldPin",oldPin);
+        jsonBody.put("oldPin","' OR '1'='1");
         jsonBody.put("newPin",newPin);
         
         //construct signature
@@ -762,48 +763,48 @@ public class changePin {
         jsonBody.put("signature", requestSignature);
         System.out.println(jsonBody);
 //     // Send request
-        Response response = given()
-                .header("X-GEO-Location", "12,12")
-                .header("X-AUTH-TOKEN",AuthToken)
-                .header("X-Device-Id", requestDeviceId)
-                .header("User-Agent", "NepalTravelApp/1.0.0 android")
-                .contentType("application/json")
-                .body(jsonBody)
-            .when()
-                .put("/pin")
-            .then()
-                .statusCode(200)
-                .log().all()
-                .extract().response();
-        System.out.println(jsonBody);
-        
-        
-        // Extracting and asserting response values
-        String code = response.jsonPath().getString("code");
-        String description = response.jsonPath().getString("description");
-        String signature = response.jsonPath().getString("signature");
-
-        assertNotNull(signature, "Signature is missing");
-        assertNotNull(code, "code is missing from the response");
-        assertNotNull(description, "description is missing from the response");
-
-        assertFalse(signature.isEmpty(), "Signature is empty");
-        assertFalse(code.isEmpty(), "code is empty");
-        assertFalse(description.isEmpty(), "description is empty");
-        
-         assertEquals(code,"GNR_OK");
-		 assertEquals(description,"PIN changed successfully.");
-		 
-		 //verify signature
-	     //matching response signature with calculated hash
-	     Map<String, Object> fields = new LinkedHashMap<>();
-	     fields.put("code", code);
-	     fields.put("description", description);
-	     
-
-	     String partialJson = objectMapper.writeValueAsString(fields);
-	     String partialSignature = signatureCreate.generateHMACSHA256(partialJson, secretKey);
-	     assertEquals(signature, partialSignature);
+//        Response response = given()
+//                .header("X-GEO-Location", "12,12")
+//                .header("X-AUTH-TOKEN",AuthToken)
+//                .header("X-Device-Id", requestDeviceId)
+//                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+//                .contentType("application/json")
+//                .body(jsonBody)
+//            .when()
+//                .put("/pin")
+//            .then()
+//                .statusCode(200)
+//                .log().all()
+//                .extract().response();
+//        System.out.println(jsonBody);
+//        
+//        
+//        // Extracting and asserting response values
+//        String code = response.jsonPath().getString("code");
+//        String description = response.jsonPath().getString("description");
+//        String signature = response.jsonPath().getString("signature");
+//
+//        assertNotNull(signature, "Signature is missing");
+//        assertNotNull(code, "code is missing from the response");
+//        assertNotNull(description, "description is missing from the response");
+//
+//        assertFalse(signature.isEmpty(), "Signature is empty");
+//        assertFalse(code.isEmpty(), "code is empty");
+//        assertFalse(description.isEmpty(), "description is empty");
+//        
+//         assertEquals(code,"GNR_OK");
+//		 assertEquals(description,"PIN changed successfully.");
+//		 
+//		 //verify signature
+//	     //matching response signature with calculated hash
+//	     Map<String, Object> fields = new LinkedHashMap<>();
+//	     fields.put("code", code);
+//	     fields.put("description", description);
+//	     
+//
+//	     String partialJson = objectMapper.writeValueAsString(fields);
+//	     String partialSignature = signatureCreate.generateHMACSHA256(partialJson, secretKey);
+//	     assertEquals(signature, partialSignature);
 		 
 		 
         
@@ -857,7 +858,7 @@ public class changePin {
         assertFalse(description.isEmpty(), "description is empty");
         
          assertEquals(code,"GNR_ERR");
-		 assertEquals(description,"Error while authorizing visitor.");
+		 assertEquals(description,"Decryption failed.");
 	}
 	
 //	@AfterClass

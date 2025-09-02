@@ -16,15 +16,17 @@ public class signatureCreate {
         return sdf.format(new Date());
     }
 
-    public static String generateHMACSHA256(String data, String secret) throws Exception {
-        Mac mac = Mac.getInstance("HmacSHA256");
-        SecretKeySpec secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
-        mac.init(secretKey);
-        byte[] hashBytes = mac.doFinal(data.getBytes(StandardCharsets.UTF_8));
-        return Base64.getEncoder().encodeToString(hashBytes);
-    }
+//    public static String generateHMACSHA256(String data, String secret) throws Exception {
+//        Mac mac = Mac.getInstance("HmacSHA256");
+//        SecretKeySpec secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
+//        mac.init(secretKey);
+//        byte[] hashBytes = mac.doFinal(data.getBytes(StandardCharsets.UTF_8));
+//        return Base64.getEncoder().encodeToString(hashBytes);
+//    }
     
-    public static String encryptAESECB(String plainText, String secretKey) throws Exception {
+    
+
+	public static String encryptAESECB(String plainText, String secretKey) throws Exception {
         // AES key must be 16, 24, or 32 bytes
         SecretKeySpec keySpec = new SecretKeySpec(secretKey.getBytes(StandardCharsets.UTF_8), "AES");
 

@@ -12,13 +12,13 @@ import java.util.*;
 
 public class verifyresetOtp {
 	String baseURI = "https://visitor0.moco.com.np/visitor";
-    String secretKey = "4100ef09cbaab262b27f37aa421f62cef3a9fad5b63cf88a271940c372626ddd";
-    String token = "o9-adPiCxNlLfr6nSjHo8sCbp_kYfVkIIfIJ0pKMbes";
-    String email = "vivek@moco.com.np";
+    String secretKey = "f7b0ae107d4f52b3a219eb34fd2e126bfa06cf26b7f4805bf5e7447d32c19584";
+    String token = "OSWFnVf7UKtEh5SG7WuyrphWiwW8CwBDDs8GQgKE8uM";
+    String email = "samwekshakya65@gmail.com";
     String requestTimestamp = signatureCreate.generateTimestamp();
     String plain_pin = "123654";
-    String plain_otp = "616243";
-    String requestdevice = "visitor-app-device4";
+    String plain_otp = "500376";
+    String requestdevice = "samwek-device";
 
     @Test
     public void verifySignUpOtpwithoutDeviceId() throws Exception {

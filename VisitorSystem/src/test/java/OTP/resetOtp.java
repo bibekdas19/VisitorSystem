@@ -14,8 +14,8 @@ import java.util.*;
 public class resetOtp {
 
     String secretKey;
-    String requestDeviceId = "visitor-app-device4";
-    String email = "vivek@moco.com.np";
+    String requestDeviceId = "samwek-device";
+    String email = "samwekshakya65@gmail.com";
     String requestTimestamp = signatureCreate.generateTimestamp();
 
     @BeforeClass

@@ -18,9 +18,9 @@ import java.util.Map;
 
 public class profileImage {
 	String AuthToken;
-	String requestDeviceId = "visitor-app-device"; 
+	 String requestDeviceId = "visitor-app-device"; 
 	String input_email = "vivek@moco.com.np";
-	String input_pin = "123654";
+	String input_pin = "147369";
 	@BeforeClass
 	public void getToken() throws Exception{
 		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
@@ -60,7 +60,7 @@ public class profileImage {
         Response response2 = given()
                 .header("X-GEO-Location", "12,12")
                 .header("X-Device-Id", requestDeviceId)
-                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+                .header("User-Agent", "NepalTravelApp/1.0.0 ios")
                 .contentType("application/json")
                 .body(jsonBody)
             .when()
@@ -79,7 +79,7 @@ public class profileImage {
 	            .header("X-GEO-Location", "12,12")
 	            .header("X-Device-Id", requestDeviceId)
 	            .header("X-AUTH-TOKEN",AuthToken)
-	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+	            .header("User-Agent", "NepalTravelApp/1.0.0 ios")
 	            .pathParam("type", "portrait")
 	        .when()
 	            .get("/profile/image/{type}")
@@ -98,7 +98,7 @@ public class profileImage {
 	            .header("X-GEO-Location", "12,12")
 	            .header("X-Device-Id", requestDeviceId)
 	            .header("X-AUTH-TOKEN",AuthToken)
-	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+	            .header("User-Agent", "NepalTravelApp/1.0.0 ios")
 	            .pathParam("type", "document")
 	        .when()
 	            .get("/profile/image/{type}")
@@ -118,7 +118,7 @@ public class profileImage {
 	            .header("X-GEO-Location", "12,12")
 	            .header("X-Device-Id", "")
 	            .header("X-AUTH-TOKEN",AuthToken)
-	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+	            .header("User-Agent", "NepalTravelApp/1.0.0 ios")
 	            .pathParam("type", "portrait")
 	        .when()
 	            .get("/profile/image/{type}")
@@ -145,7 +145,7 @@ public class profileImage {
 	            .header("X-GEO-Location", "")
 	            .header("X-Device-Id", requestDeviceId)
 	            .header("X-AUTH-TOKEN",AuthToken)
-	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+	            .header("User-Agent", "NepalTravelApp/1.0.0 ios")
 	            .pathParam("type", "portrait")
 	        .when()
 	            .get("/profile/image/{type}")
@@ -199,7 +199,7 @@ public class profileImage {
 	            .header("X-GEO-Location", "12,12")
 	            .header("X-Device-Id", "")
 	            .header("X-AUTH-TOKEN",AuthToken)
-	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+	            .header("User-Agent", "NepalTravelApp/1.0.0 ios")
 	            .pathParam("type", "portrait")
 	        .when()
 	            .get("/profile/image/{type}")
@@ -226,7 +226,7 @@ public class profileImage {
 	            .header("X-GEO-Location", "12,12")
 	            .header("X-Device-Id", "AS##")
 	            .header("X-AUTH-TOKEN",AuthToken)
-	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+	            .header("User-Agent", "NepalTravelApp/1.0.0 ios")
 	            .pathParam("type", "portrait")
 	        .when()
 	            .get("/profile/image/{type}")
@@ -258,7 +258,7 @@ public class profileImage {
 	            .header("X-GEO-Location", "12AA,12")
 	            .header("X-Device-Id", requestDeviceId)
 	            .header("X-AUTH-TOKEN",AuthToken)
-	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+	            .header("User-Agent", "NepalTravelApp/1.0.0 ios")
 	            .pathParam("type", "portrait")
 	        .when()
 	            .get("/profile/image/{type}")
@@ -290,7 +290,7 @@ public class profileImage {
 	            .header("X-GEO-Location", "12,12")
 	            .header("X-Device-Id", requestDeviceId)
 	            .header("X-AUTH-TOKEN","SS")
-	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+	            .header("User-Agent", "NepalTravelApp/1.0.0 ios")
 	            .pathParam("type", "portrait")
 	        .when()
 	            .get("/profile/image/{type}")
@@ -322,7 +322,7 @@ public class profileImage {
 	            .header("X-GEO-Location", "12,12")
 	            .header("X-Device-Id", requestDeviceId)
 	            .header("X-AUTH-TOKEN",AuthToken)
-	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+	            .header("User-Agent", "NepalTravelApp/1.0.0 ios")
 	            .pathParam("type", "portrait")
 	        .when()
 	            .get("/profile/image/{type}")
@@ -356,7 +356,7 @@ public class profileImage {
 	            .header("X-GEO-Location", "12,12")
 	            .header("X-Device-Id", "")
 	            .header("X-AUTH-TOKEN",AuthToken)
-	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+	            .header("User-Agent", "NepalTravelApp/1.0.0 ios")
 	            .pathParam("type", "")
 	        .when()
 	            .get("/profile/image/{type}")
@@ -388,7 +388,7 @@ public class profileImage {
 	            .header("X-GEO-Location", "12,12")
 	            .header("X-Device-Id", "moco-dev-app")
 	            .header("X-AUTH-TOKEN",AuthToken)
-	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+	            .header("User-Agent", "NepalTravelApp/1.0.0 ios")
 	            .pathParam("type", "potrait")
 	        .when()
 	            .get("/profile/image/{type}")
@@ -421,7 +421,7 @@ public class profileImage {
 //	          .header("X-GEO-Location", "12,12")
 //	          .header("X-AUTH-TOKEN",AuthToken)
 //	          .header("X-Device-Id", requestDeviceId)
-//	          .header("User-Agent", "NepalTravelApp/1.0.0 android")
+//	          .header("User-Agent", "NepalTravelApp/1.0.0 ios")
 //	      .when()
 //	          .delete("/authenticate");
 //	      response.then().statusCode(200);

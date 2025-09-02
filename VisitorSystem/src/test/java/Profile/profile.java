@@ -25,7 +25,7 @@ public class profile {
 	String secretKey;
 	String requestDeviceId = "visitor-app-device"; 
 	String input_email = "vivek@moco.com.np";
-	String input_pin = "123654";
+	String input_pin = "147258";
 	
 	String AuthToken;
 //	String requestDeviceId = "sandesh-thapa-app"; 
@@ -83,28 +83,28 @@ public class profile {
 	     secretKey = signatureCreate.decryptAES(response2.jsonPath().getString("sessionKey"),secretKey1);
 	}
 
-//    @Test
-//    public void UpdateUserDetails() throws Exception {
-//    	RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
-//		
-//    	ObjectMapper objectMapper = new ObjectMapper();
-//    	Map<String, Object> jsonBody = new LinkedHashMap<>();
-//		jsonBody.put("fullName", "SARAH JANE DIAS");
-//		jsonBody.put("country", "NPL");
-//		jsonBody.put("documentNumber", "P258963");
-//		jsonBody.put("documentType", "PASSPORT");
-//		jsonBody.put("dateOfBirth", "1998-02-24");
-//		jsonBody.put("documentExpiryDate", "2030-01-23");
-//		jsonBody.put("gender", "F");
-//
-//		// Generate signature
-//		String data = objectMapper.writeValueAsString(jsonBody);
-//		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
-//		
-//		jsonBody.put("signature", requestSignature);
-//		System.out.println(jsonBody);
-//		//jsonBody.put("signature", requestSignature)
-//		
+    @Test
+    public void UpdateUserDetails() throws Exception {
+    	RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
+		
+    	ObjectMapper objectMapper = new ObjectMapper();
+    	Map<String, Object> jsonBody = new LinkedHashMap<>();
+		jsonBody.put("fullName", "VIVEK DAS");
+		jsonBody.put("country", "ZAF");
+		jsonBody.put("documentNumber", "P420420");
+		jsonBody.put("documentType", "PASSPORT");
+		jsonBody.put("dateOfBirth", "1993-02-17");
+		jsonBody.put("documentExpiryDate", "2030-01-23");
+		jsonBody.put("gender", "M");
+
+		// Generate signature
+		String data = objectMapper.writeValueAsString(jsonBody);
+		String requestSignature = signatureCreate.generateHMACSHA256(data, secretKey);
+		
+		jsonBody.put("signature", requestSignature);
+		System.out.println(jsonBody);
+		//jsonBody.put("signature", requestSignature)
+		
 //		Response response = given()
 //				.header("X-GEO-Location", "12,12")
 //				.header("X-Device-Id", requestDeviceId)
@@ -165,28 +165,28 @@ public class profile {
 //	        assertFalse(verificationStatus.isEmpty(), "verificationStatus is missing");
 //	        assertFalse(loginAttemptCount.isEmpty(), "loginAttemptCount is missing");
 //	        assertFalse(isBiometric.isEmpty(), "isBiometric is missing");
-//	        
-//	        //matching response signature with calculated hash
-//	        
-////	        Map<String, Object> profile = new LinkedHashMap<>();
-////	        profile.put("fullName",fullName);
-////	        profile.put("country",country);
-////	        profile.put("documentNumber",documentNumber);
-////	        profile.put("documentType",documentType);
-////	        profile.put("dateOfBirth",dateOfBirth);
-////	        profile.put("documentExpiryDate", documentExpiryDate);
-////	        profile.put("email",responseemail);
-////	        profile.put("gender",gender);
-////	        profile.put("status",status);
-////	        profile.put("verificationStatus",verificationStatus);
-////	        profile.put("loginAttemptCountPin",loginAttemptCount);
-////	        profile.put("loginAttemptCountBiometric",isBiometric);
-////
-////	        String partialJson = objectMapper.writeValueAsString(profile);
-////	        String partialSignature = signatureCreate.generateHMACSHA256(partialJson, secretKey);
-////	        assertEquals(signature, partialSignature);
-//	        
-//	        
+	        
+	        //matching response signature with calculated hash
+	        
+//	        Map<String, Object> profile = new LinkedHashMap<>();
+//	        profile.put("fullName",fullName);
+//	        profile.put("country",country);
+//	        profile.put("documentNumber",documentNumber);
+//	        profile.put("documentType",documentType);
+//	        profile.put("dateOfBirth",dateOfBirth);
+//	        profile.put("documentExpiryDate", documentExpiryDate);
+//	        profile.put("email",responseemail);
+//	        profile.put("gender",gender);
+//	        profile.put("status",status);
+//	        profile.put("verificationStatus",verificationStatus);
+//	        profile.put("loginAttemptCountPin",loginAttemptCount);
+//	        profile.put("loginAttemptCountBiometric",isBiometric);
+//
+//	        String partialJson = objectMapper.writeValueAsString(profile);
+//	        String partialSignature = signatureCreate.generateHMACSHA256(partialJson, secretKey);
+//	        assertEquals(signature, partialSignature);
+	        
+	        
 //	        String jsonResponse = response.getBody().asString();
 //	        // Parse JSON string to JsonObject
 //	        JsonObject jsonObject = JsonParser.parseString(jsonResponse).getAsJsonObject();
@@ -199,8 +199,8 @@ public class profile {
 //	        assertEquals(signature, calculatedSignature, "Response signature doesn't match");
 //	        
 //	           AuthToken = response.getHeader("X-AUTH-TOKEN");
-//	            	
-//  }
+	            	
+  }
     
     @Test
     public void getUserDetailswithoutGeo() throws Exception {
@@ -1249,7 +1249,7 @@ public class profile {
 		jsonBody.put("documentNumber", "R9079271");
 		jsonBody.put("documentType", "PASSPORT");
 		jsonBody.put("dateOfBirth", "1998-02-24");
-		jsonBody.put("documentExpiryDate", "252222-01-23");
+		jsonBody.put("documentExpiryDate", "2025-0-23");
 		jsonBody.put("gender", "M");
 
  		// Generate signature
@@ -1260,34 +1260,34 @@ public class profile {
  		
  		System.out.println(jsonBody);
  		
-// 		Response response = given()
-// 				.header("X-GEO-Location", "12,12")
-// 				.header("X-Device-Id", requestDeviceId)
-// 				.header("User-Agent", "NepalTravelApp/1.0.0 android")
-// 				.header("X-AUTH-TOKEN",AuthToken)
-// 				.contentType("application/json")
-// 				.body(jsonBody)
-// 				.when()
-// 				.post("/profile")
-// 				.then()
-// 				.statusCode(422)
-// 				.log().all()
-// 				.extract().response();
-// 		
-// 		 String code = response.jsonPath().getString("code");
-// 	     String description = response.jsonPath().getString("description");
-// 	     //String signature = response.jsonPath().getString("signature");
-// 	     
-// 	     assertNotNull(description, "Description is missing from the response");
-// 	     assertNotNull(code, "Code is missing");
-// 	     
-// 	     
-// 	     assertFalse(description.isEmpty(), "Description is empty");
-// 	     assertFalse(code.isEmpty(), "Code is empty");
-// 	     
-// 	     
-// 	     assertEquals(code,"GNR_INVALID_DATA");
-// 		 assertEquals(description,"Invalid Data.");
+ 		Response response = given()
+ 				.header("X-GEO-Location", "12,12")
+ 				.header("X-Device-Id", requestDeviceId)
+ 				.header("User-Agent", "NepalTravelApp/1.0.0 android")
+ 				.header("X-AUTH-TOKEN",AuthToken)
+ 				.contentType("application/json")
+ 				.body(jsonBody)
+ 				.when()
+ 				.post("/profile")
+ 				.then()
+ 				.statusCode(422)
+ 				.log().all()
+ 				.extract().response();
+ 		
+ 		 String code = response.jsonPath().getString("code");
+ 	     String description = response.jsonPath().getString("description");
+ 	     //String signature = response.jsonPath().getString("signature");
+ 	     
+ 	     assertNotNull(description, "Description is missing from the response");
+ 	     assertNotNull(code, "Code is missing");
+ 	     
+ 	     
+ 	     assertFalse(description.isEmpty(), "Description is empty");
+ 	     assertFalse(code.isEmpty(), "Code is empty");
+ 	     
+ 	     
+ 	     assertEquals(code,"GNR_INVALID_DATA");
+ 		 assertEquals(description,"Invalid Data.");
      }
      
      @Test

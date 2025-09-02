@@ -17,7 +17,7 @@ public class biometric {
 	String secretKey;
 	String requestDeviceId = "visitor-app-device"; 
 	String input_email = "vivek@moco.com.np";
-	String input_pin = "123654";
+	String input_pin = "147369";
 	@BeforeClass
 	public void getToken() throws Exception{
 		RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
@@ -25,7 +25,7 @@ public class biometric {
         Response response1 = given()
                 .header("X-GEO-Location", "12,12")
                 .header("X-Device-Id", requestDeviceId)
-                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+                .header("User-Agent", "NepalTravelApp/1.0.0 ios")
             .when()
                 .get("/key")
             .then()
@@ -57,7 +57,7 @@ public class biometric {
         Response response2 = given()
                 .header("X-GEO-Location", "12,12")
                 .header("X-Device-Id", requestDeviceId)
-                .header("User-Agent", "NepalTravelApp/1.0.0 android")
+                .header("User-Agent", "NepalTravelApp/1.0.0 ios")
                 .contentType("application/json")
                 .body(jsonBody)
             .when()
@@ -67,7 +67,7 @@ public class biometric {
                 .log().all()
                 .extract().response();
         AuthToken = response2.getHeader("X-AUTH-TOKEN");
-	     secretKey = response2.jsonPath().getString("sessionKey");
+        secretKey = signatureCreate.decryptAES(response2.jsonPath().getString("sessionKey"),secretKey1);
 	}
 	
 	
@@ -85,7 +85,7 @@ public class biometric {
 		Response response = (Response) given()
 	            .header("X-GEO-Location", "12,12")
 	            .header("X-Device-Id", "")
-	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+	            .header("User-Agent", "NepalTravelApp/1.0.0 ios")
 	            .header("X-AUTH-TOKEN",AuthToken)
 	            .body(jsonMap)
 	        .when()
@@ -121,7 +121,7 @@ public class biometric {
 		Response response = (Response) given()
 	            .header("X-GEO-Location", "")
 	            .header("X-Device-Id", requestDeviceId)
-	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+	            .header("User-Agent", "NepalTravelApp/1.0.0 ios")
 	            .header("X-AUTH-TOKEN",AuthToken)
 	            .body(jsonMap)
 	        .when()
@@ -190,7 +190,7 @@ public class biometric {
 		Response response = (Response) given()
 	            .header("X-GEO-Location", "12,12")
 	            .header("X-Device-Id", requestDeviceId)
-	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+	            .header("User-Agent", "NepalTravelApp/1.0.0 ios")
 	            .header("X-AUTH-TOKEN","")
 	            .body(jsonMap)
 	        .when()
@@ -224,7 +224,7 @@ public class biometric {
 		Response response = (Response) given()
 	            .header("X-GEO-Location", "12,12")
 	            .header("X-Device-Id", "mo@@co-travel-app")
-	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+	            .header("User-Agent", "NepalTravelApp/1.0.0 ios")
 	            .header("X-AUTH-TOKEN","")
 	            .body(jsonMap)
 	        .when()
@@ -254,7 +254,7 @@ public class biometric {
 		Response response = (Response) given()
 	            .header("X-GEO-Location", "12,12")
 	            .header("X-Device-Id", requestDeviceId)
-	            .header("User-Agent", "NepalTravelAp.0.0 android")
+	            .header("User-Agent", "NepalTravelAp.0.0 ios")
 	            .header("X-AUTH-TOKEN",AuthToken)
 	            .body(jsonMap)
 	        .when()
@@ -284,7 +284,7 @@ public class biometric {
 		Response response = (Response) given()
 	            .header("X-GEO-Location", "1#2")
 	            .header("X-Device-Id", requestDeviceId)
-	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+	            .header("User-Agent", "NepalTravelApp/1.0.0 ios")
 	            .header("X-AUTH-TOKEN",AuthToken)
 	            .body(jsonMap)
 	        .when()
@@ -314,7 +314,7 @@ public class biometric {
 		Response response = (Response) given()
 	            .header("X-GEO-Location", "12,12")
 	            .header("X-Device-Id", requestDeviceId)
-	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+	            .header("User-Agent", "NepalTravelApp/1.0.0 ios")
 	            .header("X-AUTH-TOKEN","qq")
 	            .body(jsonMap)
 	        .when()
@@ -344,7 +344,7 @@ public class biometric {
 		Response response = (Response) given()
 	            .header("X-GEO-Location", "12,12")
 	            .header("X-Device-Id", requestDeviceId)
-	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+	            .header("User-Agent", "NepalTravelApp/1.0.0 ios")
 	            .header("X-AUTH-TOKEN",AuthToken)
 	            .body(jsonMap)
 	        .when()
@@ -374,7 +374,7 @@ public class biometric {
 		Response response = (Response) given()
 	            .header("X-GEO-Location", "12,12")
 	            .header("X-Device-Id", requestDeviceId)
-	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+	            .header("User-Agent", "NepalTravelApp/1.0.0 ios")
 	            .header("X-AUTH-TOKEN",AuthToken)
 	            .body(jsonMap)
 	        .when()
@@ -404,7 +404,7 @@ public class biometric {
 		Response response = (Response) given()
 	            .header("X-GEO-Location", "12,12")
 	            .header("X-Device-Id", requestDeviceId)
-	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+	            .header("User-Agent", "NepalTravelApp/1.0.0 ios")
 	            .header("X-AUTH-TOKEN",AuthToken)
 	            .body(jsonMap)
 	        .when()
@@ -434,7 +434,7 @@ public class biometric {
 //		Response response = (Response) given()
 //	            .header("X-GEO-Location", "12,12")
 //	            .header("X-Device-Id", requestDeviceId)
-//	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+//	            .header("User-Agent", "NepalTravelApp/1.0.0 ios")
 //	            .header("X-AUTH-TOKEN",AuthToken)
 //	            .body(jsonMap)
 //	        .when()
@@ -465,7 +465,7 @@ public class biometric {
 		Response response = (Response) given()
 	            .header("X-GEO-Location", "12,12")
 	            .header("X-Device-Id", requestDeviceId)
-	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+	            .header("User-Agent", "NepalTravelApp/1.0.0 ios")
 	            .header("X-AUTH-TOKEN",AuthToken)
 	            .body(jsonMap)
 	        .when()
@@ -500,7 +500,7 @@ public class biometric {
 		Response response = (Response) given()
 	            .header("X-GEO-Location", "12,12")
 	            .header("X-Device-Id", requestDeviceId)
-	            .header("User-Agent", "NepalTravelApp/1.0.0 android")
+	            .header("User-Agent", "NepalTravelApp/1.0.0 ios")
 	            .header("X-AUTH-TOKEN",AuthToken)
 	            .body(jsonMap)
 	        .when()
@@ -521,27 +521,27 @@ public class biometric {
         assertEquals(code,"GNR_OK");
         assertEquals(description,"Biometric set up successfully.");
 	}
-    @AfterClass
-    public void deleteBiometricLogout() {
-    	baseURI = "https://visitor0.moco.com.np/visitor";
-        Response response = given()
-            .header("X-GEO-Location", "12,12")
-            .header("X-AUTH-TOKEN",AuthToken)
-            .header("X-Device-Id", requestDeviceId)
-            .header("User-Agent", "NepalTravelApp/1.0.0 android")
-        .when()
-            .delete("/biometric");
-            response.then().statusCode(200);
-        
-        Response response1 = given()
-            .header("X-GEO-Location", "12,12")
-            .header("X-AUTH-TOKEN",AuthToken)
-            .header("X-Device-Id", requestDeviceId)
-            .header("User-Agent", "NepalTravelApp/1.0.0 android")
-        .when()
-            .delete("/authenticate");
-        response1.then().statusCode(200);
-   
-    }
+//    @AfterClass
+//    public void deleteBiometricLogout() {
+//    	baseURI = "https://visitor0.moco.com.np/visitor";
+//        Response response = given()
+//            .header("X-GEO-Location", "12,12")
+//            .header("X-AUTH-TOKEN",AuthToken)
+//            .header("X-Device-Id", requestDeviceId)
+//            .header("User-Agent", "NepalTravelApp/1.0.0 ios")
+//        .when()
+//            .delete("/biometric");
+//            response.then().statusCode(200);
+//        
+//        Response response1 = given()
+//            .header("X-GEO-Location", "12,12")
+//            .header("X-AUTH-TOKEN",AuthToken)
+//            .header("X-Device-Id", requestDeviceId)
+//            .header("User-Agent", "NepalTravelApp/1.0.0 ios")
+//        .when()
+//            .delete("/authenticate");
+//        response1.then().statusCode(200);
+//   
+//    }
     
 }

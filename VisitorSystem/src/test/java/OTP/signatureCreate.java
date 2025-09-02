@@ -43,6 +43,26 @@ public class signatureCreate {
         return Base64.getEncoder().encodeToString(hashBytes);
     }
 //    
+    public static String generatesHMACSHA256(String data, String secret) throws Exception {
+        Mac mac = Mac.getInstance("HmacSHA256");
+        SecretKeySpec secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
+        mac.init(secretKey);
+        byte[] hashBytes = mac.doFinal(data.getBytes(StandardCharsets.UTF_8));
+        return bytesToHex(hashBytes);
+    }
+    
+    
+    
+    private static String bytesToHex(byte[] bytes) {
+    	StringBuilder hexString = new StringBuilder();
+        for (byte b : bytes) {
+            String hex = Integer.toHexString(0xff & b); // Ensure unsigned conversion
+            if (hex.length() == 1) hexString.append('0'); // Pad with leading zero
+            hexString.append(hex);
+        }
+        return hexString.toString();
+	}
+//    
     public static String encryptAES256(String plainText, String base64Key) throws Exception {
     	MessageDigest digest = MessageDigest.getInstance("SHA-256");
     	byte[] keyBytes = digest.digest(base64Key.getBytes(StandardCharsets.UTF_8));

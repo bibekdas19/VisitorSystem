@@ -15,7 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import OTP.signatureCreate;
 public class LoginDevice {
 	String AuthToken;
-	String requestDeviceId = "visitor-app-device4"; 
+	String requestDeviceId = "samwek-device"; 
 	@Test
 	public void getToken() throws Exception{
 		 RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
@@ -34,8 +34,8 @@ public class LoginDevice {
 	        //assertNotNull(secretKey, "Secret key is null!");
 	        
 	        ObjectMapper objectMapper = new ObjectMapper();
-	        String email = "vivek@moco.com.np";
-	        String plain_pin = "125987";
+	        String email = "samwekshakya65@gmail.com";
+	        String plain_pin = "123456";
 	        Map<String, Object> credentials = new LinkedHashMap<>();
 	        credentials.put("email", email);
 	        String Pin = signatureCreate.encryptAES256(plain_pin, secretKey1);
@@ -61,8 +61,8 @@ public class LoginDevice {
 	            .when()
 	                .post("/authenticate")
 	            .then()
-	               .statusCode(401)
-	               //  .statusCode(200)
+	              .statusCode(401)
+	               // .statusCode(200)
 	                 .log().all()
 	                .extract().response();
 	       AuthToken = response2.getHeader("X-AUTH-TOKEN");

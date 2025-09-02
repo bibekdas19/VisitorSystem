@@ -15,7 +15,7 @@ public class signupOtp {
 
     String secretKey;
     String requestDeviceId = "visitor-app-device";
-    String email = "vivek@moco.com.np";
+    String email = "vivek@moco.com";
     String requestTimestamp = signatureCreate.generateTimestamp();
 
     @BeforeClass
