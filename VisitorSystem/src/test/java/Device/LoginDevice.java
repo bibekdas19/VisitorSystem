@@ -65,13 +65,11 @@ public class LoginDevice {
 	               // .statusCode(200)
 	                 .log().all()
 	                .extract().response();
-	       AuthToken = response2.getHeader("X-AUTH-TOKEN");
-	        System.out.println(AuthToken);
+	       
 	      System.out.println(secretKey1);
-	        response2.prettyPrint();
+	    
 	      //  assertEquals(response2.jsonPath().getString("code"),"VST_LOGIN_DEVICE_UNRECOGNIZED");
 	       //assertEquals(response2.jsonPath().getString("description"),"Login from unverified device. OTP Requested Successfully for device registration.");
-	       String secretKey = response2.jsonPath().getString("sessionKey");
-	       System.out.println(secretKey);
+	     
 	}
 }

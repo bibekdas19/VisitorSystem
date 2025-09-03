@@ -39,13 +39,14 @@ public class validcase {
 	     jsonBody.put("credentials",credentials);
 	     jsonBody.put("requestTimestamp", requestTimestamp);
 	     jsonBody.put("otp", plain_otp);
+	     jsonBody.put("token", token);
 	     jsonBody.put("pushToken",pushToken);
 	     jsonBody.put("deviceModel", deviceModel);
 	     jsonBody.put("deviceColorDepth", deviceColorDepth);
 	     jsonBody.put("deviceScreenHeight", deviceScreenHeight);
 	     jsonBody.put("deviceScreenWidth", deviceScreenWidth);
 	     //placing token from device API
-	     jsonBody.put("token", token);
+	     
 	  
 
 	  // Generate signature
