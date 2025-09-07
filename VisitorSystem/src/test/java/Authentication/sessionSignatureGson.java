@@ -16,90 +16,52 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 
 public class sessionSignatureGson {
-	String requestDeviceId = "793d1ae9c317736b";
-	String secretKey = "ABC123XYZ";
-	String AuthToken;
-	String input_email = "sharad@moco.com.np";
-	String input_pin = "147258";
-	String SessionSecretKey;
-
-    @BeforeClass
-    public void getToken() throws Exception {
-        RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
-
-        // Step 1: Get signOnKey
-        Response response1 = given()
-                .header("X-GEO-LOCATION", "12,12")
-                .header("X-DEVICE-ID", requestDeviceId)
-                .header("User-Agent", "TravelApp/1.0.0 android")
-            .when()
-                .get("/key")
-            .then()
-                .statusCode(200)
-                .extract().response();
-
-        String signOnKey = response1.jsonPath().getString("signOnKey");
-
-        // Step 2: Encrypt PIN and prepare payload
-        String encryptedPin = signatureCreate.encryptAES256(input_pin, signOnKey);
-
-        Map<String, Object> credentials = new LinkedHashMap<>();
-        credentials.put("email", input_email);
-        credentials.put("pin", encryptedPin);
-
-        Map<String, Object> jsonBody = new LinkedHashMap<>();
-        jsonBody.put("credentials", credentials);
-
-        // Step 3: Serialize and generate signature using Jackson
-        ObjectMapper objectMapper = new ObjectMapper();
-        String jsonData = objectMapper.writeValueAsString(jsonBody);
-        String signature = signatureCreate.generateHMACSHA256(jsonData, signOnKey);
-
-        jsonBody.put("signature", signature);
-
-        // Step 4: Authenticate request
-        Response response2 = given()
-                .header("X-GEO-LOCATION", "12,12")
-                .header("X-DEVICE-ID", requestDeviceId)
-                .header("User-Agent", "TravelApp/1.0.0 android")
-                .contentType("application/json")
-                .body(objectMapper.writeValueAsString(jsonBody)) // use Jackson here too
-            .when()
-                .post("/authenticate")
-            .then()
-                .statusCode(200)
-                .log().all()
-                .extract().response();
-
-        AuthToken = response2.getHeader("X-AUTH-TOKEN");
-        SessionSecretKey = response2.jsonPath().getString("sessionKey");
-    }
+	String sessionKey ="11d594a8f6281ab96b5a09f3bee61f1ebf5c51bfdcc5c1c0d79ca1f634fe083d";
+    String CardNumber = "4440000009900010";
 
     @Test
     public void getSignature() throws Exception {
-        Gson gson = new Gson();
-
-        // Prepare headers
-        Map<String, Object> headers = new LinkedHashMap<>();
-        headers.put("X-GEO-LOCATION", "12,12");
-        headers.put("X-AUTH-TOKEN", AuthToken);
-        headers.put("X-DEVICE-ID", requestDeviceId);
-        headers.put("User-Agent", "TravelApp/1.0.0 android");
+    	String EncryptCardNumber = signatureCreate.encryptAndUrlEncodeCard(CardNumber, sessionKey);
+    	System.out.println("card number  "+ EncryptCardNumber);
        
-        headers.put("X-REQUEST-TIMESTAMP", "2025-05-13 14:38:00");
-        headers.put("X-SYSTEM-ID", "discover");
-
-        // Prepare request JSON
-        Map<String, Object> jsonBody = new LinkedHashMap<>();
-        jsonBody.put("headers", headers);
-
-        String jsonData = gson.toJson(jsonBody);
-
-        // Sign using the static key
-        String requestSignature = signatureCreate.generateHMACSHA256(jsonData, SessionSecretKey);
-        headers.put("X-SYSTEM-SIGNATURE", requestSignature);
-
-        // Output final JSON
-        System.out.println(gson.toJson(jsonBody));
+    }
+    
+    @Test
+    public void addCard() throws Exception {
+    	String cardNumber = signatureCreate.encryptAndUrlEncodeCard(CardNumber, sessionKey);
+    	ObjectMapper objectMapper = new ObjectMapper();
+    	Map<String, Object> jsonBody = new LinkedHashMap<>();
+    	jsonBody.put("cardNumber", cardNumber);
+    	jsonBody.put("expiryYear", "39");
+    	jsonBody.put("expiryMonth", "01");
+    	jsonBody.put("nameOnCard", "SUMINA KHATIWADA");
+    	jsonBody.put("cvv", "100");
+    	
+    	String data = objectMapper.writeValueAsString(jsonBody);
+		String requestSignature = signatureCreate.generateHMACSHA256(data, sessionKey);
+		
+		jsonBody.put("signature", requestSignature);
+		System.out.println(jsonBody);
+    	
+    }
+    
+    @Test
+    public void verifyCard() throws Exception {
+    	String cardNumber = signatureCreate.encryptAndUrlEncodeCard(CardNumber, sessionKey);
+    	ObjectMapper objectMapper = new ObjectMapper();
+    	Map<String, Object> jsonBody = new LinkedHashMap<>();
+    	jsonBody.put("orderId", "");
+    	jsonBody.put("transactionId", "");
+    	jsonBody.put("cardNumber", cardNumber);
+    	jsonBody.put("expiryYear", "39");
+    	jsonBody.put("expiryMonth", "01");
+    	jsonBody.put("nameOnCard", "SUMINA KHATIWADA");
+    	jsonBody.put("cvv", "100");
+    	
+    	String data = objectMapper.writeValueAsString(jsonBody);
+		String requestSignature = signatureCreate.generateHMACSHA256(data, sessionKey);
+		
+		jsonBody.put("signature", requestSignature);
+		System.out.println(jsonBody);
     }
 }

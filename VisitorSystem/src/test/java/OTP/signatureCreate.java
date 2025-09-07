@@ -87,6 +87,27 @@ public class signatureCreate {
 //        return Base64.getEncoder().encodeToString(encrypted);
     }
     
+    public static String encryptCard(String text, String key) throws Exception {
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] keyBytes = digest.digest(key.getBytes(StandardCharsets.UTF_8));
+
+        SecretKeySpec secretKeySpec = new SecretKeySpec(keyBytes, "AES");
+        Cipher cipher = Cipher.getInstance("AES");
+        cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
+        byte[] encryptedBytes = cipher.doFinal(text.getBytes(StandardCharsets.UTF_8));
+        return Base64.getEncoder().encodeToString(encryptedBytes);
+    }
+    
+    
+     public static String encryptAndUrlEncodeCard(String plainCardNumber, String key) throws Exception {
+        // Encrypt using your existing AES + Base64 method
+        String encrypted = encryptCard(plainCardNumber, key);
+
+        // Make it URL-safe
+        return Base64.getUrlEncoder().withoutPadding().encodeToString(
+        encrypted.getBytes(StandardCharsets.UTF_8));
+    }
+    
     public static String decryptAES256(String encryptedText, String base64Key) throws Exception {
     	byte[] keyBytes = Base64.getDecoder().decode(base64Key);
         if (keyBytes.length != 32) {

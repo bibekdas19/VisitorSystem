@@ -20,9 +20,9 @@ import java.util.*;
 public class authenticate {
 	 String secretKey;
 	 String AuthToken;
-	 String requestDeviceId = "visitor-app-device"; 
-		String email = "vivek@moco.com.np";
-		String plain_pin = "147258";
+	 String requestDeviceId = "299d535ceb0116991";//"visitor-app-device"; 
+		String email = "suminakhatiwada789@gmail.com";//"vivek@moco.com.np";
+		String plain_pin = "147369";//"147258";
 	    @BeforeClass
 	    public void setup() {
 	        RestAssured.baseURI = "https://visitor0.moco.com.np/visitor";
@@ -111,7 +111,7 @@ public class authenticate {
 //        
 //        String plain_pin = "152986";
 //        Map<String, Object> credentials = new LinkedHashMap<>();
-//        credentials.put("email", email);
+//        credentials.put("email", email)l
 //        String Pin = signatureCreate.encryptAES256(plain_pin, secretKey);
 //        credentials.put("pin", Pin);
 //
@@ -692,6 +692,9 @@ public class authenticate {
                 .statusCode(200)
                 .log().all()
                 .extract().response();
+          
+        String sessionKey = signatureCreate.decryptAES(response.jsonPath().get("sessionKey"),secretKey);
+        System.out.println("the key    "+sessionKey);
         
 //        String signature = response.jsonPath().getString("signature");
 //        String sessionKey = response.jsonPath().getString("sessionKey");

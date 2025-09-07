@@ -17,12 +17,12 @@ import io.restassured.response.Response;
 
 public class validcase {
 	String baseURI = "https://visitor0.moco.com.np/visitor";
-    String secretKey = "f0572f049cfcc813dd73700cd6e750efa9d10c0360c6655492141da48d6e7a8f";
-    String token = "DmvN1R1LN52oDdz9gZrWWR8snU9Vl-yMpglAaqEoGHo";
+    String secretKey = "cf31bb7328a11e80211ebe3ff832d310cb990473e73682ac20a8046a2e119d8a";
+    String token = "AToQN9iYKZqDceMY-OxNnZZ87poHmX9vgKtUlP23TXM";
     String email = "vivek@moco.com.np";
     String requestTimestamp = signatureCreate.generateTimestamp();
    // String plain_pin = "123654";
-    String plain_otp = "394045";
+    String plain_otp = "057173";
     String requestdevice = "vivek-device";
     String pushToken = "abcdefg:7^";
     int deviceScreenWidth = 325;
